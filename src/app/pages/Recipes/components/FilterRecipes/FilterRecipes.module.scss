@@ -1,0 +1,19 @@
+.recipes-center {
+  &-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    &--find {
+      width: 100%;
+      display: flex;
+      gap: 19px;
+    }
+    &--select {
+      width: 300px;
+      align-self: flex-end;
+    }
+  }
+  &-input {
+    width: 100%;
+  }
+}

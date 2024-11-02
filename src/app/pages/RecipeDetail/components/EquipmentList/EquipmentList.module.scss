@@ -1,0 +1,21 @@
+.recipe {
+  &-center {
+    &-list--equipments {
+      width: 45%;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+  }
+  &-equipment {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+}
+
+.equipments {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}

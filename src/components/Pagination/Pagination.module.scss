@@ -1,0 +1,51 @@
+@import "../../styles/variables";
+
+.btn {
+  &-prev {
+    display: flex;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  &-page {
+    cursor: pointer;
+    min-width: 38px;
+    height: 45px;
+    border-radius: 0px;
+    border: 1.5px solid #f7e8d7;
+    background: none;
+    font-family: "Roboto";
+  }
+  &-next {
+    display: flex;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    transform: rotate(180deg);
+  }
+}
+
+.active {
+  background-color: $brand;
+  color: #fff;
+  border: 0px;
+}
+
+.page-group {
+  display: flex;
+  align-items: center;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.ellipsis {
+  width: 38px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

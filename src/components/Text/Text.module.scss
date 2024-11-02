@@ -1,0 +1,57 @@
+@import "../../styles/styles.css";
+@import "../../styles/Roboto/fonts.css";
+@import "../../styles/variables";
+
+.text {
+  font-family: "Roboto";
+  &-primary {
+    color: $primary;
+  }
+  &-secondary {
+    color: $secondary;
+  }
+  &-accent {
+    color: $brand;
+  }
+}
+
+.font {
+  &-normal {
+    font-weight: 400;
+  }
+  &-medium {
+    font-weight: 500;
+  }
+  &-semiBold {
+    font-weight: 600;
+  }
+  &-bold {
+    font-weight: 700;
+  }
+}
+
+.view {
+  &-title {
+    font-size: $xl;
+    font-weight: bold;
+  }
+  &-button {
+    font-size: $m;
+    text-transform: uppercase;
+  }
+  &-p-44 {
+    font-size: 44px;
+  }
+  &-p-20 {
+    font-size: $l;
+  }
+  &-p-18 {
+    font-size: 18px;
+  }
+  &-p-16 {
+    font-size: $m;
+  }
+  &-p-14 {
+    font-size: $s;
+  }
+}

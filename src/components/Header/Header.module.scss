@@ -1,0 +1,69 @@
+@import "../../styles/variables";
+
+.header {
+  &-wrapper {
+    width: 100%;
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  &-content {
+    width: calc(100% - 100px);
+    display: flex;
+    justify-content: space-between;
+    &-left {
+      & {
+        display: flex;
+        align-items: center;
+        gap: 80px;
+      }
+      &--logo {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      &--navbar {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+    }
+    &--actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+  }
+}
+.navbar-link {
+  &:hover {
+    color: $brand-hover;
+  }
+  &:active {
+    color: $accent;
+  }
+}
+.header-icon {
+  &-stroke {
+    cursor: pointer;
+    &:hover {
+      stroke: $brand-hover;
+    }
+    &:active {
+      stroke: $brand-active;
+    }
+  }
+  &-fill {
+    cursor: pointer;
+    &:hover {
+      fill: $brand-hover;
+    }
+    &:active {
+      fill: $brand-active;
+    }
+  }
+}
