@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackArrowIcon from '../icons/BackArrowIcon';
 import styles from './RecipeTabHeader.module.scss';
@@ -7,8 +7,10 @@ import Text from '../Text';
 type RecipeTabHeaderProps = {
   children: React.ReactNode;
 };
+
 const RecipeTabHeader: React.FC<RecipeTabHeaderProps> = ({ children }) => {
   const navigate = useNavigate();
+
   return (
     <div className={styles['recipe-tab-header']}>
       <BackArrowIcon
@@ -20,11 +22,11 @@ const RecipeTabHeader: React.FC<RecipeTabHeaderProps> = ({ children }) => {
         height={32}
         onClick={() => navigate(-1)}
       />
-      <Text view="p-44" weight="bold">
+      <Text view="p-xxl" weight="bold">
         {children}
       </Text>
     </div>
   );
 };
 
-export default RecipeTabHeader;
+export default memo(RecipeTabHeader);

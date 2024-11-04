@@ -2,20 +2,25 @@ import Text from '@/components/Text';
 import { EquipmentById } from '@/types/recipes';
 import LadelIcon from '@/components/icons/LadleIcon';
 import styles from './EquipmentList.module.scss';
+import React, { memo } from 'react';
 
-const EquipmentList: React.FC<{ equipments: EquipmentById }> = ({ equipments }) => {
+type EquipmentListProps = {
+  equipments: EquipmentById;
+};
+
+const EquipmentList: React.FC<EquipmentListProps> = ({ equipments }) => {
   return (
-    <div className={styles['recipe-center-list--equipments']}>
-      <Text view="p-20" weight="semiBold">
+    <div className={styles['equipment-list']}>
+      <Text view="p-xl" weight="semiBold">
         Equipment
       </Text>
-      <div className={styles['equipments']}>
-        {equipments.equipment.map((item) => (
-          <div key={item.name} className={styles['recipe-equipment']}>
+      <div className={styles['equipment-list__items']}>
+        {equipments.equipment.map(({ name }) => (
+          <div key={name} className={styles['equipment-list__item']}>
             <div>
               <LadelIcon width={24} height={24} color="accent" />
             </div>
-            <Text view="p-16">{item.name}</Text>
+            <Text view="p-m">{name}</Text>
           </div>
         ))}
       </div>
@@ -23,4 +28,4 @@ const EquipmentList: React.FC<{ equipments: EquipmentById }> = ({ equipments }) 
   );
 };
 
-export default EquipmentList;
+export default memo(EquipmentList);

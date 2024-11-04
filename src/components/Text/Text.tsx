@@ -1,21 +1,14 @@
 import classNames from 'classnames';
-import * as React from 'react';
+import React, { memo } from 'react';
 import styles from './Text.module.scss';
 
 export type TextProps = {
-  /** Дополнительный класс */
   className?: string;
-  /** Стиль отображения */
-  view?: 'title' | 'button' | 'p-44' | 'p-20' | 'p-18' | 'p-16' | 'p-14';
-  /** Html-тег */
+  view?: 'title' | 'button' | 'p-xxl' | 'p-xl' | 'p-l' | 'p-m' | 'p-l' | 'p-s' | 'p-xs' | 'p-xxs';
   tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'div' | 'p' | 'span';
-  /** Начертание шрифта */
   weight?: 'normal' | 'medium' | 'semiBold' | 'bold';
-  /** Контент */
   children: React.ReactNode;
-  /** Цвет */
   color?: 'primary' | 'secondary' | 'accent';
-  /** Максимальное кол-во строк */
   maxLines?: number;
   isHtml?: boolean;
 };
@@ -23,9 +16,9 @@ export type TextProps = {
 const Text: React.FC<TextProps> = ({ className, view, tag = 'p', weight, children, color, isHtml, maxLines }) => {
   const Tag = tag;
   const textClassName = classNames(styles.text, className, {
-    [styles[`text-${color}`]]: color,
-    [styles[`font-${weight}`]]: weight,
-    [styles[`view-${view}`]]: view,
+    [styles[`text--${color}`]]: color,
+    [styles[`text--weight-${weight}`]]: weight,
+    [styles[`text--view-${view}`]]: view,
   });
 
   const lineClampStyle: React.CSSProperties = maxLines
@@ -46,4 +39,4 @@ const Text: React.FC<TextProps> = ({ className, view, tag = 'p', weight, childre
   );
 };
 
-export default Text;
+export default memo(Text);

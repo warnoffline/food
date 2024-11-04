@@ -11,6 +11,7 @@ const RecipeDetail: React.FC = observer(() => {
   const { id } = useParams();
   const recipe = RecipeStore.recipe;
   const equipments = RecipeStore.equipments;
+
   useEffect(() => {
     const recipeId = Number(id);
     if (recipeId) {
@@ -18,23 +19,26 @@ const RecipeDetail: React.FC = observer(() => {
       RecipeStore.loadEquipmentsById(recipeId);
     }
   }, [id]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   if (!recipe) {
     return <p>Loading...</p>;
   }
+
   return (
-    <div className={styles['recipe-root']}>
-      <div className={styles['recipe-center']}>
+    <div className={styles.recipe}>
+      <div className={styles.recipe__center}>
         <RecipeTabHeader>{recipe.title}</RecipeTabHeader>
         <RecipeInfo recipe={recipe} />
         <RecipeSummary summary={recipe.summary} />
-        <div className={styles['recipe-center-list']}>
+        <div className={styles.recipe__list}>
           <IngredientList ingredients={recipe.extendedIngredients} />
-          <div className={styles['recipe-center-list--share']}>
-            <div className={styles['share-circle']}></div>
-            <div className={styles['share-line']}></div>
+          <div className={styles.recipe__share}>
+            <div className={styles['recipe__share-circle']}></div>
+            <div className={styles['recipe__share-line']}></div>
           </div>
           {equipments?.equipment && <EquipmentList equipments={equipments} />}
         </div>

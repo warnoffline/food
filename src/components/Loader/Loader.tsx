@@ -1,20 +1,18 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styles from './Loader.module.scss';
+import classNames from 'classnames';
 
 export type LoaderProps = {
-  /** Размер */
   size?: 's' | 'm' | 'l';
-  /** Дополнительный класс */
   className?: string;
-  /** Цвет спиннера */
   color?: string;
 };
 
 const Loader: React.FC<LoaderProps> = ({ size = 'l', className, color }) => {
-  const sizeClass = styles[`loader--${size}`];
+  const loaderClass = classNames(styles.loader, styles[`loader--${size}`], className);
 
   return (
-    <div className={`${styles.loader} ${sizeClass} ${className || ''}`.trim()}>
+    <div className={loaderClass}>
       <div
         className={styles.loader__spinner}
         style={{
@@ -27,4 +25,4 @@ const Loader: React.FC<LoaderProps> = ({ size = 'l', className, color }) => {
   );
 };
 
-export default Loader;
+export default memo(Loader);

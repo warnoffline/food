@@ -4,54 +4,58 @@
 
 .text {
   font-family: "Roboto";
-  &-primary {
+  &--primary {
     color: $primary;
   }
-  &-secondary {
+  &--secondary {
     color: $secondary;
   }
-  &-accent {
+  &--accent {
     color: $brand;
   }
-}
-
-.font {
-  &-normal {
-    font-weight: 400;
+  &--weight{
+    &-normal {
+      font-weight: 400;
+    }
+    &-medium {
+      font-weight: 500;
+    }
+    &-semiBold {
+      font-weight: 600;
+    }
+    &-bold {
+      font-weight: 700;
+    }
   }
-  &-medium {
-    font-weight: 500;
-  }
-  &-semiBold {
-    font-weight: 600;
-  }
-  &-bold {
-    font-weight: 700;
-  }
-}
-
-.view {
-  &-title {
-    font-size: $xl;
-    font-weight: bold;
-  }
-  &-button {
-    font-size: $m;
-    text-transform: uppercase;
-  }
-  &-p-44 {
-    font-size: 44px;
-  }
-  &-p-20 {
-    font-size: $l;
-  }
-  &-p-18 {
-    font-size: 18px;
-  }
-  &-p-16 {
-    font-size: $m;
-  }
-  &-p-14 {
-    font-size: $s;
+  &--view{
+    &-title {
+      font-size: $xl;
+      font-weight: bold;
+    }
+    &-button {
+      font-size: $m;
+      text-transform: uppercase;
+    }
+    &-p-xxl {
+      font-size: $xxl;
+    }
+    &-p-xl {
+      font-size: $xl;
+    }
+    &-p-l {
+      font-size: $l;
+    }
+    &-p-m {
+      font-size: $m;
+    }
+    &-p-s {
+      font-size: $s;
+    }
+    &-p-xs {
+      font-size: $xs;
+    }
+    &-p-xxs {
+      font-size: $xxs;
+    }
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Text from '@/components/Text';
 import styles from './Recipes.module.scss';
 import { observer } from 'mobx-react-lite';
@@ -15,29 +15,30 @@ const Recipes: React.FC = observer(() => {
 
   const totalPages = Math.ceil(RecipeStore.totalResults / resultsPerPage);
 
-  const handlePageChange = (page: number) => {
+  const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
     sessionStorage.setItem('recipe-current-page', page.toString());
-  };
+  }, []);
 
   useEffect(() => {
     RecipeStore.loadRecipes(currentPage, resultsPerPage);
   }, [currentPage]);
 
   const recipes = RecipeStore.recipes;
+
   return (
-    <div className={styles['recipes-root']}>
-      <div className={styles['recipes-banner']}>
+    <div className={styles.recipes}>
+      <div className={styles.recipes__banner}>
         <img src="/banner.png" alt="banner" />
       </div>
-      <div className={styles['recipes-center']}>
-        <div className={styles['recipes-center--quote']}>
+      <div className={styles.recipes__content}>
+        <div className={styles.recipes__quote}>
           <Text>
             Find the perfect food and drink ideas for every occasion, from weeknight dinners to holiday feasts.
           </Text>
         </div>
         <FilterRecipes />
-        <div className={styles['recipes-center-items']}>
+        <div className={styles.recipes__items}>
           {recipes.map((recipe) => (
             <React.Fragment key={recipe.id}>
               <RecipeCard recipe={recipe} />
@@ -45,7 +46,7 @@ const Recipes: React.FC = observer(() => {
           ))}
         </div>
         {totalPages > 1 && (
-          <div className={styles['recipes-center-footer']}>
+          <div className={styles.recipes__pagination}>
             <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
           </div>
         )}

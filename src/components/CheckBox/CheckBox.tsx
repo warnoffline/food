@@ -1,44 +1,37 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import classNames from 'classnames';
 import CheckIcon from '../icons/CheckIcon';
 import styles from './CheckBox.module.scss';
 
-export type CheckBoxProps = Omit<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  'onChange'
-> & {
-  /** Вызывается при клике на чекбокс */
+export type CheckBoxProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
   onChange: (checked: boolean) => void;
-  /** Indicates if the checkbox is checked */
-  checked?: boolean; 
+  checked?: boolean;
 };
 
-const CheckBox: React.FC<CheckBoxProps> = ({
-  checked,
-  onChange,
-  className,
-  ...rest
-}) => {
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(event.target.checked);
-  };
-  
+const CheckBox: React.FC<CheckBoxProps> = ({ checked, onChange, className, ...rest }) => {
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      onChange(event.target.checked);
+    },
+    [onChange],
+  );
+
   return (
-    <label className={classNames(styles['checkbox-wrapper'], className)}>
+    <label className={classNames(styles['checkbox__wrapper'], className)}>
       <input
         type="checkbox"
         checked={checked}
         onChange={handleChange}
-        className={styles['checkbox-input']}
+        className={styles['checkbox__input']}
         {...rest}
       />
-      <span className={styles['checkbox-custom']}>
+      <span className={styles['checkbox__custom']}>
         {checked && (
           <CheckIcon
-            className={styles['checkbox-icon']}
+            className={styles['checkbox__icon']}
             strokeWidth={2}
             width={24}
-            height={24} 
+            height={24}
             color={rest.disabled ? 'disabled' : 'accent'}
           />
         )}
@@ -47,4 +40,4 @@ const CheckBox: React.FC<CheckBoxProps> = ({
   );
 };
 
-export default CheckBox;
+export default memo(CheckBox);

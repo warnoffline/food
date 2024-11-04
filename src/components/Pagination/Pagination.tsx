@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import styles from './Pagination.module.scss';
 import BackArrowIcon from '../icons/BackArrowIcon';
 import Text from '../Text';
@@ -10,22 +10,26 @@ type PaginationProps = {
 };
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      onPageChange(page);
-    }
-  };
+  const handlePageChange = useCallback(
+    (page: number) => {
+      if (page >= 1 && page <= totalPages) {
+        onPageChange(page);
+      }
+    },
+    [onPageChange, totalPages],
+  );
 
   const renderPrevButton = () => (
     <button
       key="prev"
-      className={styles['btn-prev']}
+      className={styles['pagination__btn-prev']}
       onClick={() => handlePageChange(currentPage - 1)}
       disabled={currentPage === 1}
     >
       <BackArrowIcon fill="none" stroke={currentPage === 1 ? 'secondary' : 'primary'} width={32} height={32} />
     </button>
   );
+
   const renderPageButtons = () => {
     const buttons = [];
     const startPage = Math.max(1, currentPage - 1);
@@ -33,15 +37,15 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
     if (currentPage > 2) {
       buttons.push(
-        <button key={1} className={styles['btn-page']} onClick={() => handlePageChange(1)}>
-          <Text view="p-18">1</Text>
+        <button key={1} className={styles['pagination__btn-page']} onClick={() => handlePageChange(1)}>
+          <Text view="p-l">1</Text>
         </button>,
       );
     }
 
     if (currentPage > 3) {
       buttons.push(
-        <Text view="p-18" weight="medium" className={styles['ellipsis']} key="ellipsis-start">
+        <Text view="p-l" weight="medium" className={styles['pagination__ellipsis']} key="ellipsis-start">
           ...
         </Text>,
       );
@@ -51,17 +55,17 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
       buttons.push(
         <button
           key={page}
-          className={`${styles['btn-page']} ${currentPage === page ? styles['active'] : ''}`}
+          className={`${styles['pagination__btn-page']} ${currentPage === page ? styles['pagination__btn-page--active'] : ''}`}
           onClick={() => handlePageChange(page)}
         >
-          <Text view="p-18">{page}</Text>
+          <Text view="p-l">{page}</Text>
         </button>,
       );
     }
 
     if (endPage < totalPages - 1) {
       buttons.push(
-        <Text view="p-18" weight="medium" className={styles['ellipsis']} key="ellipsis-end">
+        <Text view="p-l" weight="medium" className={styles['pagination__ellipsis']} key="ellipsis-end">
           ...
         </Text>,
       );
@@ -69,8 +73,12 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
     if (endPage < totalPages) {
       buttons.push(
-        <button key={totalPages} className={styles['btn-page']} onClick={() => handlePageChange(totalPages)}>
-          <Text view="p-18">{totalPages}</Text>
+        <button
+          key={totalPages}
+          className={styles['pagination__btn-page']}
+          onClick={() => handlePageChange(totalPages)}
+        >
+          <Text view="p-l">{totalPages}</Text>
         </button>,
       );
     }
@@ -81,7 +89,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
   const renderNextButton = () => (
     <button
       key="next"
-      className={styles['btn-next']}
+      className={styles['pagination__btn-next']}
       onClick={() => handlePageChange(currentPage + 1)}
       disabled={currentPage === totalPages}
     >
@@ -91,11 +99,11 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
   return (
     <div className={styles['pagination']}>
-      <div className={styles['prev-group']}>{renderPrevButton()}</div>
-      <div className={styles['page-group']}>{renderPageButtons()}</div>
-      <div className={styles['next-group']}>{renderNextButton()}</div>
+      <div className={styles['pagination__prev-group']}>{renderPrevButton()}</div>
+      <div className={styles['pagination__page-group']}>{renderPageButtons()}</div>
+      <div className={styles['pagination__next-group']}>{renderNextButton()}</div>
     </div>
   );
 };
 
-export default Pagination;
+export default memo(Pagination);

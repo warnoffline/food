@@ -3,19 +3,19 @@
   flex-direction: column;
   gap: 24px;
   padding-bottom: 53px;
-  &-list {
+  &__list {
     display: flex;
     flex-direction: column;
     gap: 24px;
-    &-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    &-step {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+  }
+  &__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  &__step {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
 }

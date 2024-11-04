@@ -1,23 +1,29 @@
 import { RecipeById } from '@/types/recipes';
 import styles from './RecipeInfo.module.scss';
 import Text from '@/components/Text';
-import { mainInfoDetails } from './lib/mainInfoDetails';
+import { memo } from 'react';
+import { DETAIL_CONFIG } from '@/configs/detailsConfig';
 
-const RecipeInfo: React.FC<{ recipe: RecipeById }> = ({ recipe }) => {
-  const mainDetails = mainInfoDetails(recipe);
+type RecipeInfoProps = {
+  recipe: RecipeById;
+};
+
+const RecipeInfo: React.FC<RecipeInfoProps> = ({ recipe }) => {
+  const mainDetails = DETAIL_CONFIG(recipe);
+
   return (
-    <div className={styles['recipe-center-main_info']}>
-      <div className={styles['recipe-center-main_info--img']}>
+    <div className={styles['recipe-info']}>
+      <div className={styles['recipe-info__img']}>
         <img src={recipe.image} alt="" />
       </div>
-      <div className={styles['recipe-center-main_info--txts']}>
+      <div className={styles['recipe-info__txts']}>
         {mainDetails.map(
-          (detail, index) =>
-            detail.value && (
-              <div key={index} className={styles['recipe-center-main_info--detail']}>
-                <Text view="p-16">{detail.title}</Text>
-                <Text color="accent" weight="semiBold" view="p-16">
-                  {detail.value}
+          ({ value, title }) =>
+            value && (
+              <div key={title} className={styles['recipe-info__detail']}>
+                <Text view="p-m">{title}</Text>
+                <Text color="accent" weight="semiBold" view="p-m">
+                  {value}
                 </Text>
               </div>
             ),
@@ -27,4 +33,4 @@ const RecipeInfo: React.FC<{ recipe: RecipeById }> = ({ recipe }) => {
   );
 };
 
-export default RecipeInfo;
+export default memo(RecipeInfo);

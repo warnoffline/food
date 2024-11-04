@@ -1,19 +1,17 @@
-.recipes-center {
-  &-filter {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    &--find {
-      width: 100%;
-      display: flex;
-      gap: 19px;
-    }
-    &--select {
-      width: 300px;
-      align-self: flex-end;
-    }
-  }
-  &-input {
+.filter-recipes {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  &__input {
     width: 100%;
+  }
+  &__find {
+    width: 100%;
+    display: flex;
+    gap: 19px;
+  }
+  &__select {
+    width: 300px;
+    align-self: flex-end;
   }
 }

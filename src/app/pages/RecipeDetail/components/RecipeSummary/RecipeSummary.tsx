@@ -1,9 +1,14 @@
 import Text from '@/components/Text';
 import styles from './RecipeSummary.module.scss';
+import React, { memo } from 'react';
 
-const RecipeSummary: React.FC<{ summary: string }> = ({ summary }) => {
+type RecipeSummaryProps = {
+  summary: string;
+};
+
+const RecipeSummary: React.FC<RecipeSummaryProps> = ({ summary }) => {
   return (
-    <div className={styles['recipe-summary']}>
+    <div className={styles.summary}>
       <Text isHtml tag="p">
         {summary}
       </Text>
@@ -11,4 +16,4 @@ const RecipeSummary: React.FC<{ summary: string }> = ({ summary }) => {
   );
 };
 
-export default RecipeSummary;
+export default memo(RecipeSummary);

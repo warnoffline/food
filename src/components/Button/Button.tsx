@@ -1,28 +1,26 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Loader from '../Loader';
 import styles from './Button.module.scss';
+import classNames from 'classnames';
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  /** Состояние загрузки */
   loading?: boolean;
-  /** Класс */
   className?: string;
-  /** Текст кнопки */
   children: React.ReactNode;
-  /** Отключена */
   disabled?: boolean;
 };
 
 const Button: React.FC<ButtonProps> = ({ loading = false, className = '', children, disabled = false, ...props }) => {
   const isDisabled = loading || disabled;
+  const buttonClass = classNames(styles.button, {
+    [styles.loading]: loading,
+    [styles['button--disabled']]: isDisabled,
+    [styles['button--action']]: !loading && !isDisabled,
+    [className]: className.trim() !== '',
+  });
 
   return (
-    <button
-      className={`${styles.button} ${loading ? styles.loading : styles['button--action']} ${isDisabled ? styles['button--disabled'] : ''} ${className.trim()}`}
-      {...props}
-      disabled={isDisabled}
-      onClick={isDisabled ? undefined : props.onClick}
-    >
+    <button className={buttonClass} {...props} disabled={isDisabled} onClick={isDisabled ? undefined : props.onClick}>
       {loading ? (
         <>
           <Loader color="#fff" size="s" />
@@ -35,4 +33,4 @@ const Button: React.FC<ButtonProps> = ({ loading = false, className = '', childr
   );
 };
 
-export default Button;
+export default memo(Button);

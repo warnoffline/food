@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { memo } from 'react';
 import Icon, { IconProps } from '../Icon';
 
 const DishIcon: React.FC<IconProps> = (props) => (
@@ -16,4 +16,4 @@ const DishIcon: React.FC<IconProps> = (props) => (
   </Icon>
 );
 
-export default DishIcon;
+export default memo(DishIcon);

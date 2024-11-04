@@ -1,23 +1,29 @@
 import { AnalyzedInstructions } from '@/types/recipes';
 import Text from '@/components/Text';
 import styles from './DirectionsList.module.scss';
-const DirectionsList: React.FC<{ analyzedInstructions: AnalyzedInstructions[] }> = ({ analyzedInstructions }) => {
+import React, { memo } from 'react';
+
+type DirectionsListProps = {
+  analyzedInstructions: AnalyzedInstructions[];
+};
+
+const DirectionsList: React.FC<DirectionsListProps> = ({ analyzedInstructions }) => {
   return (
-    <div className={styles['directions']}>
-      <Text view="p-20" weight="semiBold">
+    <div className={styles.directions}>
+      <Text view="p-xl" weight="semiBold">
         Direction
       </Text>
-      <div className={styles['directions-list']}>
+      <div className={styles.directions__list}>
         {analyzedInstructions.map((instruction) => (
-          <div className={styles['directions-list-direction']}>
+          <div key={instruction.name} className={styles.directions__item}>
             {instruction.name && <Text>{instruction.name}</Text>}
-            <div className={styles['directions-list-steps']}>
-              {instruction.steps.map((direction) => (
-                <div className={styles['directions-list-step']}>
-                  <Text view="p-16" weight="semiBold">
-                    Step {direction.number}
+            <div className={styles.directions__steps}>
+              {instruction.steps.map(({ number, step }) => (
+                <div className={styles.directions__step}>
+                  <Text view="p-m" weight="semiBold">
+                    Step {number}
                   </Text>
-                  <Text view="p-14">{direction.step}</Text>
+                  <Text view="p-s">{step}</Text>
                 </div>
               ))}
             </div>
@@ -28,4 +34,4 @@ const DirectionsList: React.FC<{ analyzedInstructions: AnalyzedInstructions[] }>
   );
 };
 
-export default DirectionsList;
+export default memo(DirectionsList);

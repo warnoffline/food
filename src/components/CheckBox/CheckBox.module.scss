@@ -1,38 +1,36 @@
 @import "../../styles/styles.css";
 @import "../../styles/variables";
 
-.checkbox-wrapper {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.checkbox-input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-}
-
-.checkbox-custom {
-  line-height: 10px;
-  width: 40px;
-  height: 40px;
-  background-color: #fff;
-  border: 1px solid #fff;
-  border-radius: 10px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-.checkbox-input:hover + .checkbox-custom {
-  border-color: $accent;
-}
-
-.checkbox-input:disabled + .checkbox-custom {
-  background-color: #ffffff80;
-  border-color: #ffffff00;
-  cursor: not-allowed;
+.checkbox{
+  &__wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  &__input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  &__custom {
+    line-height: 10px;
+    width: 40px;
+    height: 40px;
+    background-color: #fff;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  &__input:hover + &__custom{
+    border-color: $accent;
+  }
+  &__input:disabled + &__custom{
+    background-color: #ffffff80;
+    border-color: #ffffff00;
+    cursor: not-allowed;
+  }
 }

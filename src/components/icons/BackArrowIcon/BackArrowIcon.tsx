@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { memo } from 'react';
 import Icon, { IconProps } from '../Icon';
 
 const BackArrowIcon: React.FC<IconProps> = (props) => (
@@ -14,4 +14,4 @@ const BackArrowIcon: React.FC<IconProps> = (props) => (
   </Icon>
 );
 
-export default BackArrowIcon;
+export default memo(BackArrowIcon);

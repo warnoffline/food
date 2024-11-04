@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import RecipeStore from '@/stores/RecipeStore';
 import { observer } from 'mobx-react-lite';
 import { Recipe } from '@/types/recipes';
+import { useCallback } from 'react';
 
 interface FavoriteCardProps {
   recipe: Recipe;
@@ -11,15 +12,20 @@ interface FavoriteCardProps {
 
 const FavoriteCard: React.FC<FavoriteCardProps> = observer(({ recipe }) => {
   const isFavorite = RecipeStore.isFavorite(recipe.id);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-    event.preventDefault();
-    if (isFavorite) {
-      RecipeStore.removeFromFavorites(recipe.id);
-    } else {
-      RecipeStore.addRecipeToFavorites(recipe);
-    }
-  };
+
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.stopPropagation();
+      event.preventDefault();
+      if (isFavorite) {
+        RecipeStore.removeFromFavorites(recipe.id);
+      } else {
+        RecipeStore.addRecipeToFavorites(recipe);
+      }
+    },
+    [isFavorite, recipe],
+  );
+
   return (
     <Link to={`/recipes/${recipe.id}`}>
       <Card
