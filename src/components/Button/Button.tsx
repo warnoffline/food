@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import Loader from '../Loader';
-import styles from './Button.module.scss';
-import classNames from 'classnames';
+import s from './Button.module.scss';
+import cn from 'classnames';
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   loading?: boolean;
@@ -12,10 +12,10 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const Button: React.FC<ButtonProps> = ({ loading = false, className = '', children, disabled = false, ...props }) => {
   const isDisabled = loading || disabled;
-  const buttonClass = classNames(styles.button, {
-    [styles.loading]: loading,
-    [styles['button--disabled']]: isDisabled,
-    [styles['button--action']]: !loading && !isDisabled,
+  const buttonClass = cn(s.root, {
+    [s.loading]: loading,
+    [s['root-disabled']]: isDisabled,
+    [s['root-action']]: !loading && !isDisabled,
     [className]: className.trim() !== '',
   });
 

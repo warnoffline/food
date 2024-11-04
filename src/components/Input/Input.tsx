@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from 'react';
-import classNames from 'classnames';
-import styles from './Input.module.scss';
+import cn from 'classnames';
+import s from './Input.module.scss';
 
 export type InputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> & {
   value: string;
@@ -19,20 +19,20 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     );
 
     return (
-      <div className={classNames(styles['input__wrapper'], className)}>
+      <div className={cn(s.root__wrapper, className)}>
         <input
           type="text"
           value={value}
           onChange={handleChange}
-          className={classNames(styles['input__field'], {
-            [styles['input__field--primary']]: color === 'primary',
-            [styles['input__field--accent']]: color === 'accent',
-            [styles['input__field--secondary']]: color === 'secondary',
+          className={cn(s.root__field, {
+            [s['root__field-primary']]: color === 'primary',
+            [s['root__field-accent']]: color === 'accent',
+            [s['root__field-secondary']]: color === 'secondary',
           })}
           ref={ref}
           {...rest}
         />
-        {afterSlot && <div className={styles['input__icon']}>{afterSlot}</div>}
+        {afterSlot && <div className={s.root__icon}>{afterSlot}</div>}
       </div>
     );
   },

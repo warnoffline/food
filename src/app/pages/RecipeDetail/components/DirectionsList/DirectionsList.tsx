@@ -1,6 +1,6 @@
 import { AnalyzedInstructions } from '@/types/recipes';
 import Text from '@/components/Text';
-import styles from './DirectionsList.module.scss';
+import s from './DirectionsList.module.scss';
 import React, { memo } from 'react';
 
 type DirectionsListProps = {
@@ -9,17 +9,17 @@ type DirectionsListProps = {
 
 const DirectionsList: React.FC<DirectionsListProps> = ({ analyzedInstructions }) => {
   return (
-    <div className={styles.directions}>
+    <div className={s.root}>
       <Text view="p-xl" weight="semiBold">
         Direction
       </Text>
-      <div className={styles.directions__list}>
+      <div className={s.root__list}>
         {analyzedInstructions.map((instruction) => (
-          <div key={instruction.name} className={styles.directions__item}>
+          <div key={instruction.name} className={s.root__item}>
             {instruction.name && <Text>{instruction.name}</Text>}
-            <div className={styles.directions__steps}>
+            <div className={s.root__steps}>
               {instruction.steps.map(({ number, step }) => (
-                <div className={styles.directions__step}>
+                <div key={number} className={s.root__step}>
                   <Text view="p-m" weight="semiBold">
                     Step {number}
                   </Text>

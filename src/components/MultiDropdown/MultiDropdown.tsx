@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, memo, useCallback } from 'react';
 import ArrowDownIcon from '../icons/ArrowDownIcon';
 import Input from '../Input';
-import styles from './MultiDropdown.module.scss';
+import s from './MultiDropdown.module.scss';
 
 export type Option = {
   key: string;
@@ -66,8 +66,8 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({ className, options, value
   }, []);
 
   return (
-    <div className={`${styles['multi-dropdown']} ${className}`} ref={dropdownRef}>
-      <div className={styles['multi-dropdown__wrapper']}>
+    <div className={`${s.root} ${className}`} ref={dropdownRef}>
+      <div className={s.root__wrapper}>
         <Input
           value={value.length === 0 ? searchTerm : getTitle(value)}
           onFocus={handleToggleDropdown}
@@ -75,20 +75,18 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({ className, options, value
           placeholder={value.length === 0 ? getTitle(value) : ''}
           disabled={disabled}
           color={isOpen ? 'secondary' : 'primary'}
-          className={styles['multi-dropdown__input']}
-          afterSlot={
-            <ArrowDownIcon color="secondary" className={isOpen ? styles['multi-dropdown__icon--opened'] : ''} />
-          }
+          className={s.root__input}
+          afterSlot={<ArrowDownIcon color="secondary" className={isOpen ? s['root__icon-opened'] : ''} />}
         />
       </div>
       {isOpen && !disabled && (
-        <ul className={styles['multi-dropdown__options']}>
+        <ul className={s.root__options}>
           {filteredOptions.map((option) => (
             <li
               key={option.key}
               onClick={() => handleSelectOption(option)}
-              className={`${styles['multi-dropdown__option']} ${
-                value.some((selected) => selected.key === option.key) ? styles['multi-dropdown__option--selected'] : ''
+              className={`${s.root__option} ${
+                value.some((selected) => selected.key === option.key) ? s['root__option-selected'] : ''
               }`}
             >
               {option.value}

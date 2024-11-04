@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
-import classNames from 'classnames';
+import cn from 'classnames';
 import Text from '../Text';
-import styles from './Card.module.scss';
+import s from './Card.module.scss';
 
 export type CardProps = {
   className?: string;
@@ -25,33 +25,33 @@ const Card: React.FC<CardProps> = ({
   actionSlot,
 }) => {
   return (
-    <div className={classNames(styles.card, className)} onClick={onClick}>
+    <div className={cn(s.root, className)} onClick={onClick}>
       {image && (
-        <div className={styles['card__image-wrapper']}>
-          <img src={image} alt="Card Image" className={styles.card__image} />
+        <div className={s['root__image-wrapper']}>
+          <img src={image} alt="Card Image" className={s.root__image} />
         </div>
       )}
-      <div className={styles['card__content-wrapper']}>
-        <div className={styles.card__content}>
+      <div className={s['root__content-wrapper']}>
+        <div className={s.root__content}>
           {captionSlot && (
-            <Text className={styles.card__caption} weight="medium" color="secondary">
+            <Text className={s.root__caption} weight="medium" color="secondary">
               {captionSlot}
             </Text>
           )}
-          <Text className={styles.card__title} maxLines={2} weight="medium">
+          <Text className={s.root__title} maxLines={2} weight="medium">
             {title}
           </Text>
-          <Text className={styles.card__subtitle} color="secondary" maxLines={3}>
+          <Text className={s.root__subtitle} color="secondary" maxLines={3}>
             {subtitle}
           </Text>
         </div>
-        <div className={styles.card__footer}>
+        <div className={s.root__footer}>
           {contentSlot && (
-            <Text weight="bold" className={styles['card__content-slot']}>
+            <Text weight="bold" className={s['root__content-slot']}>
               {contentSlot}
             </Text>
           )}
-          {actionSlot && <div className={styles.card__action}>{actionSlot}</div>}
+          {actionSlot && <div className={s.root__action}>{actionSlot}</div>}
         </div>
       </div>
     </div>

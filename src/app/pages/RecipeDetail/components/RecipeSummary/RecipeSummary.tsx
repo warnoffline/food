@@ -1,5 +1,5 @@
 import Text from '@/components/Text';
-import styles from './RecipeSummary.module.scss';
+import s from './RecipeSummary.module.scss';
 import React, { memo } from 'react';
 
 type RecipeSummaryProps = {
@@ -8,7 +8,7 @@ type RecipeSummaryProps = {
 
 const RecipeSummary: React.FC<RecipeSummaryProps> = ({ summary }) => {
   return (
-    <div className={styles.summary}>
+    <div className={s.root}>
       <Text isHtml tag="p">
         {summary}
       </Text>

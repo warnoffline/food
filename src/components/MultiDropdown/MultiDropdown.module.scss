@@ -1,20 +1,20 @@
-@import '../../styles/styles.css';
-@import '../../styles/Roboto/fonts.css';
-@import '../../styles/variables';
+@import "@/styles/styles.css";
+@import "@/styles/Roboto/fonts.css";
+@import "@/styles/variables";
 
-.multi-dropdown{
-  &__wrapper{
+.root {
+  &__wrapper {
     position: relative;
     display: flex;
   }
-  &__input{
+  &__input {
     width: 100%;
-    font-family: 'Roboto';
-    &.open{
+    font-family: "Roboto";
+    &.open {
       color: $secondary;
     }
   }
-  &__options{
+  &__options {
     list-style: none;
     margin-top: 8px;
     padding: 0;
@@ -23,21 +23,21 @@
     border-radius: 10px;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
   }
-  &__option{
+  &__option {
     padding: 14px 12px;
     cursor: pointer;
-    font-family: 'Roboto';
-    &:hover{
+    font-family: "Roboto";
+    &:hover {
       color: $secondary;
     }
-    &--selected{
+    &-selected {
       color: $accent;
-      &:hover{
-          color: $secondary;
+      &:hover {
+        color: $secondary;
       }
     }
   }
-  &__icon--opened{
+  &__icon--opened {
     transform: rotate(180deg);
   }
 }

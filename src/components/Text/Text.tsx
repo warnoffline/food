@@ -1,6 +1,6 @@
-import classNames from 'classnames';
+import cn from 'classnames';
 import React, { memo } from 'react';
-import styles from './Text.module.scss';
+import s from './Text.module.scss';
 
 export type TextProps = {
   className?: string;
@@ -15,10 +15,10 @@ export type TextProps = {
 
 const Text: React.FC<TextProps> = ({ className, view, tag = 'p', weight, children, color, isHtml, maxLines }) => {
   const Tag = tag;
-  const textClassName = classNames(styles.text, className, {
-    [styles[`text--${color}`]]: color,
-    [styles[`text--weight-${weight}`]]: weight,
-    [styles[`text--view-${view}`]]: view,
+  const textClassName = cn(s.text, className, {
+    [s[`text--${color}`]]: color,
+    [s[`text--weight-${weight}`]]: weight,
+    [s[`text--view-${view}`]]: view,
   });
 
   const lineClampStyle: React.CSSProperties = maxLines

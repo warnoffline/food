@@ -1,6 +1,6 @@
-@import "../../styles/variables";
+@import "@/styles/variables";
 
-.header {
+.root {
   &__wrapper {
     width: 100%;
     height: 64px;
@@ -15,13 +15,11 @@
     width: calc(100% - 100px);
     display: flex;
     justify-content: space-between;
-    &-left {
-      & {
-        display: flex;
-        align-items: center;
-        gap: 80px;
-      }
-    }
+  }
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 80px;
   }
   &__logo {
     display: flex;
@@ -38,11 +36,11 @@
     align-items: center;
     gap: 16px;
   }
-  &__link{
+  &__link {
     font-weight: 400;
     font-size: 16px;
     color: $primary;
-    &--selected{
+    &-selected {
       font-weight: 600;
       color: $accent;
     }
@@ -53,8 +51,8 @@
       color: $accent;
     }
   }
-  &__icon{
-    &--stroke {
+  &__icon {
+    &-stroke {
       cursor: pointer;
       &:hover {
         stroke: $brand-hover;
@@ -63,7 +61,7 @@
         stroke: $brand-active;
       }
     }
-    &--fill {
+    &-fill {
       cursor: pointer;
       &:hover {
         fill: $brand-hover;
@@ -74,4 +72,3 @@
     }
   }
 }
-

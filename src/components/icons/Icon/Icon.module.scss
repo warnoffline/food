@@ -1,35 +1,35 @@
-@import '../../../styles/styles.css';
-@import '../../../styles/variables';
+@import "@/styles/styles.css";
+@import "@/styles/variables";
 
-.icon{
-    &-primary{
-        fill: $primary;
-    }
-    &-secondary{
-        fill: $secondary;
-    }
-    &-accent{
-        fill: $accent;
-    }
-    &-white{
-        fill: #fff;
-    }
-    &-disabled{
-        fill: rgba(0, 0, 0, 0.2);
-    }
+.icon {
+  &-primary {
+    fill: $primary;
+  }
+  &-secondary {
+    fill: $secondary;
+  }
+  &-accent {
+    fill: $accent;
+  }
+  &-white {
+    fill: #fff;
+  }
+  &-disabled {
+    fill: rgba(0, 0, 0, 0.2);
+  }
 
-    &-stroke{
-        &-primary{
-            stroke: $primary;
-        }
-        &-secondary{
-            stroke: $secondary;
-        }
-        &-accent{
-            stroke: $accent;
-        }
-        &-disabled{
-            stroke: rgba(0, 0, 0, 0.2);
-        }
+  &-stroke {
+    &-primary {
+      stroke: $primary;
     }
+    &-secondary {
+      stroke: $secondary;
+    }
+    &-accent {
+      stroke: $accent;
+    }
+    &-disabled {
+      stroke: rgba(0, 0, 0, 0.2);
+    }
+  }
 }

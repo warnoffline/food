@@ -1,6 +1,6 @@
-@import "../../styles/styles.css";
-@import "../../styles/Roboto/fonts.css";
-@import "../../styles/variables";
+@import "@/styles/styles.css";
+@import "@/styles/Roboto/fonts.css";
+@import "@/styles/variables";
 
 .text {
   font-family: "Roboto";
@@ -13,7 +13,7 @@
   &--accent {
     color: $brand;
   }
-  &--weight{
+  &--weight {
     &-normal {
       font-weight: 400;
     }
@@ -27,7 +27,7 @@
       font-weight: 700;
     }
   }
-  &--view{
+  &--view {
     &-title {
       font-size: $xl;
       font-weight: bold;

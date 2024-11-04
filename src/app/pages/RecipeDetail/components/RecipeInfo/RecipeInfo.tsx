@@ -1,5 +1,5 @@
 import { RecipeById } from '@/types/recipes';
-import styles from './RecipeInfo.module.scss';
+import s from './RecipeInfo.module.scss';
 import Text from '@/components/Text';
 import { memo } from 'react';
 import { DETAIL_CONFIG } from '@/configs/detailsConfig';
@@ -12,15 +12,15 @@ const RecipeInfo: React.FC<RecipeInfoProps> = ({ recipe }) => {
   const mainDetails = DETAIL_CONFIG(recipe);
 
   return (
-    <div className={styles['recipe-info']}>
-      <div className={styles['recipe-info__img']}>
+    <div className={s.root}>
+      <div className={s.root__img}>
         <img src={recipe.image} alt="" />
       </div>
-      <div className={styles['recipe-info__txts']}>
+      <div className={s.root__txts}>
         {mainDetails.map(
           ({ value, title }) =>
             value && (
-              <div key={title} className={styles['recipe-info__detail']}>
+              <div key={title} className={s.root__detail}>
                 <Text view="p-m">{title}</Text>
                 <Text color="accent" weight="semiBold" view="p-m">
                   {value}

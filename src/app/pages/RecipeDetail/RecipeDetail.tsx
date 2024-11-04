@@ -1,6 +1,6 @@
 import RecipeTabHeader from '@/components/RecipeTabHeader';
 import React from 'react';
-import styles from './RecipeDetail.module.scss';
+import s from './RecipeDetail.module.scss';
 import { IngredientList, RecipeSummary, RecipeInfo, EquipmentList, DirectionsList } from './components';
 import RecipeStore from '@/stores/RecipeStore';
 import { useEffect } from 'react';
@@ -29,16 +29,16 @@ const RecipeDetail: React.FC = observer(() => {
   }
 
   return (
-    <div className={styles.recipe}>
-      <div className={styles.recipe__center}>
+    <div className={s.root}>
+      <div className={s.root__center}>
         <RecipeTabHeader>{recipe.title}</RecipeTabHeader>
         <RecipeInfo recipe={recipe} />
         <RecipeSummary summary={recipe.summary} />
-        <div className={styles.recipe__list}>
+        <div className={s.root__list}>
           <IngredientList ingredients={recipe.extendedIngredients} />
-          <div className={styles.recipe__share}>
-            <div className={styles['recipe__share-circle']}></div>
-            <div className={styles['recipe__share-line']}></div>
+          <div className={s.root__share}>
+            <div className={s['root__share-circle']}></div>
+            <div className={s['root__share-line']}></div>
           </div>
           {equipments?.equipment && <EquipmentList equipments={equipments} />}
         </div>

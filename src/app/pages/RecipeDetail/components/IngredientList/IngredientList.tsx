@@ -1,6 +1,6 @@
 import Text from '@/components/Text';
 import DishIcon from '@/components/icons/DishIcon';
-import styles from './IngredientList.module.scss';
+import s from './IngredientList.module.scss';
 import { Ingredient } from '@/types/recipes';
 import React, { memo } from 'react';
 
@@ -10,13 +10,13 @@ type IngredientListProps = {
 
 const IngredientList: React.FC<IngredientListProps> = ({ ingredients }) => {
   return (
-    <div className={styles['ingredient-list']}>
+    <div className={s.root}>
       <Text view="p-xl" weight="semiBold">
         Ingredients
       </Text>
-      <div className={styles['ingredient-list__items']}>
+      <div className={s.root__items}>
         {ingredients.map((ingredient) => (
-          <div key={ingredient.id} className={styles['ingredient-list__item']}>
+          <div key={ingredient.id} className={s.root__item}>
             <div>
               <DishIcon width={24} height={24} color="accent" />
             </div>

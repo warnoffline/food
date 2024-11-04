@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from 'react';
-import styles from './Pagination.module.scss';
+import s from './Pagination.module.scss';
 import BackArrowIcon from '../icons/BackArrowIcon';
 import Text from '../Text';
 
@@ -22,7 +22,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
   const renderPrevButton = () => (
     <button
       key="prev"
-      className={styles['pagination__btn-prev']}
+      className={s.root__prev}
       onClick={() => handlePageChange(currentPage - 1)}
       disabled={currentPage === 1}
     >
@@ -37,7 +37,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
     if (currentPage > 2) {
       buttons.push(
-        <button key={1} className={styles['pagination__btn-page']} onClick={() => handlePageChange(1)}>
+        <button key={1} className={s.root__page} onClick={() => handlePageChange(1)}>
           <Text view="p-l">1</Text>
         </button>,
       );
@@ -45,7 +45,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
     if (currentPage > 3) {
       buttons.push(
-        <Text view="p-l" weight="medium" className={styles['pagination__ellipsis']} key="ellipsis-start">
+        <Text view="p-l" weight="medium" className={s.root__ellipsis} key="ellipsis-start">
           ...
         </Text>,
       );
@@ -55,7 +55,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
       buttons.push(
         <button
           key={page}
-          className={`${styles['pagination__btn-page']} ${currentPage === page ? styles['pagination__btn-page--active'] : ''}`}
+          className={`${s.root__page} ${currentPage === page ? s['root__page-active'] : ''}`}
           onClick={() => handlePageChange(page)}
         >
           <Text view="p-l">{page}</Text>
@@ -65,7 +65,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
     if (endPage < totalPages - 1) {
       buttons.push(
-        <Text view="p-l" weight="medium" className={styles['pagination__ellipsis']} key="ellipsis-end">
+        <Text view="p-l" weight="medium" className={s.root__ellipsis} key="ellipsis-end">
           ...
         </Text>,
       );
@@ -73,11 +73,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
     if (endPage < totalPages) {
       buttons.push(
-        <button
-          key={totalPages}
-          className={styles['pagination__btn-page']}
-          onClick={() => handlePageChange(totalPages)}
-        >
+        <button key={totalPages} className={s.root__page} onClick={() => handlePageChange(totalPages)}>
           <Text view="p-l">{totalPages}</Text>
         </button>,
       );
@@ -89,7 +85,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
   const renderNextButton = () => (
     <button
       key="next"
-      className={styles['pagination__btn-next']}
+      className={s.root__next}
       onClick={() => handlePageChange(currentPage + 1)}
       disabled={currentPage === totalPages}
     >
@@ -98,10 +94,10 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
   );
 
   return (
-    <div className={styles['pagination']}>
-      <div className={styles['pagination__prev-group']}>{renderPrevButton()}</div>
-      <div className={styles['pagination__page-group']}>{renderPageButtons()}</div>
-      <div className={styles['pagination__next-group']}>{renderNextButton()}</div>
+    <div className={s.root}>
+      <div className={s.root__prevGroup}>{renderPrevButton()}</div>
+      <div className={s.root__pageGroup}>{renderPageButtons()}</div>
+      <div className={s.root__nextGroup}>{renderNextButton()}</div>
     </div>
   );
 };

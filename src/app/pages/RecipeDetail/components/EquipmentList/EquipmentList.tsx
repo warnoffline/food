@@ -1,7 +1,7 @@
 import Text from '@/components/Text';
 import { EquipmentById } from '@/types/recipes';
 import LadelIcon from '@/components/icons/LadleIcon';
-import styles from './EquipmentList.module.scss';
+import s from './EquipmentList.module.scss';
 import React, { memo } from 'react';
 
 type EquipmentListProps = {
@@ -10,13 +10,13 @@ type EquipmentListProps = {
 
 const EquipmentList: React.FC<EquipmentListProps> = ({ equipments }) => {
   return (
-    <div className={styles['equipment-list']}>
+    <div className={s.root}>
       <Text view="p-xl" weight="semiBold">
         Equipment
       </Text>
-      <div className={styles['equipment-list__items']}>
+      <div className={s.root__items}>
         {equipments.equipment.map(({ name }) => (
-          <div key={name} className={styles['equipment-list__item']}>
+          <div key={name} className={s.root__item}>
             <div>
               <LadelIcon width={24} height={24} color="accent" />
             </div>

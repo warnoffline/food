@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
-import styles from './Loader.module.scss';
-import classNames from 'classnames';
+import s from './Loader.module.scss';
+import cn from 'classnames';
 
 export type LoaderProps = {
   size?: 's' | 'm' | 'l';
@@ -9,12 +9,12 @@ export type LoaderProps = {
 };
 
 const Loader: React.FC<LoaderProps> = ({ size = 'l', className, color }) => {
-  const loaderClass = classNames(styles.loader, styles[`loader--${size}`], className);
+  const loaderClass = cn(s.root, s[`root-${size}`], className);
 
   return (
     <div className={loaderClass}>
       <div
-        className={styles.loader__spinner}
+        className={s.root__spinner}
         style={{
           borderTopColor: color,
           borderLeftColor: color,

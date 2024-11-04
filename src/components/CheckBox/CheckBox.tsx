@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from 'react';
-import classNames from 'classnames';
+import cn from 'classnames';
 import CheckIcon from '../icons/CheckIcon';
-import styles from './CheckBox.module.scss';
+import s from './CheckBox.module.scss';
 
 export type CheckBoxProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
   onChange: (checked: boolean) => void;
@@ -17,18 +17,12 @@ const CheckBox: React.FC<CheckBoxProps> = ({ checked, onChange, className, ...re
   );
 
   return (
-    <label className={classNames(styles['checkbox__wrapper'], className)}>
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={handleChange}
-        className={styles['checkbox__input']}
-        {...rest}
-      />
-      <span className={styles['checkbox__custom']}>
+    <label className={cn(s.root__wrapper, className)}>
+      <input type="checkbox" checked={checked} onChange={handleChange} className={s.root__input} {...rest} />
+      <span className={s.root__custom}>
         {checked && (
           <CheckIcon
-            className={styles['checkbox__icon']}
+            className={s.root__icon}
             strokeWidth={2}
             width={24}
             height={24}

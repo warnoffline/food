@@ -1,9 +1,10 @@
-import * as React from "react";
-import styles from "./Icon.module.scss";
+import * as React from 'react';
+import s from './Icon.module.scss';
+import cn from 'classnames';
 
 export type IconProps = React.SVGAttributes<SVGElement> & {
   className?: string;
-  color?: "primary" | "secondary" | "accent" | "white" | "disabled" | '';
+  color?: 'primary' | 'secondary' | 'accent' | 'white' | 'disabled' | '';
   width?: number;
   height?: number;
 };
@@ -16,14 +17,15 @@ const Icon: React.FC<React.PropsWithChildren<IconProps>> = ({
   className,
   ...props
 }) => {
-  const colorClass = color ? styles[`icon-${color}`] : "";
-  const strokeColor = props.stroke ? styles[`icon-stroke-${props.stroke}`] : "";
+  const colorClass = color ? s[`icon-${color}`] : '';
+  const strokeColor = props.stroke ? s[`icon-stroke-${props.stroke}`] : '';
+  const classNames = cn(className || '', colorClass, strokeColor);
 
   return (
     <svg
       width={width}
       height={height}
-      className={`${className || ""} ${colorClass} ${strokeColor}`}
+      className={classNames}
       viewBox={`0 0 ${width} ${height}`}
       xmlns="http://www.w3.org/2000/svg"
       {...props}

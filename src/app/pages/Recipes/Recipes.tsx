@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Text from '@/components/Text';
-import styles from './Recipes.module.scss';
+import s from './Recipes.module.scss';
 import { observer } from 'mobx-react-lite';
 import FilterRecipes from './components/FilterRecipes/FilterRecipes';
 import RecipeCard from './components/RecipeCard/RecipeCard';
@@ -27,26 +27,24 @@ const Recipes: React.FC = observer(() => {
   const recipes = RecipeStore.recipes;
 
   return (
-    <div className={styles.recipes}>
-      <div className={styles.recipes__banner}>
+    <div className={s.root}>
+      <div className={s.root__banner}>
         <img src="/banner.png" alt="banner" />
       </div>
-      <div className={styles.recipes__content}>
-        <div className={styles.recipes__quote}>
+      <div className={s.root__content}>
+        <div className={s.root__quote}>
           <Text>
             Find the perfect food and drink ideas for every occasion, from weeknight dinners to holiday feasts.
           </Text>
         </div>
         <FilterRecipes />
-        <div className={styles.recipes__items}>
+        <div className={s.root__items}>
           {recipes.map((recipe) => (
-            <React.Fragment key={recipe.id}>
-              <RecipeCard recipe={recipe} />
-            </React.Fragment>
+            <RecipeCard key={recipe.id} recipe={recipe} />
           ))}
         </div>
         {totalPages > 1 && (
-          <div className={styles.recipes__pagination}>
+          <div className={s.root__pagination}>
             <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
           </div>
         )}

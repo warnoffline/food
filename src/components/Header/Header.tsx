@@ -1,35 +1,33 @@
-import styles from './Header.module.scss';
+import s from './Header.module.scss';
 import Text from '../Text';
-import { ROUTES } from '@/configs/routeConfig';
+import { NAV_CONFIG } from '@/configs/navConfig';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import LikeIcon from '../icons/LikeIcon';
 import ProfileIcon from '../icons/ProfileIcon';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { memo } from 'react';
 
 const Header = () => {
   const location = useLocation();
 
   return (
-    <div className={styles['header__wrapper']}>
-      <div className={styles['header__content']}>
-        <div className={styles['header__content-left']}>
+    <div className={s.root__wrapper}>
+      <div className={s.root__content}>
+        <div className={s.root__left}>
           <Link to="/">
-            <div className={styles['header__logo']}>
+            <div className={s.root__logo}>
               <img src="/logo.svg" alt="" />
               <Text view="title">Food Client</Text>
             </div>
           </Link>
-          <div className={styles['header__navbar']}>
-            {ROUTES.map(
+          <div className={s.root__navbar}>
+            {NAV_CONFIG.map(
               ({ name, path }) =>
                 name && (
                   <NavLink
                     key={name}
                     to={path}
-                    className={({ isActive }) =>
-                      classNames(styles['header__link'], isActive && styles['header__link--selected'])
-                    }
+                    className={({ isActive }) => cn(s.root__link, isActive && s['root__link-selected'])}
                   >
                     {name}{' '}
                   </NavLink>
@@ -37,10 +35,10 @@ const Header = () => {
             )}
           </div>
         </div>
-        <div className={styles['header__actions']}>
+        <div className={s.root__actions}>
           <Link to="favorites">
             <LikeIcon
-              className={styles['header__icon--stroke']}
+              className={s['root__icon-stroke']}
               width={19}
               height={19}
               color={location.pathname.includes('favorites') ? 'accent' : 'white'}
@@ -49,7 +47,7 @@ const Header = () => {
             />
           </Link>
           <Link to="profile">
-            <ProfileIcon color="accent" className={styles['header__icon--fill']} />
+            <ProfileIcon color="accent" className={s['root__icon-fill']} />
           </Link>
         </div>
       </div>
