@@ -37,6 +37,12 @@ const FilterRecipes: React.FC<FilterRecipesProps> = ({ handleQuerySubmit, onFilt
     [handleQuerySubmit, value],
   );
 
+  const handleClear = () => {
+    sessionStorage.setItem('recipe-query', '');
+    setValue('');
+    handleQuerySubmit('');
+  };
+
   return (
     <div className={s.root}>
       <div className={s.root__find}>
@@ -50,6 +56,7 @@ const FilterRecipes: React.FC<FilterRecipesProps> = ({ handleQuerySubmit, onFilt
         <Button onClick={() => handleQuerySubmit(value)}>
           <FindIcon width={24} height={24} color="white" />
         </Button>
+        {value && <Button onClick={() => handleClear()}>Clear</Button>}
       </div>
       <div className={s.root__select}>
         <div className={s.root__filters}>

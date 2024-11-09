@@ -170,7 +170,6 @@ class RecipeStore {
 
   setRecipes(data: Response<Recipe>) {
     runInAction(() => {
-      // Wrap in runInAction for consistency
       this._recipes = data.results;
       this._number = data.number;
       this._totalResults = data.totalResults;
@@ -179,21 +178,18 @@ class RecipeStore {
 
   setRecipe(recipe: Recipe) {
     runInAction(() => {
-      // Wrap in runInAction for consistency
       this._recipe = recipe;
     });
   }
 
   setSimilar(recipes: Recipe[]) {
     runInAction(() => {
-      // Wrap in runInAction for consistency
       this._similarRecipes = recipes;
     });
   }
 
   setEquipments(equipments: EquipmentById) {
     runInAction(() => {
-      // Wrap in runInAction for consistency
       this._equipments = equipments;
     });
   }
@@ -209,7 +205,6 @@ class RecipeStore {
   addRecipeToFavorites(recipe: Recipe) {
     if (!this.isFavorite(recipe.id)) {
       runInAction(() => {
-        // Wrap in runInAction for consistency
         this._favorites.push(recipe);
         this.saveFavoritesToLocalStorage();
       });

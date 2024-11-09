@@ -18,7 +18,7 @@ const SearchIngredient: React.FC<SearchIngredientProps> = ({ handleQuerySubmit }
   };
 
   const handleClear = () => {
-    sessionStorage.setItem('recipe-query', '');
+    sessionStorage.setItem('ingredient-query', '');
     setValue('');
     handleQuerySubmit('');
   };
