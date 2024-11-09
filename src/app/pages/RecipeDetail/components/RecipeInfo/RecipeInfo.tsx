@@ -28,6 +28,7 @@ const RecipeInfo: React.FC<RecipeInfoProps> = observer(({ recipe }) => {
     },
     [isFavorite, recipe],
   );
+
   return (
     <div className={s.root}>
       <div className={s.root__img}>

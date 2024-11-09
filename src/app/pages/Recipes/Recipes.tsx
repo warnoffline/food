@@ -12,14 +12,14 @@ import { observer } from 'mobx-react-lite';
 import RecipeStore from '@/stores/RecipeStore';
 
 const Recipes: React.FC = observer(() => {
-  const { recipes, getRecipes, metaState, totalResults } = RecipeStore;
+  const recipes = RecipeStore.recipes;
   const currentPageFromSession = Number(sessionStorage.getItem('recipe-current-page')) || 1;
   const resultsPerPage = 12;
   const [filters, setFilters] = useState<FilterData | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(currentPageFromSession);
   const [query, setQuery] = useState<string>(sessionStorage.getItem('recipe-query') || '');
 
-  const totalPages = Math.ceil(totalResults / resultsPerPage);
+  const totalPages = Math.ceil(RecipeStore.totalResults / resultsPerPage);
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
@@ -52,7 +52,7 @@ const Recipes: React.FC = observer(() => {
   }, []);
 
   useEffect(() => {
-    getRecipes({
+    RecipeStore.getRecipes({
       query: query || undefined,
       offset: (currentPage - 1) * resultsPerPage,
       number: resultsPerPage,
@@ -65,10 +65,10 @@ const Recipes: React.FC = observer(() => {
       addRecipeNutrition: true,
       addRecipeInformation: true,
     });
-  }, [currentPage, filters, getRecipes, query]);
+  }, [currentPage, filters, query]);
 
   const renderMetaContent = () => {
-    switch (metaState.recipes) {
+    switch (RecipeStore.metaState.recipes) {
       case Meta.loading:
         return <Loading />;
       case Meta.error:

@@ -11,6 +11,7 @@ import Loading from '@/components/Loading';
 import IngredientStore from '@/stores/IngredientStore';
 
 const Ingredients: React.FC = observer(() => {
+  const ingredients = IngredientStore.ingredients;
   const currentPageFromSession = Number(sessionStorage.getItem('ingredient-current-page')) || 1;
   const [currentPage, setCurrentPage] = useState<number>(currentPageFromSession);
   const [query, setQuery] = useState<string>(sessionStorage.getItem('ingredient-query') || '');
@@ -54,9 +55,9 @@ const Ingredients: React.FC = observer(() => {
           </div>
         );
       case Meta.success:
-        return IngredientStore.ingredients.length > 0 ? (
+        return ingredients.length > 0 ? (
           <div className={s.root__items}>
-            {IngredientStore.ingredients.map((ingredient) => (
+            {ingredients.map((ingredient) => (
               <IngredientCard key={ingredient.id} ingredient={ingredient} />
             ))}
           </div>

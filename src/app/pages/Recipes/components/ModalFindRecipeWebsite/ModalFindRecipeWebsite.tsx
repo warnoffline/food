@@ -12,7 +12,7 @@ type ModalFindRecipesProps = {
   onClose: () => void;
 };
 const ModalFilterRecipes: React.FC<ModalFindRecipesProps> = observer(({ onClose }) => {
-  const { recipe, getExtractRecipe, metaState } = RecipeStore;
+  const recipe = RecipeStore.recipe;
   const [url, setUrl] = useState<string>('');
   const navigate = useNavigate();
   const regex = useMemo(() => /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(:\d+)?(\/[^\s]*)?$/, []);
@@ -23,13 +23,13 @@ const ModalFilterRecipes: React.FC<ModalFindRecipesProps> = observer(({ onClose 
     async (event: React.FormEvent) => {
       event.preventDefault();
       if (regex.test(url) || url === '') {
-        await getExtractRecipe(url);
+        await RecipeStore.getExtractRecipe(url);
         navigate(`/recipes/${recipeId}`);
         setUrl('');
         onClose();
       }
     },
-    [regex, url, getExtractRecipe, navigate, recipeId, onClose],
+    [regex, url, navigate, recipeId, onClose],
   );
 
   return (
@@ -39,7 +39,7 @@ const ModalFilterRecipes: React.FC<ModalFindRecipesProps> = observer(({ onClose 
         <Input value={url} onChange={setUrl} color="primary" placeholder="Enter url" />
       </div>
       <div className={s.root__footer}>
-        <Button loading={metaState.extractRecipe === Meta.loading} className={s.root__btn} type="submit">
+        <Button loading={RecipeStore.metaState.extractRecipe === Meta.loading} className={s.root__btn} type="submit">
           Submit
         </Button>
         <Button className={s.root__btn} fill onClick={onClose}>

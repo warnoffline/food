@@ -15,6 +15,7 @@ interface RecipeCardProps {
 
 const RecipeCard: React.FC<RecipeCardProps> = observer(({ recipe }) => {
   const isFavorite = RecipeStore.isFavorite(recipe.id);
+
   const handleFavoriteToggle = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       event.stopPropagation();
