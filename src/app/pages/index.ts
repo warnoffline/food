@@ -8,3 +8,5 @@ export const MenuItemsLazy = React.lazy(() => import('./MenuItems/MenuItems'));
 export const ProductsLazy = React.lazy(() => import('./Products/Products'));
 export const ProfileLazy = React.lazy(() => import('./Profile/Profile'));
 export const FavoritesLazy = React.lazy(() => import('./Favorites/Favorites'));
+export const NotFoundLazy = React.lazy(() => import('./NotFound/NotFound'));
+export const IngredientDetailLazy = React.lazy(() => import('./IngredientDetail/IngredientDetail'));

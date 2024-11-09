@@ -16,6 +16,8 @@
   }
   &__options {
     list-style: none;
+    height: 300px;
+    overflow-y: auto;
     margin-top: 8px;
     padding: 0;
     border: 1px solid #fff;
@@ -37,7 +39,7 @@
       }
     }
   }
-  &__icon--opened {
+  &__icon-opened {
     transform: rotate(180deg);
   }
 }

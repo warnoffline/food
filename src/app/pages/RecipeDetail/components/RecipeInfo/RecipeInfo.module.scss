@@ -1,7 +1,13 @@
 .root {
   display: flex;
   gap: 166px;
+  &__icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
   &__img {
+    position: relative;
     object-fit: cover;
     img {
       width: 450px;

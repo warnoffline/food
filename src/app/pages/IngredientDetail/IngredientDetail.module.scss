@@ -1,0 +1,11 @@
+.root {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  &__center {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 100px);
+    gap: 48px;
+  }
+}

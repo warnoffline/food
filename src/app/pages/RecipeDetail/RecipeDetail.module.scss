@@ -12,14 +12,12 @@
   &__list {
     display: flex;
     gap: 50px;
-    &--share {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-    }
   }
   &__share {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
     &-circle {
       width: 7px;
       height: 7px;

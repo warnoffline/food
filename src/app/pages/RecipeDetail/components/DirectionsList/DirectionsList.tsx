@@ -14,12 +14,12 @@ const DirectionsList: React.FC<DirectionsListProps> = ({ analyzedInstructions })
         Direction
       </Text>
       <div className={s.root__list}>
-        {analyzedInstructions.map((instruction) => (
-          <div key={instruction.name} className={s.root__item}>
-            {instruction.name && <Text>{instruction.name}</Text>}
+        {analyzedInstructions.map(({ name, steps }) => (
+          <div key={name} className={s.root__item}>
+            <Text>{name}</Text>
             <div className={s.root__steps}>
-              {instruction.steps.map(({ number, step }) => (
-                <div key={number} className={s.root__step}>
+              {steps.map(({ number, step }) => (
+                <div key={number + step} className={s.root__step}>
                   <Text view="p-m" weight="semiBold">
                     Step {number}
                   </Text>

@@ -1,5 +1,5 @@
-import { RecipeById } from '@/types/recipes';
-export const DETAIL_CONFIG = (recipe: RecipeById) => {
+import { Recipe } from '@/types/recipes';
+export const DETAIL_CONFIG = (recipe: Recipe) => {
   return [
     { title: 'Preparation', value: recipe.preparationMinutes },
     { title: 'Cooking Time', value: recipe.cookingMinutes },

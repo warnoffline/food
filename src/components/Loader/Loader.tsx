@@ -3,7 +3,7 @@ import s from './Loader.module.scss';
 import cn from 'classnames';
 
 export type LoaderProps = {
-  size?: 's' | 'm' | 'l';
+  size?: 's' | 'm' | 'l' | 'xl';
   className?: string;
   color?: string;
 };

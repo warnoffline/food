@@ -1,4 +1,5 @@
 @import "@/styles/styles.css";
+@import "@/styles/variables";
 
 .root {
   width: 360px;
@@ -32,11 +33,12 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-      border-radius: 0 0 10px 10px;
+      border-radius: 10px;
     }
     &-slot {
       font-size: 18px;
       line-height: 22px;
+      color: $accent;
     }
     & {
       display: flex;

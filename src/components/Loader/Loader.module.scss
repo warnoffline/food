@@ -30,6 +30,14 @@
       border-width: 2px;
     }
   }
+  &-xl {
+    margin: 18px;
+    width: 80px;
+    height: 80px;
+    &.loader__spinner {
+      border-width: 6px;
+    }
+  }
 
   &__spinner {
     width: 100%;

@@ -4,7 +4,7 @@ import s from './Text.module.scss';
 
 export type TextProps = {
   className?: string;
-  view?: 'title' | 'button' | 'p-xxl' | 'p-xl' | 'p-l' | 'p-m' | 'p-l' | 'p-s' | 'p-xs' | 'p-xxs';
+  view?: 'title' | 'button' | 'label' | 'p-xxl' | 'p-xl' | 'p-l' | 'p-m' | 'p-l' | 'p-s' | 'p-xs' | 'p-xxs';
   tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'div' | 'p' | 'span';
   weight?: 'normal' | 'medium' | 'semiBold' | 'bold';
   children: React.ReactNode;

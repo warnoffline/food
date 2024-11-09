@@ -1,14 +1,14 @@
 import React, { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackArrowIcon from '../icons/BackArrowIcon';
-import s from './RecipeTabHeader.module.scss';
+import s from './DetailTabHeader.module.scss';
 import Text from '../Text';
 
-type RecipeTabHeaderProps = {
+type DetailTabHeaderProps = {
   children: React.ReactNode;
 };
 
-const RecipeTabHeader: React.FC<RecipeTabHeaderProps> = ({ children }) => {
+const DetailTabHeader: React.FC<DetailTabHeaderProps> = ({ children }) => {
   const navigate = useNavigate();
 
   return (
@@ -29,4 +29,4 @@ const RecipeTabHeader: React.FC<RecipeTabHeaderProps> = ({ children }) => {
   );
 };
 
-export default memo(RecipeTabHeader);
+export default memo(DetailTabHeader);

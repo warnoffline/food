@@ -2,11 +2,7 @@ import React, { useState, useRef, useEffect, memo, useCallback } from 'react';
 import ArrowDownIcon from '../icons/ArrowDownIcon';
 import Input from '../Input';
 import s from './MultiDropdown.module.scss';
-
-export type Option = {
-  key: string;
-  value: string;
-};
+import { Option } from '@/types/recipes';
 
 export type MultiDropdownProps = {
   className?: string;
@@ -23,23 +19,23 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({ className, options, value
   const [filteredOptions, setFilteredOptions] = useState(options);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleOutsideClick = useCallback((event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-      setIsOpen(false);
-      setSearchTerm('');
-    }
-  }, []);
-
   useEffect(() => {
     setFilteredOptions(options.filter((option) => option.value.toLowerCase().includes(searchTerm.toLowerCase())));
   }, [searchTerm, options]);
 
+  const handleOutsideClick = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setIsOpen(false);
+    }
+  };
+
   useEffect(() => {
-    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener('pointerdown', handleOutsideClick);
+
     return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('pointerdown', handleOutsideClick);
     };
-  }, [handleOutsideClick]);
+  }, []);
 
   const handleToggleDropdown = useCallback(() => {
     if (!disabled) {
@@ -66,7 +62,7 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({ className, options, value
   }, []);
 
   return (
-    <div className={`${s.root} ${className}`} ref={dropdownRef}>
+    <div ref={dropdownRef} className={`${s.root} ${className}`}>
       <div className={s.root__wrapper}>
         <Input
           value={value.length === 0 ? searchTerm : getTitle(value)}
@@ -76,7 +72,13 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({ className, options, value
           disabled={disabled}
           color={isOpen ? 'secondary' : 'primary'}
           className={s.root__input}
-          afterSlot={<ArrowDownIcon color="secondary" className={isOpen ? s['root__icon-opened'] : ''} />}
+          afterSlot={
+            <ArrowDownIcon
+              onClick={handleToggleDropdown}
+              color="secondary"
+              className={isOpen ? s['root__icon-opened'] : ''}
+            />
+          }
         />
       </div>
       {isOpen && !disabled && (

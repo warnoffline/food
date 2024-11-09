@@ -10,19 +10,31 @@
   gap: 8px;
   padding: 14px 20px;
   background-color: $brand;
-  border: 0;
+  border: 1px solid $brand;
   border-radius: 10px;
   color: white;
   font-size: 18px;
   font-family: "Roboto";
   cursor: pointer;
+  z-index: 5;
 
+  &-fill {
+    background: none;
+    border: 1px solid $brand;
+    color: $brand;
+    &:hover {
+      color: white;
+      border-color: $brand-hover;
+    }
+  }
   &-action:not(:disabled) {
     &:hover {
       background-color: $brand-hover;
+      border-color: $brand-hover;
     }
     &:active {
       background-color: $brand-active;
+      border-color: $brand-active;
     }
   }
 

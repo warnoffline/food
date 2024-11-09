@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import RootLayout from '../layout/RootLayout';
 import { ROUTES } from '@/configs/routeConfig';
 import {
@@ -10,17 +10,24 @@ import {
   IngredientsLazy,
   MealPlanningLazy,
   RecipeDetailLazy,
+  NotFoundLazy,
+  IngredientDetailLazy,
 } from '../pages';
 import { Suspense } from 'react';
+import Loading from '@/components/Loading/Loading';
 
 const RouterComponent = () => {
   const router = createBrowserRouter([
     {
-      path: ROUTES.root,
+      path: '/',
       element: <RootLayout />,
       children: [
         {
           index: true,
+          element: <Navigate to={ROUTES.recipes} replace />,
+        },
+        {
+          path: ROUTES.recipes,
           element: <RecipesLazy />,
         },
         {
@@ -34,6 +41,10 @@ const RouterComponent = () => {
         {
           path: ROUTES.ingredients,
           element: <IngredientsLazy />,
+        },
+        {
+          path: ROUTES.ingredientById,
+          element: <IngredientDetailLazy />,
         },
         {
           path: ROUTES.menuItems,
@@ -51,12 +62,16 @@ const RouterComponent = () => {
           path: ROUTES.profile,
           element: <ProfileLazy />,
         },
+        {
+          path: '*',
+          element: <NotFoundLazy />,
+        },
       ],
     },
   ]);
   return (
-    <Suspense fallback={<p>Loading...</p>}>
-      <RouterProvider router={router} />;
+    <Suspense fallback={<Loading page />}>
+      <RouterProvider router={router} />
     </Suspense>
   );
 };

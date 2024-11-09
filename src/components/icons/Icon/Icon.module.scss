@@ -17,6 +17,9 @@
   &-disabled {
     fill: rgba(0, 0, 0, 0.2);
   }
+  &-none {
+    fill: none;
+  }
 
   &-stroke {
     &-primary {

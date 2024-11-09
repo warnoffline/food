@@ -1,7 +1,8 @@
 export const ROUTES = {
-  root: '/',
+  recipes: '/recipes',
   recipeById: 'recipes/:id',
   ingredients: 'ingredients',
+  ingredientById: 'ingredients/:id',
   products: 'products',
   menuItems: 'menu-items',
   mealPlanning: 'meal-planning',

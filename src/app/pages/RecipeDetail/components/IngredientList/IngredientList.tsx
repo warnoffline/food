@@ -1,7 +1,7 @@
 import Text from '@/components/Text';
 import DishIcon from '@/components/icons/DishIcon';
 import s from './IngredientList.module.scss';
-import { Ingredient } from '@/types/recipes';
+import { Ingredient } from '@/types/ingredient';
 import React, { memo } from 'react';
 
 type IngredientListProps = {
@@ -15,12 +15,12 @@ const IngredientList: React.FC<IngredientListProps> = ({ ingredients }) => {
         Ingredients
       </Text>
       <div className={s.root__items}>
-        {ingredients.map((ingredient) => (
-          <div key={ingredient.id} className={s.root__item}>
+        {ingredients.map(({ name, id, original }) => (
+          <div key={id + name} className={s.root__item}>
             <div>
               <DishIcon width={24} height={24} color="accent" />
             </div>
-            <Text view="p-m">{ingredient.original}</Text>
+            <Text view="p-m">{original}</Text>
           </div>
         ))}
       </div>

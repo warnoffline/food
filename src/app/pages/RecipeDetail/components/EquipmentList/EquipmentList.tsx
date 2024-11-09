@@ -15,8 +15,8 @@ const EquipmentList: React.FC<EquipmentListProps> = ({ equipments }) => {
         Equipment
       </Text>
       <div className={s.root__items}>
-        {equipments.equipment.map(({ name }) => (
-          <div key={name} className={s.root__item}>
+        {equipments.equipment.map(({ name, image }) => (
+          <div key={name + image} className={s.root__item}>
             <div>
               <LadelIcon width={24} height={24} color="accent" />
             </div>

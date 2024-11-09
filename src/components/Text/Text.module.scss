@@ -32,6 +32,11 @@
       font-size: $xl;
       font-weight: bold;
     }
+    &-label {
+      font-size: $m;
+      font-weight: bold;
+      padding-bottom: 5px;
+    }
     &-button {
       font-size: $m;
       text-transform: uppercase;

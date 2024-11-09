@@ -8,14 +8,23 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   className?: string;
   children: React.ReactNode;
   disabled?: boolean;
+  fill?: boolean;
 };
 
-const Button: React.FC<ButtonProps> = ({ loading = false, className = '', children, disabled = false, ...props }) => {
+const Button: React.FC<ButtonProps> = ({
+  loading = false,
+  className = '',
+  children,
+  fill,
+  disabled = false,
+  ...props
+}) => {
   const isDisabled = loading || disabled;
   const buttonClass = cn(s.root, {
     [s.loading]: loading,
     [s['root-disabled']]: isDisabled,
     [s['root-action']]: !loading && !isDisabled,
+    [s['root-fill']]: fill,
     [className]: className.trim() !== '',
   });
 
