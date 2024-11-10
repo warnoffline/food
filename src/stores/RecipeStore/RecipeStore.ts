@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import {
   fetchEquipmentsById,
   fetchExtractRecipe,
@@ -6,12 +6,27 @@ import {
   fetchRecipes,
   fetchSimilarRecipe,
 } from '@/api/recipeApi';
-import { EquipmentById, GetRecipesParams, Recipe } from '@/types/recipes';
+import FilterStore from './FilterStore/FilterStore';
+import SearchRecipeStore from './SearchRecipeStore/SearchRecipeStore';
+import { EquipmentById, Filter, Recipe } from '@/types/recipes';
 import { Meta, Response } from '@/types/shared';
+import { ILocalStore } from '@/utils/useLocalStore';
+import qs from 'qs';
+
+type PrivateFields =
+  | '_recipes'
+  | '_favorites'
+  | '_similarRecipes'
+  | '_recipe'
+  | '_equipments'
+  | '_totalResults'
+  | '_number'
+  | '_metaState'
+  | '_queryString';
 
 type metaStateKeys = 'recipe' | 'equipments' | 'similarRecipes' | 'recipes' | 'extractRecipe';
 
-class RecipeStore {
+class RecipeStore implements ILocalStore {
   private _recipes: Recipe[] = [];
   private _favorites: Recipe[] = [];
   private _similarRecipes: Recipe[] = [];
@@ -19,6 +34,7 @@ class RecipeStore {
   private _equipments: EquipmentById | null = null;
   private _totalResults: number = 0;
   private _number: number = 0;
+  private _queryString: string = '';
   private _metaState: Record<metaStateKeys, Meta> = {
     recipes: Meta.initial,
     recipe: Meta.initial,
@@ -28,7 +44,41 @@ class RecipeStore {
   };
 
   constructor() {
-    makeAutoObservable(this);
+    makeObservable<RecipeStore, PrivateFields>(this, {
+      _recipes: observable,
+      _favorites: observable,
+      _similarRecipes: observable,
+      _recipe: observable,
+      _equipments: observable,
+      _totalResults: observable,
+      _number: observable,
+      _queryString: observable,
+      _metaState: observable,
+      recipes: computed,
+      favorites: computed,
+      similarRecipes: computed,
+      recipe: computed,
+      equipments: computed,
+      totalResults: computed,
+      number: computed,
+      queryString: computed,
+      metaState: computed,
+      getRecipeById: action,
+      getEquipmentsById: action,
+      getRecipes: action,
+      getSimilarRecipe: action,
+      getExtractRecipe: action,
+      setMetaState: action,
+      setRecipes: action,
+      setRecipe: action,
+      setSimilar: action,
+      setEquipments: action,
+      addRecipeToFavorites: action,
+      removeFromFavorites: action,
+      loadFavoritesFromLocalStorage: action,
+      destroy: action,
+      updateUrl: action,
+    });
     this.loadFavoritesFromLocalStorage();
   }
 
@@ -62,6 +112,10 @@ class RecipeStore {
 
   get metaState() {
     return this._metaState;
+  }
+
+  get queryString() {
+    return this._queryString;
   }
 
   getRecipeById = async (recipeId: number) => {
@@ -104,10 +158,37 @@ class RecipeStore {
     }
   };
 
-  getRecipes = async (params: GetRecipesParams) => {
+  getRecipes = async (currentPage: number) => {
     try {
       this.setMetaState('recipes', Meta.loading);
-      const data = await fetchRecipes(params);
+      const filters = FilterStore.filter;
+      const query = SearchRecipeStore.query;
+      const filterData = {
+        query: query || undefined,
+        offset: (currentPage - 1) * 12,
+        number: 12,
+        diet: filters?.diet?.map(({ value }) => value).join() || undefined,
+        cuisine: filters?.cuisine?.map(({ value }) => value).join() || undefined,
+        intolerances: filters?.intolerances?.map(({ value }) => value).join() || undefined,
+        type: filters?.type?.map(({ value }) => value).join() || undefined,
+        includeIngredients: filters?.includeIngredients || undefined,
+        excludeIngredients: filters?.excludeIngredients || undefined,
+        addRecipeNutrition: true,
+        addRecipeInformation: true,
+      };
+
+      const filterUrl: Filter = {
+        search: filterData.query,
+        diet: filterData.diet,
+        cuisine: filterData.cuisine,
+        intolerances: filterData.intolerances,
+        type: filterData.type,
+        includeIngredients: filterData.includeIngredients,
+        excludeIngredients: filterData.excludeIngredients,
+      };
+      this.updateUrl(filterUrl);
+
+      const data = await fetchRecipes(filterData);
       runInAction(() => {
         if (data) {
           this.setMetaState('recipes', Meta.success);
@@ -169,33 +250,21 @@ class RecipeStore {
   }
 
   setRecipes(data: Response<Recipe>) {
-    runInAction(() => {
-      // Wrap in runInAction for consistency
-      this._recipes = data.results;
-      this._number = data.number;
-      this._totalResults = data.totalResults;
-    });
+    this._recipes = data.results;
+    this._number = data.number;
+    this._totalResults = data.totalResults;
   }
 
   setRecipe(recipe: Recipe) {
-    runInAction(() => {
-      // Wrap in runInAction for consistency
-      this._recipe = recipe;
-    });
+    this._recipe = recipe;
   }
 
   setSimilar(recipes: Recipe[]) {
-    runInAction(() => {
-      // Wrap in runInAction for consistency
-      this._similarRecipes = recipes;
-    });
+    this._similarRecipes = recipes;
   }
 
   setEquipments(equipments: EquipmentById) {
-    runInAction(() => {
-      // Wrap in runInAction for consistency
-      this._equipments = equipments;
-    });
+    this._equipments = equipments;
   }
 
   isFavorite = (recipeId: number) => {
@@ -209,7 +278,6 @@ class RecipeStore {
   addRecipeToFavorites(recipe: Recipe) {
     if (!this.isFavorite(recipe.id)) {
       runInAction(() => {
-        // Wrap in runInAction for consistency
         this._favorites.push(recipe);
         this.saveFavoritesToLocalStorage();
       });
@@ -218,7 +286,6 @@ class RecipeStore {
 
   removeFromFavorites(recipeId: number) {
     runInAction(() => {
-      // Wrap in runInAction for consistency
       this._favorites = this._favorites.filter((recipe) => recipe.id !== recipeId);
       localStorage.setItem('favorites', JSON.stringify(this._favorites));
     });
@@ -228,10 +295,20 @@ class RecipeStore {
     const savedFavorites = localStorage.getItem('favorites');
     if (savedFavorites) {
       runInAction(() => {
-        // Wrap in runInAction for consistency
         this._favorites = JSON.parse(savedFavorites);
       });
     }
+  }
+
+  updateUrl(filterUrl: Filter) {
+    const queryString = qs.stringify(filterUrl, { addQueryPrefix: true });
+    window.history.replaceState(null, '', queryString || window.location.pathname);
+    this._queryString = queryString;
+  }
+
+  destroy(): void {
+    this._recipes = [];
+    this._recipe = null;
   }
 }
 

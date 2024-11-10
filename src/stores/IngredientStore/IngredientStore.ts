@@ -1,22 +1,45 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-import { Ingredient, IngredientsLoadParams } from '@/types/ingredient';
+import { action, computed, makeObservable, observable, runInAction } from 'mobx';
+import { Ingredient } from '@/types/ingredient';
 import { Meta, Response } from '@/types/shared';
 import { fetchIngredientById, fetchIngredients } from '@/api/ingredientApi';
+import qs from 'qs';
+import SearchIngredientStore from './SearchIngredientStore/SearchIngredientStore';
 
 type metaStateKeys = 'ingredients' | 'ingredient';
+
+type PrivateFields = '_ingredients' | '_ingredient' | '_totalResults' | '_number' | '_queryString' | '_metaState';
 
 class IngredientStore {
   private _ingredients: Ingredient[] = [];
   private _ingredient: Ingredient | null = null;
   private _totalResults: number = 0;
   private _number: number = 0;
+  private _queryString: string = '';
   private _metaState: Record<metaStateKeys, Meta> = {
     ingredients: Meta.initial,
     ingredient: Meta.initial,
   };
 
   constructor() {
-    makeAutoObservable(this);
+    makeObservable<IngredientStore, PrivateFields>(this, {
+      _ingredients: observable,
+      _ingredient: observable,
+      _totalResults: observable,
+      _number: observable,
+      _queryString: observable,
+      _metaState: observable,
+      ingredients: computed,
+      ingredient: computed,
+      totalResults: computed,
+      number: computed,
+      queryString: computed,
+      metaState: computed,
+      getIngredient: action,
+      getIngredients: action,
+      setIngredient: action,
+      setIngredients: action,
+      setMetaState: action,
+    });
   }
 
   get ingredients() {
@@ -39,19 +62,36 @@ class IngredientStore {
     return this._metaState;
   }
 
-  getIngredients = async (params: IngredientsLoadParams) => {
-    try {
-      this.setMetaState('ingredients', Meta.loading);
-      const data = await fetchIngredients(params);
-      runInAction(() => {
-        if (data) {
-          this.setMetaState('ingredients', Meta.success);
-          this.setIngredients(data);
-          return;
-        }
+  get queryString() {
+    return this._queryString;
+  }
 
-        this.setMetaState('ingredients', Meta.error);
-      });
+  getIngredients = async (currentPage: number) => {
+    try {
+      const query = SearchIngredientStore.query;
+      if (query) {
+        this.setMetaState('ingredients', Meta.loading);
+
+        const params = {
+          query: query,
+          offset: (currentPage - 1) * 12,
+          number: 12,
+          metaInformation: true,
+        };
+        const data = await fetchIngredients(params);
+        runInAction(() => {
+          if (data) {
+            this.setMetaState('ingredients', Meta.success);
+            this.setIngredients(data);
+            return;
+          }
+
+          this.setMetaState('ingredients', Meta.error);
+        });
+      } else {
+        this.setMetaState('ingredients', Meta.initial);
+      }
+      this.updateUrl(query);
     } catch (error) {
       runInAction(() => {
         this.setMetaState('ingredients', Meta.error);
@@ -93,6 +133,11 @@ class IngredientStore {
 
   setIngredient(data: Ingredient) {
     this._ingredient = data;
+  }
+  updateUrl(search: string) {
+    const queryString = qs.stringify({ search: search ? search : undefined }, { addQueryPrefix: true });
+    window.history.replaceState(null, '', queryString || window.location.pathname);
+    this._queryString = queryString;
   }
 }
 

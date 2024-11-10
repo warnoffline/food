@@ -105,6 +105,8 @@ export type Temperature = {
 };
 
 export type Filter = {
+  [key: string]: string | undefined;
+  search?: string;
   cuisine?: string;
   diet?: string;
   intolerances?: string;
@@ -124,14 +126,14 @@ export type FilterData = {
 
 export type GetRecipesParams = {
   query?: string;
-  offset: number;
-  number: number;
+  offset?: number;
+  number?: number;
   cuisine?: string;
   diet?: string;
   intolerances?: string;
   type?: string;
   includeIngredients?: string;
   excludeIngredients?: string;
-  addRecipeNutrition: boolean;
-  addRecipeInformation: boolean;
+  addRecipeNutrition?: boolean;
+  addRecipeInformation?: boolean;
 };

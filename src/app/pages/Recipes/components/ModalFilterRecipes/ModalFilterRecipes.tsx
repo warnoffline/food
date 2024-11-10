@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { memo, useCallback, useMemo, useState } from 'react';
 import MultiDropdown from '@/components/MultiDropdown';
 import { CUISINES } from '@/configs/cuisinesConfig';
 import { DIETS } from '@/configs/dietConfig';
@@ -8,36 +8,26 @@ import Input from '@/components/Input';
 import Text from '@/components/Text';
 import s from './ModalFilterRecipes.module.scss';
 import Button from '@/components/Button';
-import { FilterData } from '@/types/recipes';
 import { Option } from '@/types/recipes';
+import FilterStore from '@/stores/RecipeStore/FilterStore/FilterStore';
+import { observer } from 'mobx-react-lite';
 
-interface ModalFilterRecipesProps {
-  onSubmit: (filters: FilterData) => void;
-}
+type ModalFilterRecipesProps = {
+  onClose: () => void;
+};
 
-const ModalFilterRecipes: React.FC<ModalFilterRecipesProps> = ({ onSubmit }) => {
-  const [selectedCuisines, setSelectedCuisines] = useState<Option[]>([]);
-  const [selectedDiets, setSelectedDiets] = useState<Option[]>([]);
-  const [selectedIntolerances, setSelectedIntolerances] = useState<Option[]>([]);
-  const [selectedTypes, setSelectedTypes] = useState<Option[]>([]);
-  const [includeIngredients, setIncludeIngredients] = useState<string>('');
-  const [excludeIngredients, setExcludeIngredients] = useState<string>('');
+const ModalFilterRecipes: React.FC<ModalFilterRecipesProps> = observer(({ onClose }) => {
+  const filterRecipes = FilterStore;
+  const filters = filterRecipes.filter;
+
+  const [selectedCuisines, setSelectedCuisines] = useState<Option[]>(filters?.cuisine || []);
+  const [selectedDiets, setSelectedDiets] = useState<Option[]>(filters?.diet || []);
+  const [selectedIntolerances, setSelectedIntolerances] = useState<Option[]>(filters?.intolerances || []);
+  const [selectedTypes, setSelectedTypes] = useState<Option[]>(filters?.type || []);
+  const [includeIngredients, setIncludeIngredients] = useState<string>(filters?.includeIngredients || '');
+  const [excludeIngredients, setExcludeIngredients] = useState<string>(filters?.excludeIngredients || '');
 
   const regex = useMemo(() => /^[A-Za-zА-Яа-я\s,]+$/, []);
-
-  useEffect(() => {
-    const savedFilters = localStorage.getItem('recipeFilters');
-    if (savedFilters) {
-      const { cuisine, diet, intolerances, type, includeIngredients, excludeIngredients } = JSON.parse(savedFilters);
-
-      setSelectedCuisines(cuisine || []);
-      setSelectedDiets(diet || []);
-      setSelectedIntolerances(intolerances || []);
-      setSelectedTypes(type || []);
-      setIncludeIngredients(includeIngredients || '');
-      setExcludeIngredients(excludeIngredients || '');
-    }
-  }, []);
 
   const handleFiltersChange = (setter: React.Dispatch<React.SetStateAction<Option[]>>, value: Option[]) => {
     setter(value);
@@ -61,17 +51,13 @@ const ModalFilterRecipes: React.FC<ModalFilterRecipesProps> = ({ onSubmit }) => 
     [regex],
   );
 
-  const handleReset = useCallback(() => {
+  const handleReset = (event: React.FormEvent) => {
+    event.preventDefault();
     if (window.confirm('Are you sure you want to reset the filters?')) {
-      setSelectedCuisines([]);
-      setSelectedDiets([]);
-      setSelectedIntolerances([]);
-      setSelectedTypes([]);
-      setIncludeIngredients('');
-      setExcludeIngredients('');
-      localStorage.removeItem('recipeFilters');
+      filterRecipes.resetFilters();
     }
-  }, []);
+    onClose();
+  };
 
   const handleSubmit = useCallback(
     (event: React.FormEvent) => {
@@ -84,13 +70,14 @@ const ModalFilterRecipes: React.FC<ModalFilterRecipesProps> = ({ onSubmit }) => 
         includeIngredients: includeIngredients.replace(/\s+/g, ''),
         excludeIngredients: excludeIngredients.replace(/\s+/g, ''),
       };
-      localStorage.setItem('recipeFilters', JSON.stringify(filterData));
-      onSubmit(filterData);
+      filterRecipes.setFilters(filterData);
+      onClose();
     },
     [
       excludeIngredients,
+      filterRecipes,
       includeIngredients,
-      onSubmit,
+      onClose,
       selectedCuisines,
       selectedDiets,
       selectedIntolerances,
@@ -99,7 +86,7 @@ const ModalFilterRecipes: React.FC<ModalFilterRecipesProps> = ({ onSubmit }) => 
   );
 
   return (
-    <form onSubmit={handleSubmit} className={s.root}>
+    <form onSubmit={(event: React.FormEvent) => handleSubmit(event)} className={s.root}>
       <div>
         <Text view="label">Cuisines</Text>
         <MultiDropdown
@@ -164,6 +151,6 @@ const ModalFilterRecipes: React.FC<ModalFilterRecipesProps> = ({ onSubmit }) => 
       </div>
     </form>
   );
-};
+});
 
 export default memo(ModalFilterRecipes);

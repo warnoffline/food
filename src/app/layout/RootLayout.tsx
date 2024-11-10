@@ -1,8 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import Header from '@/components/Header';
 import s from './RootLayout.module.scss';
+import { useQueryParamsStoreInit } from '@/stores/RootStore/hooks/useQueryParamsStoreInit';
 
 const RootLayout = () => {
+  useQueryParamsStoreInit();
+
   return (
     <>
       <Header />

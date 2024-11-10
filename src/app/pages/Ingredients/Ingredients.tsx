@@ -9,40 +9,27 @@ import { observer } from 'mobx-react-lite';
 import { Meta } from '@/types/shared';
 import Loading from '@/components/Loading';
 import IngredientStore from '@/stores/IngredientStore';
+import SearchIngredientStore from '@/stores/IngredientStore/SearchIngredientStore/SearchIngredientStore';
 
 const Ingredients: React.FC = observer(() => {
-  const ingredients = IngredientStore.ingredients;
+  const ingredientStore = IngredientStore;
+  const search = SearchIngredientStore.query;
+  const ingredients = ingredientStore.ingredients;
+  const queryString = ingredientStore.queryString;
   const currentPageFromSession = Number(sessionStorage.getItem('ingredient-current-page')) || 1;
-  const [currentPage, setCurrentPage] = useState<number>(currentPageFromSession);
-  const [query, setQuery] = useState<string>(sessionStorage.getItem('ingredient-query') || '');
   const resultsPerPage = 12;
+  const [currentPage, setCurrentPage] = useState<number>(currentPageFromSession);
 
-  const totalPages = Math.ceil(IngredientStore.totalResults / resultsPerPage);
+  const totalPages = Math.ceil(ingredientStore.totalResults / resultsPerPage);
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
     sessionStorage.setItem('ingredient-current-page', page.toString());
   }, []);
 
-  const handleQuerySubmit = useCallback(
-    (query: string) => {
-      setQuery(query);
-      sessionStorage.setItem('ingredient-query', query);
-      handlePageChange(1);
-    },
-    [handlePageChange],
-  );
-
   useEffect(() => {
-    if (query) {
-      IngredientStore.getIngredients({
-        query: query,
-        offset: (currentPage - 1) * resultsPerPage,
-        number: resultsPerPage,
-        metaInformation: true,
-      });
-    }
-  }, [currentPage, query]);
+    ingredientStore.getIngredients(currentPage);
+  }, [currentPage, ingredientStore, search, queryString]);
 
   const renderMetaContent = () => {
     switch (IngredientStore.metaState.ingredients) {
@@ -80,7 +67,7 @@ const Ingredients: React.FC = observer(() => {
       <div className={s.root__center}>
         <Text view="p-xxl">Ingredients</Text>
         <div>
-          <SearchIngredient handleQuerySubmit={handleQuerySubmit} />
+          <SearchIngredient />
         </div>
         {renderMetaContent()}
         {totalPages > 1 && (
