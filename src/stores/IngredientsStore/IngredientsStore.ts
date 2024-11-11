@@ -4,10 +4,24 @@ import { Meta, Response } from '@/types/shared';
 import { fetchIngredientById, fetchIngredients } from '@/api/ingredientApi';
 import qs from 'qs';
 import { ILocalStore } from '@/utils/useLocalStore';
+import SearchIngredientStore from './SearchIngredientStore/SearchIngredientStore';
+import rootStore from '../RootStore';
 
 type metaStateKeys = 'ingredients' | 'ingredient';
 
-type PrivateFields = '_ingredients' | '_ingredient' | '_totalResults' | '_number' | '_queryString' | '_metaState';
+type PrivateFields =
+  | '_ingredients'
+  | '_ingredient'
+  | '_number'
+  | '_totalResults'
+  | '_number'
+  | '_queryString'
+  | '_metaState';
+
+type UpdateParams = {
+  page: number;
+  search?: string;
+};
 
 class IngredientsStore implements ILocalStore {
   private _ingredients: Ingredient[] = [];
@@ -15,12 +29,17 @@ class IngredientsStore implements ILocalStore {
   private _totalResults: number = 0;
   private _number: number = 0;
   private _queryString: string = '';
+  private _page: number;
   private _metaState: Record<metaStateKeys, Meta> = {
     ingredients: Meta.initial,
     ingredient: Meta.initial,
   };
 
+  readonly searchStore = new SearchIngredientStore();
+
   constructor() {
+    this._page = Number(rootStore.query.getParam('page')) || 1;
+
     makeObservable<IngredientsStore, PrivateFields>(this, {
       _ingredients: observable,
       _ingredient: observable,
@@ -39,6 +58,7 @@ class IngredientsStore implements ILocalStore {
       setIngredient: action,
       setIngredients: action,
       setMetaState: action,
+      destroy: action,
     });
   }
 
@@ -66,18 +86,25 @@ class IngredientsStore implements ILocalStore {
     return this._queryString;
   }
 
-  getIngredients = async (currentPage: number, query: string) => {
+  get page() {
+    return this._page;
+  }
+
+  getIngredients = async () => {
     try {
+      const query = this.searchStore.query;
       if (query) {
         this.setMetaState('ingredients', Meta.loading);
 
         const params = {
           query: query,
-          offset: (currentPage - 1) * 12,
+          offset: (this._page - 1) * 12,
           number: 12,
           metaInformation: true,
         };
+
         const data = await fetchIngredients(params);
+
         runInAction(() => {
           if (data) {
             this.setMetaState('ingredients', Meta.success);
@@ -90,7 +117,11 @@ class IngredientsStore implements ILocalStore {
       } else {
         this.setMetaState('ingredients', Meta.initial);
       }
-      this.updateUrl(query);
+      const params: UpdateParams = {
+        page: this._page,
+        search: query || undefined,
+      };
+      this.updateUrl(params);
     } catch (error) {
       runInAction(() => {
         this.setMetaState('ingredients', Meta.error);
@@ -133,18 +164,18 @@ class IngredientsStore implements ILocalStore {
   setIngredient(data: Ingredient) {
     this._ingredient = data;
   }
-  updateUrl(search: string) {
-    const queryString = qs.stringify({ search: search ? search : undefined }, { addQueryPrefix: true });
+
+  setPage(page: number) {
+    this._page = page;
+  }
+
+  updateUrl(params: UpdateParams) {
+    const queryString = qs.stringify(params, { addQueryPrefix: true });
     window.history.replaceState(null, '', queryString || window.location.pathname);
     this._queryString = queryString;
   }
 
-  destroy(): void {
-    this._ingredients = [];
-    this._totalResults = 0;
-    this._number = 0;
-    this._queryString = '';
-  }
+  destroy(): void {}
 }
 
 export default IngredientsStore;

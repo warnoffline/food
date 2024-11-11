@@ -15,19 +15,19 @@ interface RecipeCardProps {
 
 const RecipeCard: React.FC<RecipeCardProps> = observer(({ recipe }) => {
   const recipeStore = useRecipesStore();
-  const isFavorite = recipeStore.isFavorite(recipe.id);
+  const isRecipeFavorite = recipeStore.isFavorite(recipe.id);
 
   const handleFavoriteToggle = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       event.stopPropagation();
       event.preventDefault();
-      if (isFavorite) {
+      if (isRecipeFavorite) {
         recipeStore.removeFromFavorites(recipe.id);
       } else {
         recipeStore.addRecipeToFavorites(recipe);
       }
     },
-    [isFavorite, recipe, recipeStore],
+    [isRecipeFavorite, recipe, recipeStore],
   );
 
   const CaptionSlot: React.ReactNode = (
@@ -37,7 +37,7 @@ const RecipeCard: React.FC<RecipeCardProps> = observer(({ recipe }) => {
     </span>
   );
 
-  const ActionSlot = <Button onClick={handleFavoriteToggle}>{isFavorite ? 'Saved' : 'Save'}</Button>;
+  const ActionSlot = <Button onClick={handleFavoriteToggle}>{isRecipeFavorite ? 'Saved' : 'Save'}</Button>;
 
   return (
     <Link to={`/recipes/${recipe.id}`}>

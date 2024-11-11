@@ -1,33 +1,45 @@
-import { action, computed, makeObservable, observable, runInAction } from 'mobx';
+import { action, computed, makeObservable, observable, remove, runInAction, set, toJS } from 'mobx';
 import { fetchExtractRecipe, fetchRecipes } from '@/api/recipeApi';
-import { Filter, FilterData, Recipe } from '@/types/recipes';
+import { Filter, Recipe } from '@/types/recipes';
 import { Meta, Response } from '@/types/shared';
 import { ILocalStore } from '@/utils/useLocalStore';
 import qs from 'qs';
+import FilterStore from './FilterStore/FilterStore';
+import SearchRecipeStore from './SearchRecipeStore/SearchRecipeStore';
+import rootStore from '../RootStore';
+import { CollectionModel, getInitialCollectionModel, linearizeCollection } from '../models/shared/collection';
 
-type PrivateFields = '_recipes' | '_totalResults' | '_number' | '_metaState' | '_queryString' | '_favorites';
+type PrivateFields = '_recipes' | '_totalResults' | '_number' | '_metaState' | '_queryString' | '_favorites' | '_page';
 
 type metaStateKeys = 'recipes' | 'extractRecipe';
 
 class RecipesStore implements ILocalStore {
   private _recipes: Recipe[] = [];
   private _totalResults: number = 0;
-  private _favorites: Recipe[] = [];
+  private _favorites: CollectionModel<number, Recipe> = getInitialCollectionModel();
   private _number: number = 0;
   private _queryString: string = '';
   private _metaState: Record<metaStateKeys, Meta> = {
     recipes: Meta.initial,
     extractRecipe: Meta.initial,
   };
+  private _page: number;
+
+  readonly filtersStore = new FilterStore();
+  readonly searchStore = new SearchRecipeStore();
 
   constructor() {
+    this._page = Number(rootStore.query.getParam('page')) || 1;
+
     makeObservable<RecipesStore, PrivateFields>(this, {
+      _page: observable,
       _recipes: observable,
       _totalResults: observable,
       _number: observable,
       _queryString: observable,
       _metaState: observable,
       _favorites: observable,
+      page: computed,
       favorites: computed,
       recipes: computed,
       totalResults: computed,
@@ -39,14 +51,19 @@ class RecipesStore implements ILocalStore {
       extractRicpe: action,
       setMetaState: action,
       setRecipes: action,
+      setPage: action.bound,
       destroy: action,
       updateUrl: action,
+      isFavorite: action,
+      loadFavoritesFromLocalStorage: action,
+      addRecipeToFavorites: action,
+      saveFavoritesToLocalStorage: action,
     });
     this.loadFavoritesFromLocalStorage();
   }
 
-  get favorites() {
-    return this._favorites;
+  get page() {
+    return this._page;
   }
 
   get recipes() {
@@ -69,24 +86,26 @@ class RecipesStore implements ILocalStore {
     return this._queryString;
   }
 
-  getRecipes = async (currentPage: number, query?: string, filters?: FilterData) => {
+  getRecipes = async () => {
     try {
       this.setMetaState('recipes', Meta.loading);
+
       const filterData = {
-        query: query || undefined,
-        offset: (currentPage - 1) * 12,
+        query: this.searchStore.query || undefined,
+        offset: (this._page - 1) * 12,
         number: 12,
-        diet: filters?.diet?.map(({ value }) => value).join() || undefined,
-        cuisine: filters?.cuisine?.map(({ value }) => value).join() || undefined,
-        intolerances: filters?.intolerances?.map(({ value }) => value).join() || undefined,
-        type: filters?.type?.map(({ value }) => value).join() || undefined,
-        includeIngredients: filters?.includeIngredients || undefined,
-        excludeIngredients: filters?.excludeIngredients || undefined,
+        diet: this.filtersStore.filter?.diet?.map(({ value }) => value).join() || undefined,
+        cuisine: this.filtersStore.filter?.cuisine?.map(({ value }) => value).join() || undefined,
+        intolerances: this.filtersStore.filter?.intolerances?.map(({ value }) => value).join() || undefined,
+        type: this.filtersStore.filter?.type?.map(({ value }) => value).join() || undefined,
+        includeIngredients: this.filtersStore.filter?.includeIngredients || undefined,
+        excludeIngredients: this.filtersStore.filter?.excludeIngredients || undefined,
         addRecipeNutrition: true,
         addRecipeInformation: true,
       };
 
       const filterUrl: Filter = {
+        page: this._page,
         search: filterData.query,
         diet: filterData.diet,
         cuisine: filterData.cuisine,
@@ -124,18 +143,17 @@ class RecipesStore implements ILocalStore {
     this._totalResults = data.totalResults;
   }
 
+  setPage(page: number) {
+    this._page = page;
+  }
+
   updateUrl(filterUrl: Filter) {
     const queryString = qs.stringify(filterUrl, { addQueryPrefix: true });
     window.history.replaceState(null, '', queryString || window.location.pathname);
     this._queryString = queryString;
   }
 
-  destroy(): void {
-    this._recipes = [];
-    this._totalResults = 0;
-    this._number = 0;
-    this._queryString = '';
-  }
+  destroy(): void {}
 
   getExtractRecipe = async (url: string) => {
     try {
@@ -161,30 +179,40 @@ class RecipesStore implements ILocalStore {
     sessionStorage.setItem('extractRecipe', JSON.stringify(data));
   }
 
+  get favorites() {
+    return linearizeCollection(this._favorites);
+  }
+
   isFavorite = (recipeId: number) => {
-    return this._favorites.some((favorite) => favorite.id === recipeId);
+    return this._favorites.order.includes(recipeId);
   };
 
   saveFavoritesToLocalStorage() {
-    localStorage.setItem('favorites', JSON.stringify(this._favorites));
+    const plainFavorites = toJS(this._favorites);
+    localStorage.setItem('favorites', JSON.stringify(plainFavorites));
   }
 
   addRecipeToFavorites(recipe: Recipe) {
     if (!this.isFavorite(recipe.id)) {
-      this._favorites.push(recipe);
+      set(this._favorites, 'order', [...this._favorites.order, recipe.id]);
+      set(this._favorites.entities, recipe.id, recipe);
       this.saveFavoritesToLocalStorage();
     }
   }
 
   removeFromFavorites(recipeId: number) {
-    this._favorites = this._favorites.filter((recipe) => recipe.id !== recipeId);
-    localStorage.setItem('favorites', JSON.stringify(this._favorites));
+    if (this.isFavorite(recipeId)) {
+      this._favorites.order = this._favorites.order.filter((id) => id !== recipeId);
+      remove(this._favorites.entities, recipeId.toString());
+      this.saveFavoritesToLocalStorage();
+    }
   }
 
   loadFavoritesFromLocalStorage() {
     const savedFavorites = localStorage.getItem('favorites');
     if (savedFavorites) {
-      this._favorites = JSON.parse(savedFavorites);
+      const parsedData: CollectionModel<number, Recipe> = JSON.parse(savedFavorites);
+      this._favorites = parsedData;
     }
   }
 }

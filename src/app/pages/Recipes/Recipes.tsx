@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import Text from '@/components/Text';
 import s from './Recipes.module.scss';
 import FilterRecipesWithProvider from './components/FilterRecipes/FilterRecipes';
@@ -9,32 +9,25 @@ import Loading from '@/components/Loading';
 import { Meta } from '@/types/shared';
 import { observer } from 'mobx-react-lite';
 import { RecipesStoreProvider, useRecipesStore } from './useRecipesStore';
-import { SearchRecipesStoreProvider, useSearchRecipesStore } from './useSearchRecipesStore';
-import { FilterRecipesStoreProvider, useFilterRecipesStore } from './useFilterRecipesStore';
+import { withProvider } from '@/hoc/withProvider';
 
 const Recipes: React.FC = observer(() => {
-  const filters = useFilterRecipesStore().filter || undefined;
-  const recipeStore = useRecipesStore();
-  const search = useSearchRecipesStore().query;
-  const recipes = recipeStore.recipes;
-  const queryString = recipeStore.queryString;
-  const currentPageFromSession = Number(sessionStorage.getItem('recipe-current-page')) || 1;
+  const { filtersStore, searchStore, setPage, recipes, queryString, page, getRecipes, totalResults, metaState } =
+    useRecipesStore();
+
+  const filters = filtersStore.filter || undefined;
+  const search = searchStore.query;
+
   const resultsPerPage = 12;
-  const [currentPage, setCurrentPage] = useState<number>(currentPageFromSession);
 
-  const totalPages = Math.ceil(recipeStore.totalResults / resultsPerPage);
-
-  const handlePageChange = useCallback((page: number) => {
-    setCurrentPage(page);
-    sessionStorage.setItem('recipe-current-page', page.toString());
-  }, []);
+  const totalPages = Math.ceil(totalResults / resultsPerPage);
 
   useEffect(() => {
-    recipeStore.getRecipes(currentPage, search, filters);
-  }, [currentPage, recipeStore, filters, queryString, search]);
+    getRecipes();
+  }, [filters, queryString, search, getRecipes]);
 
   const renderMetaContent = () => {
-    switch (recipeStore.metaState.recipes) {
+    switch (metaState.recipes) {
       case Meta.loading:
         return <Loading />;
       case Meta.error:
@@ -69,7 +62,7 @@ const Recipes: React.FC = observer(() => {
         {renderMetaContent()}
         {totalPages > 1 && (
           <div className={s.root__pagination}>
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+            <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
           </div>
         )}
       </div>
@@ -77,16 +70,6 @@ const Recipes: React.FC = observer(() => {
   );
 });
 
-const RecipesWithProvider: React.FC = () => {
-  return (
-    <RecipesStoreProvider>
-      <SearchRecipesStoreProvider>
-        <FilterRecipesStoreProvider>
-          <Recipes />
-        </FilterRecipesStoreProvider>
-      </SearchRecipesStoreProvider>
-    </RecipesStoreProvider>
-  );
-};
+const RecipesWithProvider = withProvider(RecipesStoreProvider, Recipes);
 
 export default RecipesWithProvider;

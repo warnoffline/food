@@ -8,23 +8,18 @@ import { observer } from 'mobx-react-lite';
 import SimilarList from './components/SimilarList/SimilarList';
 import Loading from '@/components/Loading';
 import { RecipeStoreProvider, useRecipeStore } from './useRecipeStore';
-import { toJS } from 'mobx';
+import { withProvider } from '@/hoc/withProvider';
 
 const RecipeDetail: React.FC = observer(() => {
   const { id } = useParams();
-  const recipeStore = useRecipeStore();
-  const recipe = recipeStore.recipe;
-  const equipments = recipeStore.equipments;
-  const similarRecipes = recipeStore.similarRecipes;
-  console.log(toJS(recipe));
+  const { recipe, equipments, similarRecipes, initRecipeDetail } = useRecipeStore();
+
   useEffect(() => {
     const recipeId = Number(id);
     if (recipeId && recipeId !== -1) {
-      recipeStore.getRecipeById(recipeId);
-      recipeStore.getEquipmentsById(recipeId);
-      recipeStore.getSimilarRecipe(recipeId);
+      initRecipeDetail(recipeId);
     }
-  }, [id, recipeStore]);
+  }, [id, initRecipeDetail]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -57,12 +52,6 @@ const RecipeDetail: React.FC = observer(() => {
   );
 });
 
-const RecipeWithProvider: React.FC = () => {
-  return (
-    <RecipeStoreProvider>
-      <RecipeDetail />
-    </RecipeStoreProvider>
-  );
-};
+const RecipeWithProvider = withProvider(RecipeStoreProvider, RecipeDetail);
 
 export default RecipeWithProvider;

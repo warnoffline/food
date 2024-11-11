@@ -1,8 +1,9 @@
-import { action, computed, makeObservable, observable, runInAction } from 'mobx';
+import { action, computed, makeObservable, observable, remove, runInAction, set, toJS } from 'mobx';
 import { fetchEquipmentsById, fetchRecipeById, fetchSimilarRecipe } from '@/api/recipeApi';
 import { EquipmentById, Recipe } from '@/types/recipes';
 import { Meta } from '@/types/shared';
 import { ILocalStore } from '@/utils/useLocalStore';
+import { CollectionModel, getInitialCollectionModel, linearizeCollection } from '../models/shared/collection';
 
 type PrivateFields = '_similarRecipes' | '_recipe' | '_equipments' | '_metaState' | '_favorites';
 
@@ -10,9 +11,9 @@ type metaStateKeys = 'recipe' | 'equipments' | 'similarRecipes';
 
 class RecipeStore implements ILocalStore {
   private _similarRecipes: Recipe[] = [];
-  private _favorites: Recipe[] = [];
   private _recipe: Recipe | null = null;
   private _equipments: EquipmentById | null = null;
+  private _favorites: CollectionModel<number, Recipe> = getInitialCollectionModel();
   private _metaState: Record<metaStateKeys, Meta> = {
     recipe: Meta.initial,
     equipments: Meta.initial,
@@ -39,9 +40,10 @@ class RecipeStore implements ILocalStore {
       setSimilar: action,
       setEquipments: action,
       isFavorite: action,
-      addRecipeToFavorites: action,
-      removeFromFavorites: action,
+      addRecipeToFavorites: action.bound,
+      removeFromFavorites: action.bound,
       destroy: action,
+      initRecipeDetail: action.bound,
     });
     const extractRecipe = sessionStorage.getItem('extractRecipe');
     if (extractRecipe) {
@@ -64,10 +66,6 @@ class RecipeStore implements ILocalStore {
 
   get metaState() {
     return this._metaState;
-  }
-
-  get favorites() {
-    return this._favorites;
   }
 
   getRecipeById = async (recipeId: number) => {
@@ -130,6 +128,50 @@ class RecipeStore implements ILocalStore {
     }
   };
 
+  initRecipeDetail = async (recipeId: number) => {
+    try {
+      this.setMetaState('recipe', Meta.loading);
+      this.setMetaState('equipments', Meta.loading);
+      this.setMetaState('similarRecipes', Meta.loading);
+
+      const [recipeData, equipmentsData, similarRecipesData] = await Promise.all([
+        fetchRecipeById(recipeId),
+        fetchEquipmentsById(recipeId),
+        fetchSimilarRecipe(recipeId),
+      ]);
+
+      runInAction(() => {
+        if (recipeData) {
+          this.setMetaState('recipe', Meta.success);
+          this.setRecipe(recipeData);
+        } else {
+          this.setMetaState('recipe', Meta.error);
+        }
+
+        if (equipmentsData) {
+          this.setMetaState('equipments', Meta.success);
+          this.setEquipments(equipmentsData);
+        } else {
+          this.setMetaState('equipments', Meta.error);
+        }
+
+        if (similarRecipesData) {
+          this.setMetaState('similarRecipes', Meta.success);
+          this.setSimilar(similarRecipesData);
+        } else {
+          this.setMetaState('similarRecipes', Meta.error);
+        }
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.setMetaState('recipe', Meta.error);
+        this.setMetaState('equipments', Meta.error);
+        this.setMetaState('similarRecipes', Meta.error);
+      });
+      console.error('Failed to load recipe details:', error);
+    }
+  };
+
   setMetaState(key: keyof typeof this._metaState, state: Meta) {
     this._metaState[key] = state;
   }
@@ -146,34 +188,42 @@ class RecipeStore implements ILocalStore {
     this._equipments = equipments;
   }
 
-  destroy(): void {
-    sessionStorage.removeItem('extractRecipe');
+  destroy(): void {}
+
+  get favorites() {
+    return linearizeCollection(this._favorites);
   }
 
   isFavorite = (recipeId: number) => {
-    return this._favorites.some((favorite) => favorite.id === recipeId);
+    return this._favorites.order.includes(recipeId);
   };
 
   saveFavoritesToLocalStorage() {
-    localStorage.setItem('favorites', JSON.stringify(this._favorites));
+    const plainFavorites = toJS(this._favorites);
+    localStorage.setItem('favorites', JSON.stringify(plainFavorites));
   }
 
   addRecipeToFavorites(recipe: Recipe) {
     if (!this.isFavorite(recipe.id)) {
-      this._favorites.push(recipe);
+      set(this._favorites, 'order', [...this._favorites.order, recipe.id]);
+      set(this._favorites.entities, recipe.id, recipe);
       this.saveFavoritesToLocalStorage();
     }
   }
 
   removeFromFavorites(recipeId: number) {
-    this._favorites = this._favorites.filter((recipe) => recipe.id !== recipeId);
-    localStorage.setItem('favorites', JSON.stringify(this._favorites));
+    if (this.isFavorite(recipeId)) {
+      this._favorites.order = this._favorites.order.filter((id) => id !== recipeId);
+      remove(this._favorites.entities, recipeId.toString());
+      this.saveFavoritesToLocalStorage();
+    }
   }
 
   loadFavoritesFromLocalStorage() {
     const savedFavorites = localStorage.getItem('favorites');
     if (savedFavorites) {
-      this._favorites = JSON.parse(savedFavorites);
+      const parsedData: CollectionModel<number, Recipe> = JSON.parse(savedFavorites);
+      this._favorites = parsedData;
     }
   }
 }

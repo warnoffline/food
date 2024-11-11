@@ -4,10 +4,10 @@ import Input from '@/components/Input';
 import React, { useCallback, useMemo, useState } from 'react';
 import s from './SearchIngredient.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useSearchIngredientStore } from '../../useSearchIngredientStore';
+import { useIngredientsStore } from '@/app/pages/Ingredients/useIngredientsStore';
 
 const SearchIngredient: React.FC = observer(() => {
-  const searchStore = useSearchIngredientStore();
+  const { searchStore } = useIngredientsStore();
   const [value, setValue] = useState<string>(searchStore.query);
 
   const regex = useMemo(() => /^[A-Za-zА-Яа-я\s,]+$/, []);

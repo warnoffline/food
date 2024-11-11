@@ -7,6 +7,7 @@ import Button from '@/components/Button';
 import LikeIcon from '@/components/icons/LikeIcon';
 import { observer } from 'mobx-react-lite';
 import { useRecipeStore } from '../../useRecipeStore';
+import { toJS } from 'mobx';
 
 type RecipeInfoProps = {
   recipe: Recipe;
@@ -14,29 +15,33 @@ type RecipeInfoProps = {
 
 const RecipeInfo: React.FC<RecipeInfoProps> = observer(({ recipe }) => {
   const recipeStore = useRecipeStore();
-  const isFavorite = recipeStore.isFavorite(recipe.id);
-  const mainDetails = DETAIL_CONFIG(recipe);
+  const mainDetails = DETAIL_CONFIG(toJS(recipe));
+  const recipeId = recipe.id;
+  const isFavoriteRecipe = recipeStore.isFavorite(recipeId);
 
   const handleFavoriteToggle = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       event.stopPropagation();
       event.preventDefault();
-      if (isFavorite) {
-        recipeStore.removeFromFavorites(recipe.id);
+      if (isFavoriteRecipe) {
+        recipeStore.removeFromFavorites(recipeId);
       } else {
         recipeStore.addRecipeToFavorites(recipe);
       }
     },
-    [isFavorite, recipe, recipeStore],
+    [isFavoriteRecipe, recipe, recipeId, recipeStore],
   );
+
+  const colorLike = isFavoriteRecipe ? 'white' : 'none';
 
   return (
     <div className={s.root}>
+      {colorLike}
       <div className={s.root__img}>
         <img src={recipe.image} alt="" />
         {recipe.id > 0 && (
           <Button className={s.root__icon} onClick={handleFavoriteToggle}>
-            <LikeIcon width={19} height={19} color={isFavorite ? 'white' : 'none'} strokeWidth={2} stroke="white" />
+            <LikeIcon width={19} height={19} color={colorLike} strokeWidth={2} stroke="white" />
           </Button>
         )}
       </div>

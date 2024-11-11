@@ -23,6 +23,7 @@ class IngredientStore implements ILocalStore {
       getIngredient: action,
       setIngredient: action,
       setMetaState: action,
+      destroy: action,
     });
   }
 
@@ -63,9 +64,7 @@ class IngredientStore implements ILocalStore {
     this._ingredient = data;
   }
 
-  destroy(): void {
-    this._ingredient = null;
-  }
+  destroy(): void {}
 }
 
 export default IngredientStore;

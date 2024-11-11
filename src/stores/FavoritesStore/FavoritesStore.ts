@@ -1,11 +1,12 @@
-import { action, computed, makeObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable, remove, set, toJS } from 'mobx';
 import { Recipe } from '@/types/recipes';
 import { ILocalStore } from '@/utils/useLocalStore';
+import { CollectionModel, getInitialCollectionModel, linearizeCollection } from '../models/shared/collection';
 
 type PrivateFields = '_favorites';
 
 class FavoritesStore implements ILocalStore {
-  private _favorites: Recipe[] = [];
+  private _favorites: CollectionModel<number, Recipe> = getInitialCollectionModel();
 
   constructor() {
     makeObservable<FavoritesStore, PrivateFields>(this, {
@@ -15,38 +16,45 @@ class FavoritesStore implements ILocalStore {
       removeFromFavorites: action,
       loadFavoritesFromLocalStorage: action,
       saveFavoritesToLocalStorage: action,
+      destroy: action,
     });
     this.loadFavoritesFromLocalStorage();
   }
 
   get favorites() {
-    return this._favorites;
+    return linearizeCollection(this._favorites);
   }
 
   isFavorite = (recipeId: number) => {
-    return this._favorites.some((favorite) => favorite.id === recipeId);
+    return this._favorites.order.includes(recipeId);
   };
 
   saveFavoritesToLocalStorage() {
-    localStorage.setItem('favorites', JSON.stringify(this._favorites));
+    const plainFavorites = toJS(this._favorites);
+    localStorage.setItem('favorites', JSON.stringify(plainFavorites));
   }
 
   addRecipeToFavorites(recipe: Recipe) {
     if (!this.isFavorite(recipe.id)) {
-      this._favorites.push(recipe);
+      set(this._favorites, 'order', [...this._favorites.order, recipe.id]);
+      set(this._favorites.entities, recipe.id, recipe);
       this.saveFavoritesToLocalStorage();
     }
   }
 
   removeFromFavorites(recipeId: number) {
-    this._favorites = this._favorites.filter((recipe) => recipe.id !== recipeId);
-    localStorage.setItem('favorites', JSON.stringify(this._favorites));
+    if (this.isFavorite(recipeId)) {
+      this._favorites.order = this._favorites.order.filter((id) => id !== recipeId);
+      remove(this._favorites.entities, recipeId.toString());
+      this.saveFavoritesToLocalStorage();
+    }
   }
 
   loadFavoritesFromLocalStorage() {
     const savedFavorites = localStorage.getItem('favorites');
     if (savedFavorites) {
-      this._favorites = JSON.parse(savedFavorites);
+      const parsedData: CollectionModel<number, Recipe> = JSON.parse(savedFavorites);
+      this._favorites = parsedData;
     }
   }
 

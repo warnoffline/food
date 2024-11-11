@@ -105,7 +105,8 @@ export type Temperature = {
 };
 
 export type Filter = {
-  [key: string]: string | undefined;
+  [key: string]: string | number | undefined;
+  page?: number;
   search?: string;
   cuisine?: string;
   diet?: string;

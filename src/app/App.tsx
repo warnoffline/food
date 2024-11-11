@@ -1,7 +1,12 @@
+import { RootStoreProvider } from '@/stores/RootStore/hooks/useRootStore';
 import RouterComponent from './router';
 
 function App() {
-  return <RouterComponent />;
+  return (
+    <RootStoreProvider>
+      <RouterComponent />;
+    </RootStoreProvider>
+  );
 }
 
 export default App;

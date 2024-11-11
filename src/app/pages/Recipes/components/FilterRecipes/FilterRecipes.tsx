@@ -9,12 +9,12 @@ import useModal from '@/utils/useModal';
 import ModalFilterRecipes from '../ModalFilterRecipes/ModalFilterRecipes';
 import ModalFindRecipeWebsite from '../ModalFindRecipeWebsite/ModalFindRecipeWebsite';
 import { observer } from 'mobx-react-lite';
-import { useSearchRecipesStore } from '../../useSearchRecipesStore';
+import { useRecipesStore } from '../../useRecipesStore';
 
 const FilterRecipes: React.FC = observer(() => {
   const filterModal = useModal();
   const findRecipeModal = useModal();
-  const searchStore = useSearchRecipesStore();
+  const { searchStore } = useRecipesStore();
 
   const regex = useMemo(() => /^[A-Za-zА-Яа-я\s,]+$/, []);
 

@@ -12,6 +12,7 @@ class SearchIngredientStore implements ILocalStore {
       query: computed,
       setQuery: action,
       reset: action,
+      destroy: action,
     });
     const filter = sessionStorage.getItem('ingredient-filter');
     const savedQuery = JSON.parse(filter !== null ? filter : '');
@@ -32,9 +33,7 @@ class SearchIngredientStore implements ILocalStore {
     this._query = '';
   }
 
-  destroy(): void {
-    this.reset();
-  }
+  destroy(): void {}
 }
 
 export default SearchIngredientStore;

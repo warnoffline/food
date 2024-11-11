@@ -4,11 +4,11 @@ import FavoriteCard from './components/FavoriteCard';
 import s from './Favorites.module.scss';
 import Text from '@/components/Text';
 import { FavoritesStoreProvider, useFavoritesStore } from './useFavoritesStore';
+import { withProvider } from '@/hoc/withProvider';
 
 const Favorites: React.FC = observer(() => {
   const favoriteStore = useFavoritesStore();
   const favorites = favoriteStore.favorites;
-  console.log(favorites);
 
   return (
     <div className={s.root}>
@@ -17,19 +17,15 @@ const Favorites: React.FC = observer(() => {
           Favorite recipes
         </Text>
         <div className={s.root__list}>
-          {favorites.length > 1 && favorites.map((recipe) => <FavoriteCard key={recipe.id} recipe={recipe} />)}
+          {favorites &&
+            favorites.length > 0 &&
+            favorites.map((recipe) => <FavoriteCard key={recipe.id} recipe={recipe} />)}
         </div>
       </div>
     </div>
   );
 });
 
-const FavoritesWithProvider: React.FC = () => {
-  return (
-    <FavoritesStoreProvider>
-      <Favorites />
-    </FavoritesStoreProvider>
-  );
-};
+const FavoritesWithProvider = withProvider(FavoritesStoreProvider, Favorites);
 
 export default FavoritesWithProvider;

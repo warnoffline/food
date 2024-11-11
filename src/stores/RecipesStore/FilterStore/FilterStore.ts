@@ -2,27 +2,33 @@ import { CUISINES } from '@/configs/cuisinesConfig';
 import { DIETS } from '@/configs/dietConfig';
 import { INTOLERANCES } from '@/configs/intolerancesConfig';
 import { TYPES } from '@/configs/typesConfig';
-import { Filter, FilterData } from '@/types/recipes';
-import type { Option } from '@/types/recipes';
+import { FilterData, Option } from '@/types/recipes';
 import { ILocalStore } from '@/utils/useLocalStore';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-type PrivateFields = '_filter';
+type PrivateFields = '_filter' | '_filterData';
 
 class FilterStore implements ILocalStore {
   private _filter: FilterData | null = null;
+  private _filterData: FilterData | null = null;
+  private regex = /^[A-Za-zА-Яа-я\s,]+$/;
+
   constructor() {
     makeObservable<FilterStore, PrivateFields>(this, {
       _filter: observable.ref,
+      _filterData: observable.ref,
       filter: computed,
+      filterData: computed,
       setFilters: action,
       resetFilters: action,
+      setIncludeIngredients: action,
+      setExcludeIngredients: action,
+      syncFilters: action,
     });
 
     const savedFilters = sessionStorage.getItem('recipe-filter');
-
     if (savedFilters) {
-      const filters: Filter = JSON.parse(savedFilters);
+      const filters = JSON.parse(savedFilters);
 
       const getSelectedOptions = (filterKey: string, options: Option[]) => {
         if (filters[filterKey]) {
@@ -40,7 +46,14 @@ class FilterStore implements ILocalStore {
         excludeIngredients: filters.excludeIngredients || '',
       };
 
-      this.setFilters(sortedFilter);
+      this._filterData = sortedFilter;
+      this._filter = sortedFilter;
+    }
+  }
+
+  syncFilters() {
+    if (this._filterData) {
+      this._filter = { ...this._filterData };
     }
   }
 
@@ -48,17 +61,32 @@ class FilterStore implements ILocalStore {
     return this._filter;
   }
 
+  get filterData() {
+    return this._filterData;
+  }
+
   setFilters(filters: FilterData | null) {
-    this._filter = filters;
+    this._filterData = filters;
   }
 
   resetFilters(): void {
     this.setFilters(null);
+    this._filter = null;
   }
 
-  destroy(): void {
-    this.resetFilters();
+  setIncludeIngredients(value: string): void {
+    if (this.regex.test(value) || value === '') {
+      this._filterData = { ...this._filterData, includeIngredients: value };
+    }
   }
+
+  setExcludeIngredients(value: string): void {
+    if (this.regex.test(value) || value === '') {
+      this._filterData = { ...this._filterData, excludeIngredients: value };
+    }
+  }
+
+  destroy(): void {}
 }
 
 export default FilterStore;

@@ -6,36 +6,30 @@ import s from './IngredientDetail.module.scss';
 import Loading from '@/components/Loading';
 import IngredientInfo from './components/IngredientInfo';
 import { IngredientStoreProvider, useIngredientStore } from './useIngredientStore';
+import { withProvider } from '@/hoc/withProvider';
 
 const IngredientDetail: React.FC = observer(() => {
   const { id } = useParams();
-  const ingredientStore = useIngredientStore();
+  const { ingredient, getIngredient } = useIngredientStore();
 
   useEffect(() => {
-    const recipeId = Number(id);
-    ingredientStore.getIngredient(recipeId);
-  }, [id, ingredientStore]);
+    getIngredient(Number(id));
+  }, [getIngredient, id, ingredient]);
 
-  if (!ingredientStore.ingredient) {
+  if (!ingredient) {
     return <Loading page />;
   }
 
   return (
     <div className={s.root}>
       <div className={s.root__center}>
-        <DetailTabHeader>{ingredientStore.ingredient.original}</DetailTabHeader>
-        <IngredientInfo ingredient={ingredientStore.ingredient} />
+        <DetailTabHeader>{ingredient.original}</DetailTabHeader>
+        <IngredientInfo ingredient={ingredient} />
       </div>
     </div>
   );
 });
 
-const IngredientWithProvider: React.FC = () => {
-  return (
-    <IngredientStoreProvider>
-      <IngredientDetail />
-    </IngredientStoreProvider>
-  );
-};
+const IngredientWithProvider = withProvider(IngredientStoreProvider, IngredientDetail);
 
 export default IngredientWithProvider;
