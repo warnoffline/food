@@ -7,22 +7,24 @@ import { useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import SimilarList from './components/SimilarList/SimilarList';
 import Loading from '@/components/Loading';
-import RecipeStore from '@/stores/RecipeStore';
+import { RecipeStoreProvider, useRecipeStore } from './useRecipeStore';
+import { toJS } from 'mobx';
 
 const RecipeDetail: React.FC = observer(() => {
   const { id } = useParams();
-  const recipe = RecipeStore.recipe;
-  const equipments = RecipeStore.equipments;
-  const similarRecipes = RecipeStore.similarRecipes;
-
+  const recipeStore = useRecipeStore();
+  const recipe = recipeStore.recipe;
+  const equipments = recipeStore.equipments;
+  const similarRecipes = recipeStore.similarRecipes;
+  console.log(toJS(recipe));
   useEffect(() => {
     const recipeId = Number(id);
-    if (recipeId) {
-      RecipeStore.getRecipeById(recipeId);
-      RecipeStore.getEquipmentsById(recipeId);
-      RecipeStore.getSimilarRecipe(recipeId);
+    if (recipeId && recipeId !== -1) {
+      recipeStore.getRecipeById(recipeId);
+      recipeStore.getEquipmentsById(recipeId);
+      recipeStore.getSimilarRecipe(recipeId);
     }
-  }, [id]);
+  }, [id, recipeStore]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -55,4 +57,12 @@ const RecipeDetail: React.FC = observer(() => {
   );
 });
 
-export default RecipeDetail;
+const RecipeWithProvider: React.FC = () => {
+  return (
+    <RecipeStoreProvider>
+      <RecipeDetail />
+    </RecipeStoreProvider>
+  );
+};
+
+export default RecipeWithProvider;

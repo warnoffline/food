@@ -4,61 +4,78 @@
 
 .text {
   font-family: "Roboto";
+
   &--primary {
     color: $primary;
   }
+
   &--secondary {
     color: $secondary;
   }
+
   &--accent {
     color: $brand;
   }
+
   &--weight {
     &-normal {
       font-weight: 400;
     }
+
     &-medium {
       font-weight: 500;
     }
+
     &-semiBold {
       font-weight: 600;
     }
+
     &-bold {
       font-weight: 700;
     }
   }
+
   &--view {
     &-title {
       font-size: $xl;
       font-weight: bold;
     }
+
     &-label {
       font-size: $m;
       font-weight: bold;
       padding-bottom: 5px;
     }
+
     &-button {
       font-size: $m;
       text-transform: uppercase;
     }
+
     &-p-xxl {
       font-size: $xxl;
     }
+
     &-p-xl {
       font-size: $xl;
     }
+
     &-p-l {
       font-size: $l;
     }
+
     &-p-m {
       font-size: $m;
     }
+
     &-p-s {
       font-size: $s;
     }
+
     &-p-xs {
       font-size: $xs;
     }
+
     &-p-xxs {
       font-size: $xxs;
     }

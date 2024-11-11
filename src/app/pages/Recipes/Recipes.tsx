@@ -1,21 +1,21 @@
 import React, { useCallback, useState } from 'react';
 import Text from '@/components/Text';
 import s from './Recipes.module.scss';
-import FilterRecipes from './components/FilterRecipes/FilterRecipes';
+import FilterRecipesWithProvider from './components/FilterRecipes/FilterRecipes';
 import RecipeCard from './components/RecipeCard/RecipeCard';
 import Pagination from '@/components/Pagination';
 import { useEffect } from 'react';
 import Loading from '@/components/Loading';
 import { Meta } from '@/types/shared';
 import { observer } from 'mobx-react-lite';
-import RecipeStore from '@/stores/RecipeStore';
-import FilterStore from '@/stores/RecipeStore/FilterStore/FilterStore';
-import SearchStore from '@/stores/RecipeStore/SearchRecipeStore/SearchRecipeStore';
+import { RecipesStoreProvider, useRecipesStore } from './useRecipesStore';
+import { SearchRecipesStoreProvider, useSearchRecipesStore } from './useSearchRecipesStore';
+import { FilterRecipesStoreProvider, useFilterRecipesStore } from './useFilterRecipesStore';
 
 const Recipes: React.FC = observer(() => {
-  const recipeStore = RecipeStore;
-  const filters = FilterStore.filter;
-  const search = SearchStore.query;
+  const filters = useFilterRecipesStore().filter || undefined;
+  const recipeStore = useRecipesStore();
+  const search = useSearchRecipesStore().query;
   const recipes = recipeStore.recipes;
   const queryString = recipeStore.queryString;
   const currentPageFromSession = Number(sessionStorage.getItem('recipe-current-page')) || 1;
@@ -30,11 +30,11 @@ const Recipes: React.FC = observer(() => {
   }, []);
 
   useEffect(() => {
-    recipeStore.getRecipes(currentPage);
-  }, [currentPage, recipeStore, filters, search, queryString]);
+    recipeStore.getRecipes(currentPage, search, filters);
+  }, [currentPage, recipeStore, filters, queryString, search]);
 
   const renderMetaContent = () => {
-    switch (RecipeStore.metaState.recipes) {
+    switch (recipeStore.metaState.recipes) {
       case Meta.loading:
         return <Loading />;
       case Meta.error:
@@ -65,7 +65,7 @@ const Recipes: React.FC = observer(() => {
             Find the perfect food and drink ideas for every occasion, from weeknight dinners to holiday feasts.
           </Text>
         </div>
-        <FilterRecipes />
+        <FilterRecipesWithProvider />
         {renderMetaContent()}
         {totalPages > 1 && (
           <div className={s.root__pagination}>
@@ -77,4 +77,16 @@ const Recipes: React.FC = observer(() => {
   );
 });
 
-export default Recipes;
+const RecipesWithProvider: React.FC = () => {
+  return (
+    <RecipesStoreProvider>
+      <SearchRecipesStoreProvider>
+        <FilterRecipesStoreProvider>
+          <Recipes />
+        </FilterRecipesStoreProvider>
+      </SearchRecipesStoreProvider>
+    </RecipesStoreProvider>
+  );
+};
+
+export default RecipesWithProvider;

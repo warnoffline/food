@@ -11,61 +11,76 @@
     top: 0;
     z-index: 10;
   }
+
   &__content {
     width: calc(100% - 100px);
     display: flex;
     justify-content: space-between;
   }
+
   &__left {
     display: flex;
     align-items: center;
     gap: 80px;
   }
+
   &__logo {
     display: flex;
     align-items: center;
     gap: 20px;
   }
+
   &__navbar {
     display: flex;
     align-items: center;
     gap: 16px;
   }
+
   &__actions {
     display: flex;
     align-items: center;
     gap: 16px;
   }
+
   &__link {
     font-weight: 400;
     font-size: 16px;
     color: $primary;
+
     &-selected {
       font-weight: 600;
       color: $accent;
     }
+
     &:hover {
       color: $brand-hover;
     }
+
     &:active {
       color: $accent;
     }
   }
+
   &__icon {
     &-stroke {
       cursor: pointer;
+
       &:hover {
         stroke: $brand-hover;
       }
+
       &:active {
         stroke: $brand-active;
       }
     }
+
     &-fill {
       cursor: pointer;
+
       &:hover {
         fill: $brand-hover;
       }
+
       &:active {
         fill: $brand-active;
       }

@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite';
 import { Recipe } from '@/types/recipes';
 import TimerIcon from '@/components/icons/TimerIcon';
 import s from './SimilarCard.module.scss';
-import { memo } from 'react';
 
 interface FavoriteCardProps {
   recipe: Recipe;
@@ -25,4 +24,4 @@ const SimilarCard: React.FC<FavoriteCardProps> = observer(({ recipe }) => {
   );
 });
 
-export default memo(SimilarCard);
+export default SimilarCard;

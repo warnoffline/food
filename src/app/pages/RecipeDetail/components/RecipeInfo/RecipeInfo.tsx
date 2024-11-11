@@ -1,19 +1,20 @@
 import { Recipe } from '@/types/recipes';
 import s from './RecipeInfo.module.scss';
 import Text from '@/components/Text';
-import { memo, useCallback } from 'react';
+import { useCallback } from 'react';
 import { DETAIL_CONFIG } from '@/configs/detailsConfig';
 import Button from '@/components/Button';
 import LikeIcon from '@/components/icons/LikeIcon';
 import { observer } from 'mobx-react-lite';
-import RecipeStore from '@/stores/RecipeStore';
+import { useRecipeStore } from '../../useRecipeStore';
 
 type RecipeInfoProps = {
   recipe: Recipe;
 };
 
 const RecipeInfo: React.FC<RecipeInfoProps> = observer(({ recipe }) => {
-  const isFavorite = RecipeStore.isFavorite(recipe.id);
+  const recipeStore = useRecipeStore();
+  const isFavorite = recipeStore.isFavorite(recipe.id);
   const mainDetails = DETAIL_CONFIG(recipe);
 
   const handleFavoriteToggle = useCallback(
@@ -21,12 +22,12 @@ const RecipeInfo: React.FC<RecipeInfoProps> = observer(({ recipe }) => {
       event.stopPropagation();
       event.preventDefault();
       if (isFavorite) {
-        RecipeStore.removeFromFavorites(recipe.id);
+        recipeStore.removeFromFavorites(recipe.id);
       } else {
-        RecipeStore.addRecipeToFavorites(recipe);
+        recipeStore.addRecipeToFavorites(recipe);
       }
     },
-    [isFavorite, recipe],
+    [isFavorite, recipe, recipeStore],
   );
 
   return (
@@ -56,4 +57,4 @@ const RecipeInfo: React.FC<RecipeInfoProps> = observer(({ recipe }) => {
   );
 });
 
-export default memo(RecipeInfo);
+export default RecipeInfo;

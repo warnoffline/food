@@ -3,9 +3,13 @@ import React from 'react';
 import FavoriteCard from './components/FavoriteCard';
 import s from './Favorites.module.scss';
 import Text from '@/components/Text';
-import RecipeStore from '@/stores/RecipeStore';
+import { FavoritesStoreProvider, useFavoritesStore } from './useFavoritesStore';
 
 const Favorites: React.FC = observer(() => {
+  const favoriteStore = useFavoritesStore();
+  const favorites = favoriteStore.favorites;
+  console.log(favorites);
+
   return (
     <div className={s.root}>
       <div className={s.root__center}>
@@ -13,12 +17,19 @@ const Favorites: React.FC = observer(() => {
           Favorite recipes
         </Text>
         <div className={s.root__list}>
-          {RecipeStore.favorites.length > 1 &&
-            RecipeStore.favorites.map((recipe) => <FavoriteCard key={recipe.id} recipe={recipe} />)}
+          {favorites.length > 1 && favorites.map((recipe) => <FavoriteCard key={recipe.id} recipe={recipe} />)}
         </div>
       </div>
     </div>
   );
 });
 
-export default Favorites;
+const FavoritesWithProvider: React.FC = () => {
+  return (
+    <FavoritesStoreProvider>
+      <Favorites />
+    </FavoritesStoreProvider>
+  );
+};
+
+export default FavoritesWithProvider;

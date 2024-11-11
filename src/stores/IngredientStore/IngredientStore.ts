@@ -1,104 +1,38 @@
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import { Ingredient } from '@/types/ingredient';
-import { Meta, Response } from '@/types/shared';
-import { fetchIngredientById, fetchIngredients } from '@/api/ingredientApi';
-import qs from 'qs';
-import SearchIngredientStore from './SearchIngredientStore/SearchIngredientStore';
+import { Meta } from '@/types/shared';
+import { fetchIngredientById } from '@/api/ingredientApi';
+import { ILocalStore } from '@/utils/useLocalStore';
 
-type metaStateKeys = 'ingredients' | 'ingredient';
+type metaStateKeys = 'ingredient';
 
-type PrivateFields = '_ingredients' | '_ingredient' | '_totalResults' | '_number' | '_queryString' | '_metaState';
+type PrivateFields = '_ingredient' | '_metaState';
 
-class IngredientStore {
-  private _ingredients: Ingredient[] = [];
+class IngredientStore implements ILocalStore {
   private _ingredient: Ingredient | null = null;
-  private _totalResults: number = 0;
-  private _number: number = 0;
-  private _queryString: string = '';
   private _metaState: Record<metaStateKeys, Meta> = {
-    ingredients: Meta.initial,
     ingredient: Meta.initial,
   };
 
   constructor() {
     makeObservable<IngredientStore, PrivateFields>(this, {
-      _ingredients: observable,
       _ingredient: observable,
-      _totalResults: observable,
-      _number: observable,
-      _queryString: observable,
       _metaState: observable,
-      ingredients: computed,
       ingredient: computed,
-      totalResults: computed,
-      number: computed,
-      queryString: computed,
       metaState: computed,
       getIngredient: action,
-      getIngredients: action,
       setIngredient: action,
-      setIngredients: action,
       setMetaState: action,
     });
-  }
-
-  get ingredients() {
-    return this._ingredients;
   }
 
   get ingredient() {
     return this._ingredient;
   }
 
-  get totalResults() {
-    return this._totalResults;
-  }
-
-  get number() {
-    return this._number;
-  }
-
   get metaState() {
     return this._metaState;
   }
-
-  get queryString() {
-    return this._queryString;
-  }
-
-  getIngredients = async (currentPage: number) => {
-    try {
-      const query = SearchIngredientStore.query;
-      if (query) {
-        this.setMetaState('ingredients', Meta.loading);
-
-        const params = {
-          query: query,
-          offset: (currentPage - 1) * 12,
-          number: 12,
-          metaInformation: true,
-        };
-        const data = await fetchIngredients(params);
-        runInAction(() => {
-          if (data) {
-            this.setMetaState('ingredients', Meta.success);
-            this.setIngredients(data);
-            return;
-          }
-
-          this.setMetaState('ingredients', Meta.error);
-        });
-      } else {
-        this.setMetaState('ingredients', Meta.initial);
-      }
-      this.updateUrl(query);
-    } catch (error) {
-      runInAction(() => {
-        this.setMetaState('ingredients', Meta.error);
-      });
-      console.error('Failed to load:', error);
-    }
-  };
 
   getIngredient = async (ingredinetId: number) => {
     try {
@@ -125,20 +59,13 @@ class IngredientStore {
     this._metaState[key] = state;
   }
 
-  setIngredients(data: Response<Ingredient>) {
-    this._ingredients = data.results;
-    this._totalResults = data.totalResults;
-    this._number = data.number;
-  }
-
   setIngredient(data: Ingredient) {
     this._ingredient = data;
   }
-  updateUrl(search: string) {
-    const queryString = qs.stringify({ search: search ? search : undefined }, { addQueryPrefix: true });
-    window.history.replaceState(null, '', queryString || window.location.pathname);
-    this._queryString = queryString;
+
+  destroy(): void {
+    this._ingredient = null;
   }
 }
 
-export default new IngredientStore();
+export default IngredientStore;

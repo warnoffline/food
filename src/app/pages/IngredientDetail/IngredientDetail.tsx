@@ -5,28 +5,37 @@ import DetailTabHeader from '@/components/DetailTabHeader';
 import s from './IngredientDetail.module.scss';
 import Loading from '@/components/Loading';
 import IngredientInfo from './components/IngredientInfo';
-import IngredientStore from '@/stores/IngredientStore';
+import { IngredientStoreProvider, useIngredientStore } from './useIngredientStore';
 
 const IngredientDetail: React.FC = observer(() => {
   const { id } = useParams();
+  const ingredientStore = useIngredientStore();
 
   useEffect(() => {
     const recipeId = Number(id);
-    IngredientStore.getIngredient(recipeId);
-  }, [id]);
+    ingredientStore.getIngredient(recipeId);
+  }, [id, ingredientStore]);
 
-  if (!IngredientStore.ingredient) {
+  if (!ingredientStore.ingredient) {
     return <Loading page />;
   }
 
   return (
     <div className={s.root}>
       <div className={s.root__center}>
-        <DetailTabHeader>{IngredientStore.ingredient.original}</DetailTabHeader>
-        <IngredientInfo ingredient={IngredientStore.ingredient} />
+        <DetailTabHeader>{ingredientStore.ingredient.original}</DetailTabHeader>
+        <IngredientInfo ingredient={ingredientStore.ingredient} />
       </div>
     </div>
   );
 });
 
-export default IngredientDetail;
+const IngredientWithProvider: React.FC = () => {
+  return (
+    <IngredientStoreProvider>
+      <IngredientDetail />
+    </IngredientStoreProvider>
+  );
+};
+
+export default IngredientWithProvider;

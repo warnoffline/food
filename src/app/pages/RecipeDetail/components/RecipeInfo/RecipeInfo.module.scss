@@ -1,14 +1,17 @@
 .root {
   display: flex;
   gap: 166px;
+
   &__icon {
     position: absolute;
     top: 0;
     right: 0;
   }
+
   &__img {
     position: relative;
     object-fit: cover;
+
     img {
       width: 450px;
       height: 300px;
@@ -16,12 +19,14 @@
       object-fit: cover;
     }
   }
+
   &__txts {
     width: 50%;
     gap: 100px;
     display: flex;
     flex-wrap: wrap;
   }
+
   &__detail {
     width: 90px;
     display: flex;

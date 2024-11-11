@@ -4,11 +4,12 @@ import { INTOLERANCES } from '@/configs/intolerancesConfig';
 import { TYPES } from '@/configs/typesConfig';
 import { Filter, FilterData } from '@/types/recipes';
 import type { Option } from '@/types/recipes';
+import { ILocalStore } from '@/utils/useLocalStore';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 type PrivateFields = '_filter';
 
-class FilterStore {
+class FilterStore implements ILocalStore {
   private _filter: FilterData | null = null;
   constructor() {
     makeObservable<FilterStore, PrivateFields>(this, {
@@ -54,6 +55,10 @@ class FilterStore {
   resetFilters(): void {
     this.setFilters(null);
   }
+
+  destroy(): void {
+    this.resetFilters();
+  }
 }
 
-export default new FilterStore();
+export default FilterStore;

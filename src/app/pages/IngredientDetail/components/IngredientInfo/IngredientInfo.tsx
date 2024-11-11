@@ -1,6 +1,5 @@
 import s from './IngredientInfo.module.scss';
 import Text from '@/components/Text';
-import { memo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Ingredient } from '@/types/ingredient';
 
@@ -40,4 +39,4 @@ const IngredientInfo: React.FC<IngredientInfoProps> = observer(({ ingredient }) 
   );
 });
 
-export default memo(IngredientInfo);
+export default IngredientInfo;

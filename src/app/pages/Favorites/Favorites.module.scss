@@ -1,10 +1,12 @@
 .root {
   display: flex;
   justify-content: center;
+
   &__center {
     width: calc(100% - 100px);
     padding: 48px 0;
   }
+
   &__list {
     display: grid;
     grid-template-columns: repeat(4, 1fr);

@@ -2,6 +2,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
+
   &__center {
     width: calc(100% - 100px);
     padding: 48px 0;
@@ -10,9 +11,11 @@
     gap: 24px;
     justify-content: center;
   }
+
   &__search {
     display: flex;
   }
+
   &__items {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -31,11 +34,13 @@
       grid-template-columns: 1fr;
     }
   }
+
   &__no-items {
     width: 100%;
     display: flex;
     justify-content: center;
   }
+
   &__pagination {
     display: flex;
     justify-content: center;

@@ -1,7 +1,7 @@
 import Text from '@/components/Text';
 import s from './SimilarList.module.scss';
 import { Recipe } from '@/types/recipes';
-import React, { memo } from 'react';
+import React from 'react';
 import SimilarCard from '../SimilarCard/SimilarCard';
 import { observer } from 'mobx-react-lite';
 
@@ -24,4 +24,4 @@ const SimilarList: React.FC<SimilarListProps> = observer(({ recipes }) => {
   );
 });
 
-export default memo(SimilarList);
+export default SimilarList;

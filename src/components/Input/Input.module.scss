@@ -8,6 +8,7 @@
     display: flex;
     align-items: center;
   }
+
   &__field {
     width: 100%;
     padding: 16px 12px;
@@ -15,12 +16,15 @@
     border-radius: 10px;
     font-size: 16px;
     font-family: "Roboto";
+
     &-primary {
       color: $primary;
     }
+
     &-accent {
       color: $accent;
     }
+
     &-seccondary {
       color: $secondary;
     }
@@ -29,15 +33,18 @@
       color: $secondary;
       font-family: "Roboto";
     }
+
     &:focus {
       border-color: $accent;
       outline: none;
     }
+
     &:disabled {
       background-color: #fff;
       color: $primary;
     }
   }
+
   &__icon {
     position: absolute;
     right: 12px;

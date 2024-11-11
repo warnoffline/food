@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import MultiDropdown from '@/components/MultiDropdown';
 import { CUISINES } from '@/configs/cuisinesConfig';
 import { DIETS } from '@/configs/dietConfig';
@@ -9,15 +9,15 @@ import Text from '@/components/Text';
 import s from './ModalFilterRecipes.module.scss';
 import Button from '@/components/Button';
 import { Option } from '@/types/recipes';
-import FilterStore from '@/stores/RecipeStore/FilterStore/FilterStore';
 import { observer } from 'mobx-react-lite';
+import { useFilterRecipesStore } from '../../useFilterRecipesStore';
 
 type ModalFilterRecipesProps = {
   onClose: () => void;
 };
 
 const ModalFilterRecipes: React.FC<ModalFilterRecipesProps> = observer(({ onClose }) => {
-  const filterRecipes = FilterStore;
+  const filterRecipes = useFilterRecipesStore();
   const filters = filterRecipes.filter;
 
   const [selectedCuisines, setSelectedCuisines] = useState<Option[]>(filters?.cuisine || []);
@@ -153,4 +153,4 @@ const ModalFilterRecipes: React.FC<ModalFilterRecipesProps> = observer(({ onClos
   );
 });
 
-export default memo(ModalFilterRecipes);
+export default ModalFilterRecipes;

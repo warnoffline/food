@@ -1,8 +1,9 @@
+import { ILocalStore } from '@/utils/useLocalStore';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 type PrivateFields = '_query';
 
-class SearchIngredientStore {
+class SearchIngredientStore implements ILocalStore {
   private _query: string = '';
 
   constructor() {
@@ -30,6 +31,10 @@ class SearchIngredientStore {
   reset() {
     this._query = '';
   }
+
+  destroy(): void {
+    this.reset();
+  }
 }
 
-export default new SearchIngredientStore();
+export default SearchIngredientStore;

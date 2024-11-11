@@ -1,11 +1,13 @@
 .root {
   display: flex;
   gap: 50px;
+
   &__img {
     display: flex;
     flex-direction: column;
     position: relative;
     object-fit: cover;
+
     img {
       width: 450px;
       height: 300px;
@@ -13,12 +15,14 @@
       object-fit: cover;
     }
   }
+
   &__txts {
     width: 50%;
     gap: 100px;
     display: flex;
     flex-wrap: wrap;
   }
+
   &__detail {
     width: 90px;
     display: flex;

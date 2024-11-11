@@ -8,12 +8,13 @@ import Text from '@/components/Text';
 import { observer } from 'mobx-react-lite';
 import { Meta } from '@/types/shared';
 import Loading from '@/components/Loading';
-import IngredientStore from '@/stores/IngredientStore';
-import SearchIngredientStore from '@/stores/IngredientStore/SearchIngredientStore/SearchIngredientStore';
+import { IngredientsStoreProvider, useIngredientsStore } from './useIngredientsStore';
+import { useSearchIngredientStore } from './useSearchIngredientStore';
+import { SearchRecipesStoreProvider } from '../Recipes/useSearchRecipesStore';
 
 const Ingredients: React.FC = observer(() => {
-  const ingredientStore = IngredientStore;
-  const search = SearchIngredientStore.query;
+  const ingredientStore = useIngredientsStore();
+  const search = useSearchIngredientStore().query;
   const ingredients = ingredientStore.ingredients;
   const queryString = ingredientStore.queryString;
   const currentPageFromSession = Number(sessionStorage.getItem('ingredient-current-page')) || 1;
@@ -28,11 +29,11 @@ const Ingredients: React.FC = observer(() => {
   }, []);
 
   useEffect(() => {
-    ingredientStore.getIngredients(currentPage);
+    ingredientStore.getIngredients(currentPage, search);
   }, [currentPage, ingredientStore, search, queryString]);
 
   const renderMetaContent = () => {
-    switch (IngredientStore.metaState.ingredients) {
+    switch (ingredientStore.metaState.ingredients) {
       case Meta.loading:
         return <Loading />;
       case Meta.error:
@@ -80,4 +81,14 @@ const Ingredients: React.FC = observer(() => {
   );
 });
 
-export default Ingredients;
+const IngredientsWithProvider: React.FC = () => {
+  return (
+    <IngredientsStoreProvider>
+      <SearchRecipesStoreProvider>
+        <Ingredients />
+      </SearchRecipesStoreProvider>
+    </IngredientsStoreProvider>
+  );
+};
+
+export default IngredientsWithProvider;

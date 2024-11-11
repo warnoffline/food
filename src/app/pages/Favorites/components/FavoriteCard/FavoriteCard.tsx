@@ -3,30 +3,31 @@ import Card from '@/components/Card';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Recipe } from '@/types/recipes';
-import { memo, useCallback } from 'react';
+import { useCallback } from 'react';
 import TimerIcon from '@/components/icons/TimerIcon';
 import s from './FavoriteCard.module.scss';
 import Text from '@/components/Text';
-import RecipeStore from '@/stores/RecipeStore';
+import { useFavoritesStore } from '../../useFavoritesStore';
 
 interface FavoriteCardProps {
   recipe: Recipe;
 }
 
 const FavoriteCard: React.FC<FavoriteCardProps> = observer(({ recipe }) => {
-  const isFavorite = RecipeStore.isFavorite(recipe.id);
+  const favoriteStore = useFavoritesStore();
+  const isFavorite = favoriteStore.isFavorite(recipe.id);
 
   const handleFavoriteToggle = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       event.stopPropagation();
       event.preventDefault();
       if (isFavorite) {
-        RecipeStore.removeFromFavorites(recipe.id);
+        favoriteStore.removeFromFavorites(recipe.id);
       } else {
-        RecipeStore.addRecipeToFavorites(recipe);
+        favoriteStore.addRecipeToFavorites(recipe);
       }
     },
-    [isFavorite, recipe],
+    [favoriteStore, isFavorite, recipe],
   );
 
   const CaptionSlot: React.ReactNode = (
@@ -60,4 +61,4 @@ const FavoriteCard: React.FC<FavoriteCardProps> = observer(({ recipe }) => {
   );
 });
 
-export default memo(FavoriteCard);
+export default FavoriteCard;

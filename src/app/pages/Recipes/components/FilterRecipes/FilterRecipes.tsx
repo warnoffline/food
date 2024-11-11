@@ -2,19 +2,19 @@ import Input from '@/components/Input';
 import Button from '@/components/Button';
 import FindIcon from '@/components/icons/FindIcon';
 import s from './FilterRecipes.module.scss';
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import FilterIcon from '@/components/icons/FilterIcon/FilterIcon';
 import Modal from '@/components/Modal/Modal';
 import useModal from '@/utils/useModal';
 import ModalFilterRecipes from '../ModalFilterRecipes/ModalFilterRecipes';
 import ModalFindRecipeWebsite from '../ModalFindRecipeWebsite/ModalFindRecipeWebsite';
 import { observer } from 'mobx-react-lite';
-import SearchRecipeStore from '@/stores/RecipeStore/SearchRecipeStore/SearchRecipeStore';
+import { useSearchRecipesStore } from '../../useSearchRecipesStore';
 
 const FilterRecipes: React.FC = observer(() => {
   const filterModal = useModal();
   const findRecipeModal = useModal();
-  const searchStore = SearchRecipeStore;
+  const searchStore = useSearchRecipesStore();
 
   const regex = useMemo(() => /^[A-Za-zА-Яа-я\s,]+$/, []);
 
@@ -89,4 +89,4 @@ const FilterRecipes: React.FC = observer(() => {
   );
 });
 
-export default memo(FilterRecipes);
+export default FilterRecipes;

@@ -2,7 +2,6 @@ import Card from '@/components/Card';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Ingredient } from '@/types/ingredient';
-import { memo } from 'react';
 
 type IngredientCardProps = {
   ingredient: Ingredient;
@@ -18,4 +17,4 @@ const IngredientCard: React.FC<IngredientCardProps> = observer(({ ingredient }) 
   );
 });
 
-export default memo(IngredientCard);
+export default IngredientCard;

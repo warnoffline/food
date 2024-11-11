@@ -6,34 +6,42 @@
   justify-content: center;
   align-items: center;
   position: relative;
+
   &-s {
     margin: 4px;
     width: 16px;
     height: 16px;
+
     &.loader__spinner {
       border-width: 5px;
     }
   }
+
   &-m {
     margin: 8px;
     width: 32px;
     height: 32px;
+
     &.loader__spinner {
       border-width: 4px;
     }
   }
+
   &-l {
     margin: 10px;
     width: 40px;
     height: 40px;
+
     &.loader__spinner {
       border-width: 2px;
     }
   }
+
   &-xl {
     margin: 18px;
     width: 80px;
     height: 80px;
+
     &.loader__spinner {
       border-width: 6px;
     }

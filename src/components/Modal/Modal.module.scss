@@ -13,6 +13,7 @@
     justify-content: center;
     z-index: 1000;
   }
+
   &__content {
     background: $background;
     max-height: 80vh;
@@ -23,19 +24,20 @@
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: relative;
+    scrollbar-width: none;
 
     &::-webkit-scrollbar {
       width: 0px;
     }
-
-    scrollbar-width: none;
   }
+
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
   }
+
   &__btn-close {
     background: transparent;
     border: none;
@@ -43,9 +45,11 @@
     cursor: pointer;
     color: #333;
   }
+
   &__body {
     margin-bottom: 20px;
   }
+
   &__actions {
     display: flex;
     justify-content: flex-end;
