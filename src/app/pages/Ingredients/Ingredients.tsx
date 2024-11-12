@@ -21,7 +21,7 @@ const Ingredients: React.FC = observer(() => {
 
   useEffect(() => {
     getIngredients();
-  }, [search, queryString, getIngredients]);
+  }, [page, search, queryString, getIngredients]);
 
   const renderMetaContent = () => {
     switch (metaState.ingredients) {

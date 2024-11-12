@@ -16,7 +16,8 @@ type PrivateFields =
   | '_totalResults'
   | '_number'
   | '_queryString'
-  | '_metaState';
+  | '_metaState'
+  | '_page';
 
 type UpdateParams = {
   page: number;
@@ -47,10 +48,12 @@ class IngredientsStore implements ILocalStore {
       _number: observable,
       _queryString: observable,
       _metaState: observable,
+      _page: observable,
       ingredients: computed,
       ingredient: computed,
       totalResults: computed,
       number: computed,
+      page: computed,
       queryString: computed,
       metaState: computed,
       getIngredient: action,
@@ -58,6 +61,7 @@ class IngredientsStore implements ILocalStore {
       setIngredient: action,
       setIngredients: action,
       setMetaState: action,
+      setPage: action.bound,
       destroy: action,
     });
   }

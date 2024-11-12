@@ -24,7 +24,7 @@ const Recipes: React.FC = observer(() => {
 
   useEffect(() => {
     getRecipes();
-  }, [filters, queryString, search, getRecipes]);
+  }, [page, filters, queryString, search, getRecipes]);
 
   const renderMetaContent = () => {
     switch (metaState.recipes) {
