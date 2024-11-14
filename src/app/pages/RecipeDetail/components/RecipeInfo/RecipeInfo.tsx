@@ -36,7 +36,6 @@ const RecipeInfo: React.FC<RecipeInfoProps> = observer(({ recipe }) => {
 
   return (
     <div className={s.root}>
-      {colorLike}
       <div className={s.root__img}>
         <img src={recipe.image} alt="" />
         {recipe.id > 0 && (
