@@ -1,19 +1,21 @@
 import axios from 'axios';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const API_KEY = import.meta.env.VITE_API_KEY;
+const BASE_URL = process.env.BASE_URL;
+const API_KEY = process.env.API_KEY;
 
 const axiosInstance = axios.create({
-    baseURL: BASE_URL,
+  baseURL: BASE_URL,
 });
 
-axiosInstance.interceptors.request.use(config => {
+axiosInstance.interceptors.request.use((config) => {
+  if (API_KEY) {
     const queryParams = new URLSearchParams({
-        apiKey: API_KEY,
+      apiKey: API_KEY,
     }).toString();
-
     config.url = `${config.url}?${queryParams}`;
     return config;
+  }
+  return config;
 });
 
 export default axiosInstance;

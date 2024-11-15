@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import s from './Icon.module.scss';
 import cn from 'classnames';
 

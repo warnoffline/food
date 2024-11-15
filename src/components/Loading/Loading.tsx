@@ -16,7 +16,7 @@ const Loading: React.FC<LoadingParams> = ({ page }) => {
   return (
     <div className={loadingClass}>
       <Loader size={page ? 'xl' : 'l'} color="accent" />
-      <Text view="p-xl">Загрузка...</Text>
+      <Text view="p-xl">Loading...</Text>
     </div>
   );
 };

@@ -1,5 +1,4 @@
-@import "@/styles/styles.css";
-@import "@/styles/variables";
+@use "@/styles/variables" as *;
 
 .root {
   &__wrapper {
