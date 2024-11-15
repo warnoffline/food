@@ -21,8 +21,7 @@ const getSettingsForStyles = (withModules = false) => {
             loader: 'css-loader',
             options: {
               modules: {
-                localIdentName: isProd ? '[name]__[local]' : '[name]__[local]--[hash:base64]',
-                namedExport: false,
+                localIdentName: isProd ? '[path][name]__[local]' : '[name]__[local]-[hash:base64]',
               },
             },
           },

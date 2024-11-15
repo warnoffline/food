@@ -10,9 +10,13 @@ module.exports = api => {
             }
         ],
         "@babel/preset-typescript",
+        "mobx"
     ]
 
     const plugins = [
+        '@babel/plugin-proposal-optional-chaining',
+        ["@babel/plugin-transform-private-methods", { "loose": true }],
+        ["@babel/plugin-transform-private-property-in-object", { "loose": true }],
         process.env.NODE_ENV === 'development' && 'react-refresh/babel',
     ].filter(Boolean);
     

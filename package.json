@@ -18,17 +18,17 @@
     "mobx-react-lite": "^4.0.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.0"
+    "react-router-dom": "^6.28.0",
+    "regenerator-runtime": "^0.14.1"
   },
   "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not op_mini all"
+    "IE 11"
   ],
   "devDependencies": {
     "@babel/cli": "^7.25.9",
     "@babel/core": "^7.26.0",
     "@babel/eslint-parser": "^7.25.9",
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.9",
     "@babel/preset-typescript": "^7.26.0",
@@ -41,8 +41,9 @@
     "@types/webpack-env": "^1.18.5",
     "autoprefixer": "^10.4.20",
     "babel-loader": "^9.2.1",
+    "babel-preset-mobx": "^2.0.0",
     "cross-env": "^7.0.3",
-    "css-loader": "^7.1.2",
+    "css-loader": "6.11.0",
     "eslint": "^9.13.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.3",
