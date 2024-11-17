@@ -24,7 +24,7 @@ const FavoriteCard: React.FC<FavoriteCardProps> = observer(({ recipe }) => {
       if (isFavorite) {
         favoriteStore.removeFromFavorites(recipe.id);
       } else {
-        favoriteStore.addRecipeToFavorites(recipe);
+        favoriteStore.addRecipeToFavorites(recipe.id);
       }
     },
     [favoriteStore, isFavorite, recipe],

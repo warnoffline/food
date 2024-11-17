@@ -6,7 +6,7 @@ import { DETAIL_CONFIG } from '@/configs/detailsConfig';
 import Button from '@/components/Button';
 import LikeIcon from '@/components/icons/LikeIcon';
 import { observer } from 'mobx-react-lite';
-import { useRecipeStore } from '../../useRecipeStore';
+import { useRecipeDetailStore } from '../../useRecipeDetailStore';
 import { toJS } from 'mobx';
 
 type RecipeInfoProps = {
@@ -14,25 +14,25 @@ type RecipeInfoProps = {
 };
 
 const RecipeInfo: React.FC<RecipeInfoProps> = observer(({ recipe }) => {
-  const recipeStore = useRecipeStore();
+  const recipeStore = useRecipeDetailStore();
   const mainDetails = DETAIL_CONFIG(toJS(recipe));
   const recipeId = recipe.id;
-  const isFavoriteRecipe = recipeStore.isFavorite(recipeId);
+  const isRecipeFavorite = recipeStore.favorites.includes(recipe.id);
 
   const handleFavoriteToggle = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       event.stopPropagation();
       event.preventDefault();
-      if (isFavoriteRecipe) {
+      if (isRecipeFavorite) {
         recipeStore.removeFromFavorites(recipeId);
       } else {
-        recipeStore.addRecipeToFavorites(recipe);
+        recipeStore.addRecipeToFavorites(recipe.id);
       }
     },
-    [isFavoriteRecipe, recipe, recipeId, recipeStore],
+    [isRecipeFavorite, recipe, recipeId, recipeStore],
   );
 
-  const colorLike = isFavoriteRecipe ? 'white' : 'none';
+  const colorLike = isRecipeFavorite ? 'white' : 'none';
 
   return (
     <div className={s.root}>

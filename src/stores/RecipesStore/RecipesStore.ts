@@ -1,5 +1,4 @@
-import { action, computed, makeObservable, observable, remove, runInAction, set, toJS } from 'mobx';
-import { fetchExtractRecipe, fetchRecipes } from '@/api/recipeApi';
+import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import { Filter, Recipe } from '@/types/recipes';
 import { Meta, Response } from '@/types/shared';
 import { ILocalStore } from '@/utils/useLocalStore';
@@ -7,7 +6,6 @@ import qs from 'qs';
 import FilterStore from './FilterStore/FilterStore';
 import SearchRecipeStore from './SearchRecipeStore/SearchRecipeStore';
 import rootStore from '../RootStore';
-import { CollectionModel, getInitialCollectionModel, linearizeCollection } from '../models/shared/collection';
 
 type PrivateFields = '_recipes' | '_totalResults' | '_number' | '_metaState' | '_queryString' | '_favorites' | '_page';
 
@@ -16,7 +14,7 @@ type metaStateKeys = 'recipes' | 'extractRecipe';
 class RecipesStore implements ILocalStore {
   private _recipes: Recipe[] = [];
   private _totalResults: number = 0;
-  private _favorites: CollectionModel<number, Recipe> = getInitialCollectionModel();
+  private _favorites: number[] = [];
   private _number: number = 0;
   private _queryString: string = '';
   private _metaState: Record<metaStateKeys, Meta> = {
@@ -116,7 +114,7 @@ class RecipesStore implements ILocalStore {
       };
       this.updateUrl(filterUrl);
 
-      const data = await fetchRecipes(filterData);
+      const data = await rootStore.api.fetchRecipes(filterData);
       runInAction(() => {
         if (data) {
           this.setMetaState('recipes', Meta.success);
@@ -158,7 +156,7 @@ class RecipesStore implements ILocalStore {
   getExtractRecipe = async (url: string) => {
     try {
       this.setMetaState('extractRecipe', Meta.loading);
-      const data = await fetchExtractRecipe(url);
+      const data = await rootStore.api.fetchExtractRecipe(url);
       runInAction(() => {
         if (data) {
           this.setMetaState('extractRecipe', Meta.success);
@@ -180,30 +178,28 @@ class RecipesStore implements ILocalStore {
   }
 
   get favorites() {
-    return linearizeCollection(this._favorites);
+    return this._favorites;
   }
 
   isFavorite = (recipeId: number) => {
-    return this._favorites.order.includes(recipeId);
+    return this._favorites.includes(recipeId);
   };
 
   saveFavoritesToLocalStorage() {
-    const plainFavorites = toJS(this._favorites);
+    const plainFavorites = this._favorites;
     localStorage.setItem('favorites', JSON.stringify(plainFavorites));
   }
 
-  addRecipeToFavorites(recipe: Recipe) {
-    if (!this.isFavorite(recipe.id)) {
-      set(this._favorites, 'order', [...this._favorites.order, recipe.id]);
-      set(this._favorites.entities, recipe.id, recipe);
+  addRecipeToFavorites(recipeId: number) {
+    if (!this.isFavorite(recipeId)) {
+      this._favorites.push(recipeId);
       this.saveFavoritesToLocalStorage();
     }
   }
 
   removeFromFavorites(recipeId: number) {
     if (this.isFavorite(recipeId)) {
-      this._favorites.order = this._favorites.order.filter((id) => id !== recipeId);
-      remove(this._favorites.entities, recipeId.toString());
+      this._favorites = this._favorites.filter((id) => id !== recipeId);
       this.saveFavoritesToLocalStorage();
     }
   }
@@ -211,7 +207,7 @@ class RecipesStore implements ILocalStore {
   loadFavoritesFromLocalStorage() {
     const savedFavorites = localStorage.getItem('favorites');
     if (savedFavorites) {
-      const parsedData: CollectionModel<number, Recipe> = JSON.parse(savedFavorites);
+      const parsedData: number[] = JSON.parse(savedFavorites);
       this._favorites = parsedData;
     }
   }

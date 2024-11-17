@@ -7,12 +7,12 @@ import { useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import SimilarList from './components/SimilarList/SimilarList';
 import Loading from '@/components/Loading';
-import { RecipeStoreProvider, useRecipeStore } from './useRecipeStore';
+import { RecipeStoreProvider, useRecipeDetailStore } from './useRecipeDetailStore';
 import { withProvider } from '@/hoc/withProvider';
 
 const RecipeDetail: React.FC = observer(() => {
   const { id } = useParams();
-  const { recipe, equipments, similarRecipes, initRecipeDetail } = useRecipeStore();
+  const { recipe, equipments, similarRecipes, initRecipeDetail } = useRecipeDetailStore();
 
   useEffect(() => {
     const recipeId = Number(id);

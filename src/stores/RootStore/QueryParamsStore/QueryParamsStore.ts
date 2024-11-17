@@ -20,6 +20,9 @@ export default class QueryParamsStore {
     if (window.location.pathname.includes('ingredients')) {
       savedParams = sessionStorage.getItem('ingredient-filter') || '';
     }
+    if (window.location.pathname.includes('products')) {
+      savedParams = sessionStorage.getItem('product-filter') || '';
+    }
 
     if (savedParams) {
       this._params = JSON.parse(savedParams);
@@ -40,6 +43,11 @@ export default class QueryParamsStore {
     if (window.location.pathname.includes('ingredients')) {
       const searchParams = qs.parse(cleanSearch) as Record<string, string>;
       sessionStorage.setItem('ingredient-filter', JSON.stringify(searchParams));
+      this._params = searchParams;
+    }
+    if (window.location.pathname.includes('products')) {
+      const searchParams = qs.parse(cleanSearch) as Record<string, string | Option | Option[]>;
+      sessionStorage.setItem('product-filter', JSON.stringify(searchParams));
       this._params = searchParams;
     }
   }

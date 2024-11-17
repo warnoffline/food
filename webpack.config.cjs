@@ -44,6 +44,7 @@ module.exports = {
         filename: "bundle.js"
     },
     target: !isProd ? 'web' : 'browserslist',
+    devtool: isProd ? 'hidden-source-map' : 'eval-source-map',
     module: {
         rules: [
             {

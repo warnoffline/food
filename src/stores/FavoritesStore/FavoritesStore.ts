@@ -1,51 +1,99 @@
-import { action, computed, makeObservable, observable, remove, set, toJS } from 'mobx';
+import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import { Recipe } from '@/types/recipes';
 import { ILocalStore } from '@/utils/useLocalStore';
-import { CollectionModel, getInitialCollectionModel, linearizeCollection } from '../models/shared/collection';
+import { Meta } from '@/types/shared';
+import rootStore from '../RootStore';
 
-type PrivateFields = '_favorites';
+type PrivateFields = '_favoritesIds' | '_favorites' | '_metaState';
+
+type metaStateKeys = 'favorites';
 
 class FavoritesStore implements ILocalStore {
-  private _favorites: CollectionModel<number, Recipe> = getInitialCollectionModel();
+  private _favoritesIds: number[] = [];
+  private _favorites: Recipe[] = [];
+  private _metaState: Record<metaStateKeys, Meta> = {
+    favorites: Meta.initial,
+  };
 
   constructor() {
     makeObservable<FavoritesStore, PrivateFields>(this, {
+      _favoritesIds: observable,
       _favorites: observable,
+      _metaState: observable,
+      favoritesIds: computed,
       favorites: computed,
+      metaState: computed,
       addRecipeToFavorites: action,
       removeFromFavorites: action,
       loadFavoritesFromLocalStorage: action,
       saveFavoritesToLocalStorage: action,
+      setMetaState: action,
       destroy: action,
     });
     this.loadFavoritesFromLocalStorage();
   }
 
-  get favorites() {
-    return linearizeCollection(this._favorites);
+  get favoritesIds() {
+    return this._favoritesIds;
   }
 
+  get favorites() {
+    return this._favorites;
+  }
+
+  get metaState() {
+    return this._metaState;
+  }
+
+  setMetaState(key: keyof typeof this._metaState, state: Meta) {
+    this._metaState[key] = state;
+  }
+
+  setFavorites(data: Recipe[]) {
+    this._favorites = data;
+  }
+
+  getFavorites = async () => {
+    try {
+      this.setMetaState('favorites', Meta.loading);
+      const ids = this._favoritesIds.join(',');
+      const data = await rootStore.api.fetchRecipeInformationBulk(ids);
+      runInAction(() => {
+        if (data) {
+          this.setMetaState('favorites', Meta.success);
+          this.setFavorites(data);
+          return;
+        }
+
+        this.setMetaState('favorites', Meta.error);
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.setMetaState('favorites', Meta.error);
+      });
+      console.error('Failed to load:', error);
+    }
+  };
+
   isFavorite = (recipeId: number) => {
-    return this._favorites.order.includes(recipeId);
+    return this._favoritesIds.includes(recipeId);
   };
 
   saveFavoritesToLocalStorage() {
-    const plainFavorites = toJS(this._favorites);
+    const plainFavorites = this._favoritesIds;
     localStorage.setItem('favorites', JSON.stringify(plainFavorites));
   }
 
-  addRecipeToFavorites(recipe: Recipe) {
-    if (!this.isFavorite(recipe.id)) {
-      set(this._favorites, 'order', [...this._favorites.order, recipe.id]);
-      set(this._favorites.entities, recipe.id, recipe);
+  addRecipeToFavorites(recipeId: number) {
+    if (!this.isFavorite(recipeId)) {
+      this._favoritesIds.push(recipeId);
       this.saveFavoritesToLocalStorage();
     }
   }
 
   removeFromFavorites(recipeId: number) {
     if (this.isFavorite(recipeId)) {
-      this._favorites.order = this._favorites.order.filter((id) => id !== recipeId);
-      remove(this._favorites.entities, recipeId.toString());
+      this._favoritesIds = this._favoritesIds.filter((id) => id !== recipeId);
       this.saveFavoritesToLocalStorage();
     }
   }
@@ -53,8 +101,8 @@ class FavoritesStore implements ILocalStore {
   loadFavoritesFromLocalStorage() {
     const savedFavorites = localStorage.getItem('favorites');
     if (savedFavorites) {
-      const parsedData: CollectionModel<number, Recipe> = JSON.parse(savedFavorites);
-      this._favorites = parsedData;
+      const parsedData: number[] = JSON.parse(savedFavorites);
+      this._favoritesIds = parsedData;
     }
   }
 

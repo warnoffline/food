@@ -1,19 +1,18 @@
-import { action, computed, makeObservable, observable, remove, runInAction, set, toJS } from 'mobx';
-import { fetchEquipmentsById, fetchRecipeById, fetchSimilarRecipe } from '@/api/recipeApi';
+import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import { EquipmentById, Recipe } from '@/types/recipes';
 import { Meta } from '@/types/shared';
 import { ILocalStore } from '@/utils/useLocalStore';
-import { CollectionModel, getInitialCollectionModel, linearizeCollection } from '../models/shared/collection';
+import rootStore from '../RootStore';
 
 type PrivateFields = '_similarRecipes' | '_recipe' | '_equipments' | '_metaState' | '_favorites';
 
 type metaStateKeys = 'recipe' | 'equipments' | 'similarRecipes';
 
-class RecipeStore implements ILocalStore {
+class RecipeDetailStore implements ILocalStore {
   private _similarRecipes: Recipe[] = [];
   private _recipe: Recipe | null = null;
   private _equipments: EquipmentById | null = null;
-  private _favorites: CollectionModel<number, Recipe> = getInitialCollectionModel();
+  private _favorites: number[] = [];
   private _metaState: Record<metaStateKeys, Meta> = {
     recipe: Meta.initial,
     equipments: Meta.initial,
@@ -21,7 +20,7 @@ class RecipeStore implements ILocalStore {
   };
 
   constructor() {
-    makeObservable<RecipeStore, PrivateFields>(this, {
+    makeObservable<RecipeDetailStore, PrivateFields>(this, {
       _similarRecipes: observable,
       _recipe: observable,
       _equipments: observable,
@@ -71,7 +70,7 @@ class RecipeStore implements ILocalStore {
   getRecipeById = async (recipeId: number) => {
     try {
       this.setMetaState('recipe', Meta.loading);
-      const data = await fetchRecipeById(recipeId);
+      const data = await rootStore.api.fetchRecipeById(recipeId);
       runInAction(() => {
         if (data) {
           this.setMetaState('recipe', Meta.success);
@@ -91,7 +90,7 @@ class RecipeStore implements ILocalStore {
   getEquipmentsById = async (recipeId: number) => {
     try {
       this.setMetaState('equipments', Meta.loading);
-      const data = await fetchEquipmentsById(recipeId);
+      const data = await rootStore.api.fetchEquipmentsById(recipeId);
       runInAction(() => {
         if (data) {
           this.setMetaState('equipments', Meta.success);
@@ -111,7 +110,7 @@ class RecipeStore implements ILocalStore {
   getSimilarRecipe = async (recipeId: number) => {
     try {
       this.setMetaState('similarRecipes', Meta.loading);
-      const data = await fetchSimilarRecipe(recipeId);
+      const data = await rootStore.api.fetchSimilarRecipe(recipeId);
       runInAction(() => {
         if (data) {
           this.setMetaState('similarRecipes', Meta.success);
@@ -135,9 +134,9 @@ class RecipeStore implements ILocalStore {
       this.setMetaState('similarRecipes', Meta.loading);
 
       const [recipeData, equipmentsData, similarRecipesData] = await Promise.all([
-        fetchRecipeById(recipeId),
-        fetchEquipmentsById(recipeId),
-        fetchSimilarRecipe(recipeId),
+        rootStore.api.fetchRecipeById(recipeId),
+        rootStore.api.fetchEquipmentsById(recipeId),
+        rootStore.api.fetchSimilarRecipe(recipeId),
       ]);
 
       runInAction(() => {
@@ -191,30 +190,28 @@ class RecipeStore implements ILocalStore {
   destroy(): void {}
 
   get favorites() {
-    return linearizeCollection(this._favorites);
+    return this._favorites;
   }
 
   isFavorite = (recipeId: number) => {
-    return this._favorites.order.includes(recipeId);
+    return this._favorites.includes(recipeId);
   };
 
   saveFavoritesToLocalStorage() {
-    const plainFavorites = toJS(this._favorites);
+    const plainFavorites = this._favorites;
     localStorage.setItem('favorites', JSON.stringify(plainFavorites));
   }
 
-  addRecipeToFavorites(recipe: Recipe) {
-    if (!this.isFavorite(recipe.id)) {
-      set(this._favorites, 'order', [...this._favorites.order, recipe.id]);
-      set(this._favorites.entities, recipe.id, recipe);
+  addRecipeToFavorites(recipeId: number) {
+    if (!this.isFavorite(recipeId)) {
+      this._favorites.push(recipeId);
       this.saveFavoritesToLocalStorage();
     }
   }
 
   removeFromFavorites(recipeId: number) {
     if (this.isFavorite(recipeId)) {
-      this._favorites.order = this._favorites.order.filter((id) => id !== recipeId);
-      remove(this._favorites.entities, recipeId.toString());
+      this._favorites = this._favorites.filter((id) => id !== recipeId);
       this.saveFavoritesToLocalStorage();
     }
   }
@@ -222,10 +219,10 @@ class RecipeStore implements ILocalStore {
   loadFavoritesFromLocalStorage() {
     const savedFavorites = localStorage.getItem('favorites');
     if (savedFavorites) {
-      const parsedData: CollectionModel<number, Recipe> = JSON.parse(savedFavorites);
+      const parsedData: number[] = JSON.parse(savedFavorites);
       this._favorites = parsedData;
     }
   }
 }
 
-export default RecipeStore;
+export default RecipeDetailStore;

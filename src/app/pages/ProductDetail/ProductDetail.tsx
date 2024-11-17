@@ -4,32 +4,32 @@ import { observer } from 'mobx-react-lite';
 import DetailTabHeader from '@/components/DetailTabHeader';
 import s from './IngredientDetail.module.scss';
 import Loading from '@/components/Loading';
-import IngredientInfo from './components/IngredientInfo';
-import { IngredientStoreProvider, useIngredientDetailStore } from './useIngredientDetailStore';
+import { ProductDetailStoreProvider, useProductDetailStore } from './useProductDetailStore';
 import { withProvider } from '@/hoc/withProvider';
+import ProductInfo from './components/ProductInfo';
 
 const IngredientDetail: React.FC = observer(() => {
   const { id } = useParams();
-  const { ingredient, getIngredient } = useIngredientDetailStore();
+  const { product, getProduct } = useProductDetailStore();
 
   useEffect(() => {
-    getIngredient(Number(id));
-  }, [getIngredient, id, ingredient]);
+    getProduct(Number(id));
+  }, [getProduct, id]);
 
-  if (!ingredient) {
+  if (!product) {
     return <Loading page />;
   }
 
   return (
     <div className={s.root}>
       <div className={s.root__center}>
-        <DetailTabHeader>{ingredient.original}</DetailTabHeader>
-        <IngredientInfo ingredient={ingredient} />
+        <DetailTabHeader>{product.title}</DetailTabHeader>
+        <ProductInfo product={product} />
       </div>
     </div>
   );
 });
 
-const IngredientWithProvider = withProvider(IngredientStoreProvider, IngredientDetail);
+const ProductDetailWithProvider = withProvider(ProductDetailStoreProvider, IngredientDetail);
 
-export default IngredientWithProvider;
+export default ProductDetailWithProvider;

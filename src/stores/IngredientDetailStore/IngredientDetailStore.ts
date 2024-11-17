@@ -1,21 +1,21 @@
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import { Ingredient } from '@/types/ingredient';
 import { Meta } from '@/types/shared';
-import { fetchIngredientById } from '@/api/ingredientApi';
 import { ILocalStore } from '@/utils/useLocalStore';
+import rootStore from '../RootStore';
 
 type metaStateKeys = 'ingredient';
 
 type PrivateFields = '_ingredient' | '_metaState';
 
-class IngredientStore implements ILocalStore {
+class IngredientDetailStore implements ILocalStore {
   private _ingredient: Ingredient | null = null;
   private _metaState: Record<metaStateKeys, Meta> = {
     ingredient: Meta.initial,
   };
 
   constructor() {
-    makeObservable<IngredientStore, PrivateFields>(this, {
+    makeObservable<IngredientDetailStore, PrivateFields>(this, {
       _ingredient: observable,
       _metaState: observable,
       ingredient: computed,
@@ -38,7 +38,7 @@ class IngredientStore implements ILocalStore {
   getIngredient = async (ingredinetId: number) => {
     try {
       this.setMetaState('ingredient', Meta.loading);
-      const data = await fetchIngredientById(ingredinetId);
+      const data = await rootStore.api.fetchIngredientById(ingredinetId);
       runInAction(() => {
         if (data) {
           this.setMetaState('ingredient', Meta.success);
@@ -67,4 +67,4 @@ class IngredientStore implements ILocalStore {
   destroy(): void {}
 }
 
-export default IngredientStore;
+export default IngredientDetailStore;

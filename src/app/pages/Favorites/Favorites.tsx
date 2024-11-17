@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import React from 'react';
+import React, { useEffect } from 'react';
 import FavoriteCard from './components/FavoriteCard';
 import s from './Favorites.module.scss';
 import Text from '@/components/Text';
@@ -7,8 +7,11 @@ import { FavoritesStoreProvider, useFavoritesStore } from './useFavoritesStore';
 import { withProvider } from '@/hoc/withProvider';
 
 const Favorites: React.FC = observer(() => {
-  const favoriteStore = useFavoritesStore();
-  const favorites = favoriteStore.favorites;
+  const { favorites, getFavorites } = useFavoritesStore();
+
+  useEffect(() => {
+    getFavorites();
+  }, [getFavorites]);
 
   return (
     <div className={s.root}>

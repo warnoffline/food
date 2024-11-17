@@ -15,7 +15,7 @@ interface RecipeCardProps {
 
 const RecipeCard: React.FC<RecipeCardProps> = observer(({ recipe }) => {
   const recipeStore = useRecipesStore();
-  const isRecipeFavorite = recipeStore.isFavorite(recipe.id);
+  const isRecipeFavorite = recipeStore.favorites.includes(recipe.id);
 
   const handleFavoriteToggle = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -24,7 +24,7 @@ const RecipeCard: React.FC<RecipeCardProps> = observer(({ recipe }) => {
       if (isRecipeFavorite) {
         recipeStore.removeFromFavorites(recipe.id);
       } else {
-        recipeStore.addRecipeToFavorites(recipe);
+        recipeStore.addRecipeToFavorites(recipe.id);
       }
     },
     [isRecipeFavorite, recipe, recipeStore],

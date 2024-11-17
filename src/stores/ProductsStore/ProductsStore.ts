@@ -1,60 +1,48 @@
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
-import { Ingredient } from '@/types/ingredient';
-import { Meta, Response } from '@/types/shared';
+import { Meta } from '@/types/shared';
 import qs from 'qs';
 import { ILocalStore } from '@/utils/useLocalStore';
-import SearchIngredientStore from './SearchIngredientStore/SearchIngredientStore';
 import rootStore from '../RootStore';
+import { Product, ProductsResponse } from '@/types/product';
+import SearchProductStore from './SearchProductStore/SearchProductStore';
 
-type metaStateKeys = 'ingredients';
+type metaStateKeys = 'products';
 
-type PrivateFields =
-  | '_ingredients'
-  | '_ingredient'
-  | '_number'
-  | '_totalResults'
-  | '_number'
-  | '_queryString'
-  | '_metaState'
-  | '_page';
+type PrivateFields = '_products' | '_number' | '_totalResults' | '_number' | '_queryString' | '_metaState' | '_page';
 
 type UpdateParams = {
   page: number;
   search?: string;
 };
 
-class IngredientsStore implements ILocalStore {
-  private _ingredients: Ingredient[] = [];
-  private _ingredient: Ingredient | null = null;
+class ProductsStore implements ILocalStore {
+  private _products: Product[] = [];
   private _totalResults: number = 0;
   private _number: number = 0;
   private _queryString: string = '';
   private _page: number;
   private _metaState: Record<metaStateKeys, Meta> = {
-    ingredients: Meta.initial,
+    products: Meta.initial,
   };
 
-  readonly searchStore = new SearchIngredientStore();
+  readonly searchStore = new SearchProductStore();
 
   constructor() {
     this._page = Number(rootStore.query.getParam('page')) || 1;
 
-    makeObservable<IngredientsStore, PrivateFields>(this, {
-      _ingredients: observable,
-      _ingredient: observable,
+    makeObservable<ProductsStore, PrivateFields>(this, {
+      _products: observable,
       _totalResults: observable,
       _number: observable,
       _queryString: observable,
       _metaState: observable,
       _page: observable,
-      ingredients: computed,
+      products: computed,
       totalResults: computed,
       number: computed,
       page: computed,
       queryString: computed,
       metaState: computed,
-      getIngredients: action,
-      setIngredient: action,
       setIngredients: action,
       setMetaState: action,
       setPage: action.bound,
@@ -62,8 +50,8 @@ class IngredientsStore implements ILocalStore {
     });
   }
 
-  get ingredients() {
-    return this._ingredients;
+  get products() {
+    return this._products;
   }
 
   get totalResults() {
@@ -86,32 +74,32 @@ class IngredientsStore implements ILocalStore {
     return this._page;
   }
 
-  getIngredients = async () => {
+  getProducts = async () => {
     try {
       const query = this.searchStore.query;
       if (query) {
-        this.setMetaState('ingredients', Meta.loading);
+        this.setMetaState('products', Meta.loading);
 
         const params = {
           query: query,
           offset: (this._page - 1) * 12,
           number: 12,
-          metaInformation: true,
+          addProductInformation: true,
         };
 
-        const data = await rootStore.api.fetchIngredients(params);
+        const data = await rootStore.api.fetchProducts(params);
 
         runInAction(() => {
           if (data) {
-            this.setMetaState('ingredients', Meta.success);
+            this.setMetaState('products', Meta.success);
             this.setIngredients(data);
             return;
           }
 
-          this.setMetaState('ingredients', Meta.error);
+          this.setMetaState('products', Meta.error);
         });
       } else {
-        this.setMetaState('ingredients', Meta.initial);
+        this.setMetaState('products', Meta.initial);
       }
       const params: UpdateParams = {
         page: this._page,
@@ -120,7 +108,7 @@ class IngredientsStore implements ILocalStore {
       this.updateUrl(params);
     } catch (error) {
       runInAction(() => {
-        this.setMetaState('ingredients', Meta.error);
+        this.setMetaState('products', Meta.error);
       });
       console.error('Failed to load:', error);
     }
@@ -130,14 +118,10 @@ class IngredientsStore implements ILocalStore {
     this._metaState[key] = state;
   }
 
-  setIngredients(data: Response<Ingredient>) {
-    this._ingredients = data.results;
-    this._totalResults = data.totalResults;
+  setIngredients(data: ProductsResponse) {
+    this._products = data.products;
+    this._totalResults = data.totalProducts;
     this._number = data.number;
-  }
-
-  setIngredient(data: Ingredient) {
-    this._ingredient = data;
   }
 
   setPage(page: number) {
@@ -153,4 +137,4 @@ class IngredientsStore implements ILocalStore {
   destroy(): void {}
 }
 
-export default IngredientsStore;
+export default ProductsStore;
