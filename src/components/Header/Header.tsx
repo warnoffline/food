@@ -6,9 +6,12 @@ import LikeIcon from '../icons/LikeIcon';
 import ProfileIcon from '../icons/ProfileIcon';
 import cn from 'classnames';
 import { memo } from 'react';
+import { useRootStore } from '@/stores/RootStore/hooks/useRootStore';
+import LogInIcon from '../icons/LogInIcon/LogInIcon';
 
 const Header = () => {
   const location = useLocation();
+  const { user } = useRootStore();
 
   return (
     <div className={s.root__wrapper}>
@@ -43,12 +46,21 @@ const Header = () => {
               height={19}
               color={location.pathname.includes('favorites') ? 'accent' : 'white'}
               strokeWidth={2}
-              stroke="accent"
+              stroke={location.pathname.includes('favorites') ? 'accent' : 'secondary'}
             />
           </Link>
-          <Link to="profile">
-            <ProfileIcon color="accent" className={s['root__icon-fill']} />
-          </Link>
+          {user.isAuthenticated ? (
+            <Link to="profile">
+              <ProfileIcon
+                color={location.pathname.includes('profile') ? 'accent' : 'secondary'}
+                className={s['root__icon-fill']}
+              />
+            </Link>
+          ) : (
+            <Link to="auth">
+              <LogInIcon stroke={location.pathname.includes('auth') ? 'accent' : 'secondary'} />
+            </Link>
+          )}
         </div>
       </div>
     </div>

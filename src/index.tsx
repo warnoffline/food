@@ -5,6 +5,7 @@ import './styles/styles.css';
 import './styles/Roboto/fonts.css';
 import { createRoot } from 'react-dom/client';
 import 'regenerator-runtime/runtime';
+import '@/configs/configureFirebase';
 
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

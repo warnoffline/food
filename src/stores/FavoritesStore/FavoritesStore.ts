@@ -6,16 +6,20 @@ import rootStore from '../RootStore';
 
 type PrivateFields = '_favoritesIds' | '_favorites' | '_metaState';
 
-type metaStateKeys = 'favorites';
+type metaStateKeys = 'favorites' | 'favoritesIds';
 
 class FavoritesStore implements ILocalStore {
   private _favoritesIds: number[] = [];
   private _favorites: Recipe[] = [];
   private _metaState: Record<metaStateKeys, Meta> = {
     favorites: Meta.initial,
+    favoritesIds: Meta.initial,
   };
+  private user: string;
+  private initializationPromise: Promise<void>;
 
   constructor() {
+    this.user = rootStore.user.user;
     makeObservable<FavoritesStore, PrivateFields>(this, {
       _favoritesIds: observable,
       _favorites: observable,
@@ -26,11 +30,12 @@ class FavoritesStore implements ILocalStore {
       addRecipeToFavorites: action,
       removeFromFavorites: action,
       loadFavoritesFromLocalStorage: action,
-      saveFavoritesToLocalStorage: action,
+      saveFavorites: action,
       setMetaState: action,
       destroy: action,
     });
-    this.loadFavoritesFromLocalStorage();
+
+    this.initializationPromise = this.initializeFavorites();
   }
 
   get favoritesIds() {
@@ -54,6 +59,8 @@ class FavoritesStore implements ILocalStore {
   }
 
   getFavorites = async () => {
+    await this.initializationPromise;
+
     try {
       this.setMetaState('favorites', Meta.loading);
       const ids = this._favoritesIds.join(',');
@@ -79,22 +86,26 @@ class FavoritesStore implements ILocalStore {
     return this._favoritesIds.includes(recipeId);
   };
 
-  saveFavoritesToLocalStorage() {
+  saveFavorites() {
     const plainFavorites = this._favoritesIds;
-    localStorage.setItem('favorites', JSON.stringify(plainFavorites));
+    if (this.user) {
+      rootStore.user.saveFavorites(plainFavorites);
+    } else {
+      localStorage.setItem('favorites', JSON.stringify(plainFavorites));
+    }
   }
 
   addRecipeToFavorites(recipeId: number) {
     if (!this.isFavorite(recipeId)) {
       this._favoritesIds.push(recipeId);
-      this.saveFavoritesToLocalStorage();
+      this.saveFavorites();
     }
   }
 
   removeFromFavorites(recipeId: number) {
     if (this.isFavorite(recipeId)) {
       this._favoritesIds = this._favoritesIds.filter((id) => id !== recipeId);
-      this.saveFavoritesToLocalStorage();
+      this.saveFavorites();
     }
   }
 
@@ -103,6 +114,26 @@ class FavoritesStore implements ILocalStore {
     if (savedFavorites) {
       const parsedData: number[] = JSON.parse(savedFavorites);
       this._favoritesIds = parsedData;
+    }
+  }
+
+  private async initializeFavorites() {
+    if (this.user) {
+      this.setMetaState('favoritesIds', Meta.loading);
+      try {
+        const favorites = await rootStore.user.getFavorites();
+        runInAction(() => {
+          this._favoritesIds = favorites;
+          this.setMetaState('favoritesIds', Meta.success);
+        });
+      } catch (error) {
+        runInAction(() => {
+          this.setMetaState('favoritesIds', Meta.error);
+        });
+        console.error('Failed to load:', error);
+      }
+    } else {
+      this.loadFavoritesFromLocalStorage();
     }
   }
 

@@ -27,6 +27,12 @@
       color: $secondary;
     }
 
+    &__background {
+      &-gray {
+        background-color: #eeeeee;
+      }
+    }
+
     &::placeholder {
       color: $secondary;
       font-family: "Roboto";

@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import DetailTabHeader from '@/components/DetailTabHeader';
-import s from './IngredientDetail.module.scss';
+import s from './ProductDetail.module.scss';
 import Loading from '@/components/Loading';
 import { ProductDetailStoreProvider, useProductDetailStore } from './useProductDetailStore';
 import { withProvider } from '@/hoc/withProvider';

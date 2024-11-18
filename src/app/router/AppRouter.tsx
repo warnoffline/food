@@ -12,11 +12,19 @@ import {
   RecipeDetailLazy,
   NotFoundLazy,
   IngredientDetailLazy,
+  ProductDetailLazy,
+  AuthLazy,
 } from '../pages';
 import { Suspense } from 'react';
 import Loading from '@/components/Loading/Loading';
+import ProtectedRoute from './ProtectedRoute';
+import { observer } from 'mobx-react-lite';
+import { useRootStore } from '@/stores/RootStore/hooks/useRootStore';
 
-const RouterComponent = () => {
+const RouterComponent = observer(() => {
+  const { user } = useRootStore();
+  const isAuthenticated = user.isAuthenticated ? true : false;
+
   const router = createBrowserRouter([
     {
       path: '/',
@@ -39,6 +47,10 @@ const RouterComponent = () => {
           element: <ProductsLazy />,
         },
         {
+          path: ROUTES.productById,
+          element: <ProductDetailLazy />,
+        },
+        {
           path: ROUTES.ingredients,
           element: <IngredientsLazy />,
         },
@@ -59,8 +71,17 @@ const RouterComponent = () => {
           element: <FavoritesLazy />,
         },
         {
-          path: ROUTES.profile,
-          element: <ProfileLazy />,
+          path: ROUTES.auth,
+          element: <AuthLazy />,
+        },
+        {
+          element: <ProtectedRoute isAuthenticated={isAuthenticated} />,
+          children: [
+            {
+              path: ROUTES.profile,
+              element: <ProfileLazy />,
+            },
+          ],
         },
         {
           path: '*',
@@ -74,6 +95,6 @@ const RouterComponent = () => {
       <RouterProvider router={router} />
     </Suspense>
   );
-};
+});
 
 export default RouterComponent;

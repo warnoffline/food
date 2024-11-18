@@ -16,6 +16,10 @@
     color: $brand;
   }
 
+  &--red {
+    color: red;
+  }
+
   &--weight {
     &-normal {
       font-weight: 400;

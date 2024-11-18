@@ -7,10 +7,11 @@ export type InputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onCh
   onChange: (value: string) => void;
   afterSlot?: React.ReactNode;
   color?: 'primary' | 'accent' | 'secondary';
+  background?: 'white' | 'gray';
 };
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ value, onChange, afterSlot, className, color, ...rest }, ref) => {
+  ({ value, onChange, afterSlot, className, background, color, ...rest }, ref) => {
     const handleChange = useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
         onChange(event.target.value);
@@ -18,20 +19,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       [onChange],
     );
 
+    const classNames = cn(s.root__field, s[`root__field-${color}`], s[`root__field__background-${background}`]);
+
     return (
       <div className={cn(s.root__wrapper, className)}>
-        <input
-          type="text"
-          value={value}
-          onChange={handleChange}
-          className={cn(s.root__field, {
-            [s['root__field-primary']]: color === 'primary',
-            [s['root__field-accent']]: color === 'accent',
-            [s['root__field-secondary']]: color === 'secondary',
-          })}
-          ref={ref}
-          {...rest}
-        />
+        <input type="text" value={value} onChange={handleChange} className={classNames} ref={ref} {...rest} />
         {afterSlot && <div className={s.root__icon}>{afterSlot}</div>}
       </div>
     );

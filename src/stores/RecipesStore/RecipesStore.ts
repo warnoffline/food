@@ -22,12 +22,15 @@ class RecipesStore implements ILocalStore {
     extractRecipe: Meta.initial,
   };
   private _page: number;
+  private user: string;
+  private initializationPromise: Promise<void>;
 
   readonly filtersStore = new FilterStore();
   readonly searchStore = new SearchRecipeStore();
 
   constructor() {
     this._page = Number(rootStore.query.getParam('page')) || 1;
+    this.user = rootStore.user.user;
 
     makeObservable<RecipesStore, PrivateFields>(this, {
       _page: observable,
@@ -55,9 +58,10 @@ class RecipesStore implements ILocalStore {
       isFavorite: action,
       loadFavoritesFromLocalStorage: action,
       addRecipeToFavorites: action,
-      saveFavoritesToLocalStorage: action,
+      saveFavorites: action,
     });
-    this.loadFavoritesFromLocalStorage();
+
+    this.initializationPromise = this.initializeFavorites();
   }
 
   get page() {
@@ -85,6 +89,8 @@ class RecipesStore implements ILocalStore {
   }
 
   getRecipes = async () => {
+    await this.initializationPromise;
+
     try {
       this.setMetaState('recipes', Meta.loading);
 
@@ -185,22 +191,26 @@ class RecipesStore implements ILocalStore {
     return this._favorites.includes(recipeId);
   };
 
-  saveFavoritesToLocalStorage() {
+  saveFavorites() {
     const plainFavorites = this._favorites;
-    localStorage.setItem('favorites', JSON.stringify(plainFavorites));
+    if (this.user) {
+      rootStore.user.saveFavorites(plainFavorites);
+    } else {
+      localStorage.setItem('favorites', JSON.stringify(plainFavorites));
+    }
   }
 
   addRecipeToFavorites(recipeId: number) {
     if (!this.isFavorite(recipeId)) {
       this._favorites.push(recipeId);
-      this.saveFavoritesToLocalStorage();
+      this.saveFavorites();
     }
   }
 
   removeFromFavorites(recipeId: number) {
     if (this.isFavorite(recipeId)) {
       this._favorites = this._favorites.filter((id) => id !== recipeId);
-      this.saveFavoritesToLocalStorage();
+      this.saveFavorites();
     }
   }
 
@@ -209,6 +219,21 @@ class RecipesStore implements ILocalStore {
     if (savedFavorites) {
       const parsedData: number[] = JSON.parse(savedFavorites);
       this._favorites = parsedData;
+    }
+  }
+
+  private async initializeFavorites() {
+    if (this.user) {
+      try {
+        const favorites = await rootStore.user.getFavorites();
+        runInAction(() => {
+          this._favorites = favorites;
+        });
+      } catch (error) {
+        console.error('Failed to load:', error);
+      }
+    } else {
+      this.loadFavoritesFromLocalStorage();
     }
   }
 }

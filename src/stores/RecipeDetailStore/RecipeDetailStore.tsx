@@ -18,8 +18,12 @@ class RecipeDetailStore implements ILocalStore {
     equipments: Meta.initial,
     similarRecipes: Meta.initial,
   };
+  private user: string;
+  private initializationPromise: Promise<void>;
 
   constructor() {
+    this.user = rootStore.user.user;
+
     makeObservable<RecipeDetailStore, PrivateFields>(this, {
       _similarRecipes: observable,
       _recipe: observable,
@@ -48,7 +52,8 @@ class RecipeDetailStore implements ILocalStore {
     if (extractRecipe) {
       this._recipe = JSON.parse(extractRecipe);
     }
-    this.loadFavoritesFromLocalStorage();
+
+    this.initializationPromise = this.initializeFavorites();
   }
 
   get similarRecipes() {
@@ -128,6 +133,8 @@ class RecipeDetailStore implements ILocalStore {
   };
 
   initRecipeDetail = async (recipeId: number) => {
+    await this.initializationPromise;
+
     try {
       this.setMetaState('recipe', Meta.loading);
       this.setMetaState('equipments', Meta.loading);
@@ -197,22 +204,26 @@ class RecipeDetailStore implements ILocalStore {
     return this._favorites.includes(recipeId);
   };
 
-  saveFavoritesToLocalStorage() {
+  saveFavorites() {
     const plainFavorites = this._favorites;
-    localStorage.setItem('favorites', JSON.stringify(plainFavorites));
+    if (this.user) {
+      rootStore.user.saveFavorites(plainFavorites);
+    } else {
+      localStorage.setItem('favorites', JSON.stringify(plainFavorites));
+    }
   }
 
   addRecipeToFavorites(recipeId: number) {
     if (!this.isFavorite(recipeId)) {
       this._favorites.push(recipeId);
-      this.saveFavoritesToLocalStorage();
+      this.saveFavorites();
     }
   }
 
   removeFromFavorites(recipeId: number) {
     if (this.isFavorite(recipeId)) {
       this._favorites = this._favorites.filter((id) => id !== recipeId);
-      this.saveFavoritesToLocalStorage();
+      this.saveFavorites();
     }
   }
 
@@ -221,6 +232,21 @@ class RecipeDetailStore implements ILocalStore {
     if (savedFavorites) {
       const parsedData: number[] = JSON.parse(savedFavorites);
       this._favorites = parsedData;
+    }
+  }
+
+  private async initializeFavorites() {
+    if (this.user) {
+      try {
+        const favorites = await rootStore.user.getFavorites();
+        runInAction(() => {
+          this._favorites = favorites;
+        });
+      } catch (error) {
+        console.error('Failed to load:', error);
+      }
+    } else {
+      this.loadFavoritesFromLocalStorage();
     }
   }
 }

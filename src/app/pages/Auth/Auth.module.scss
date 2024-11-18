@@ -1,0 +1,45 @@
+@use "@/styles/variables" as *;
+
+.root {
+  width: 100%;
+  height: 80vh;
+  max-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__center {
+    display: flex;
+    padding: 30px;
+    border-radius: 16px;
+    background-color: white;
+    z-index: 5;
+    flex-direction: column;
+    width: 40%;
+  }
+
+  &__footer {
+    display: flex;
+    gap: 5px;
+
+    button {
+      border: 0;
+      background: none;
+      font-size: 16px;
+      font-family: "Roboto";
+      padding: 0;
+      display: block;
+      text-decoration: underline;
+      cursor: pointer;
+
+      &:hover {
+        color: $brand-hover;
+        text-decoration: none;
+      }
+
+      &:active {
+        color: $brand-active;
+      }
+    }
+  }
+}
