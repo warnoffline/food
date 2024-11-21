@@ -69,7 +69,7 @@ const Form: React.FC<FormProps> = observer(({ title, handleClick }) => {
         </Button>
       </div>
       <div className={s.root__img}>
-        <img src="/auth.jpg" alt="" />
+        <img src="auth.jpg" alt="" />
       </div>
     </form>
   );

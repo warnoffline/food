@@ -15,7 +15,7 @@ const IngredientCard: React.FC<IngredientCardProps> = observer(({ ingredient }) 
   );
 
   return (
-    <Link to={`/ingredients/${ingredient.id}`}>
+    <Link to={`/food/ingredients/${ingredient.id}`}>
       <Card captionSlot={ingredient.aisle} title={ingredient.name} image={Image} />
     </Link>
   );

@@ -12,7 +12,7 @@ const ProductCard: React.FC<IngredientCardProps> = observer(({ product }) => {
   const Image = useMemo(() => product.image || undefined, [product.image]);
 
   return (
-    <Link to={`/products/${product.id}`}>
+    <Link to={`/food/products/${product.id}`}>
       <Card captionSlot={product.aisle} title={product.title} subtitle={product.ingredientList} image={Image} />
     </Link>
   );

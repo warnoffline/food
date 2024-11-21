@@ -40,7 +40,7 @@ const RecipeCard: React.FC<RecipeCardProps> = observer(({ recipe }) => {
   const ActionSlot = <Button onClick={handleFavoriteToggle}>{isRecipeFavorite ? 'Saved' : 'Save'}</Button>;
 
   return (
-    <Link to={`/recipes/${recipe.id}`}>
+    <Link to={`/food/recipes/${recipe.id}`}>
       <Card
         captionSlot={CaptionSlot}
         title={recipe.title}

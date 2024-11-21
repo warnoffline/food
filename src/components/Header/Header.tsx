@@ -44,7 +44,7 @@ const Header = () => {
         <div className={s.root__left}>
           <Link to="/">
             <div className={s.root__logo}>
-              <img src="/logo.svg" alt="" />
+              <img src="logo.svg" alt="" />
               <Text className={s['root__logo-text']} view="title">
                 Food Client
               </Text>

@@ -18,7 +18,7 @@ const SimilarCard: React.FC<FavoriteCardProps> = observer(({ recipe }) => {
   );
 
   return (
-    <Link to={`/recipes/${recipe.id}`}>
+    <Link to={`/food/recipes/${recipe.id}`}>
       <Card captionSlot={CaptionSlot} title={recipe.title} image={recipe.image} />
     </Link>
   );

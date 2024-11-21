@@ -9,7 +9,7 @@ const RootLayout = () => {
   return (
     <>
       <Header />
-      <img className={s['background-image']} src="/Pattern.png" alt="" />
+      <img className={s['background-image']} src="Pattern.png" alt="" />
       <Outlet />
     </>
   );

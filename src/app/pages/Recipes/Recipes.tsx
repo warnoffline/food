@@ -30,7 +30,7 @@ const Recipes: React.FC = observer(() => {
   return (
     <div className={s.root}>
       <div className={s.root__banner}>
-        <img src="/banner.png" alt="banner" />
+        <img src="banner.png" alt="banner" />
       </div>
       <div className={s.root__content}>
         <div className={s.root__quote}>

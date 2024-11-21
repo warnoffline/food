@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import cn from 'classnames';
 import Text from '../Text';
 import s from './Card.module.scss';
+import ImageWithFallback from '@/hoc/ImageWithFallback';
 
 export type CardProps = {
   className?: string;
@@ -28,7 +29,7 @@ const Card: React.FC<CardProps> = ({
     <div className={cn(s.root, className)} onClick={onClick}>
       {image && (
         <div className={s['root__image-wrapper']}>
-          <img src={image} alt="Card Image" className={s.root__image} />
+          <ImageWithFallback src={image} alt="Card Image" fallbackSrc="notImg.png" className={s.root__image} />
         </div>
       )}
       <div className={s['root__content-wrapper']}>

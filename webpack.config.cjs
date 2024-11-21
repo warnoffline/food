@@ -43,7 +43,8 @@ module.exports = {
     entry: path.resolve(srcPath, 'index.tsx'),
     output: {
         path: buildPath,
-        filename: "bundle.js"
+        filename: "bundle.js",
+        publicPath: '/food/',
     },
     target: !isProd ? 'web' : 'browserslist',
     devtool: isProd ? 'hidden-source-map' : 'eval-source-map',
@@ -92,7 +93,8 @@ module.exports = {
           'process.env.REACT_APP_FIREBASE_MEASUREMENT_ID': JSON.stringify(process.env.REACT_APP_FIREBASE_MEASUREMENT_ID), 
         }),
         new HtmlWebpackPlugin({
-            template: path.join(srcPath, 'index.html'),
+            template: path.join(srcPath, 'index.html'), 
+            base: '/food/'
         }),
         !isProd && new ReactRefreshWebpackPlugin(),
         isProd && new MiniCssExtractPlugin({
