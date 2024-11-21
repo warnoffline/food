@@ -1,1 +1,0 @@
-import{j as o,T as s}from"./index-BIpS7iMd.js";const r="_root_4hhai_1",i="_root__img_4hhai_8",t={root:r,root__img:i},n=()=>o.jsxs("div",{className:t.root,children:[o.jsx("div",{className:t.root__img,children:o.jsx("img",{src:"/404.png",alt:""})}),o.jsx(s,{view:"p-xxl",children:"404 Not Found"})]});export{n as default};
