@@ -42,6 +42,10 @@
     &-title {
       font-size: $xl;
       font-weight: bold;
+
+      @media (max-width: 900px) {
+        font-size: $l;
+      }
     }
 
     &-label {
@@ -57,26 +61,50 @@
 
     &-p-xxl {
       font-size: $xxl;
+
+      @media (max-width: 900px) {
+        font-size: $xl;
+      }
     }
 
     &-p-xl {
       font-size: $xl;
+
+      @media (max-width: 900px) {
+        font-size: $l;
+      }
     }
 
     &-p-l {
       font-size: $l;
+
+      @media (max-width: 900px) {
+        font-size: $m;
+      }
     }
 
     &-p-m {
       font-size: $m;
+
+      @media (max-width: 900px) {
+        font-size: $s;
+      }
     }
 
     &-p-s {
       font-size: $s;
+
+      @media (max-width: 900px) {
+        font-size: $xs;
+      }
     }
 
     &-p-xs {
       font-size: $xs;
+
+      @media (max-width: 900px) {
+        font-size: $xxs;
+      }
     }
 
     &-p-xxs {

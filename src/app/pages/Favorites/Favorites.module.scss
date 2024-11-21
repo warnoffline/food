@@ -5,6 +5,10 @@
   &__center {
     width: calc(100% - 100px);
     padding: 48px 0;
+
+    @media (max-width: 600px) {
+      width: calc(100% - 20px);
+    }
   }
 
   &__list {

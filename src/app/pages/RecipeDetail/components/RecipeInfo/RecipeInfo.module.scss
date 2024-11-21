@@ -17,6 +17,11 @@
       height: 300px;
       border-radius: 10px;
       object-fit: cover;
+
+      @media (max-width: 600px) {
+        width: 100%;
+        height: 250px;
+      }
     }
   }
 
@@ -25,6 +30,12 @@
     gap: 100px;
     display: flex;
     flex-wrap: wrap;
+
+    @media (max-width: 600px) {
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+    }
   }
 
   &__detail {
@@ -33,5 +44,10 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 20px;
   }
 }

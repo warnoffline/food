@@ -14,7 +14,7 @@ import { useRecipesStore } from '../../useRecipesStore';
 const FilterRecipes: React.FC = observer(() => {
   const filterModal = useModal();
   const findRecipeModal = useModal();
-  const { searchStore } = useRecipesStore();
+  const { searchStore, setRecipes, resetPage } = useRecipesStore();
 
   const regex = useMemo(() => /^[A-Za-zА-Яа-я\s,]+$/, []);
 
@@ -24,16 +24,18 @@ const FilterRecipes: React.FC = observer(() => {
     (event: React.KeyboardEvent) => {
       if (event.key === 'Enter') {
         searchStore.setQuery(value);
+        resetPage();
       }
     },
-    [searchStore, value],
+    [resetPage, searchStore, value],
   );
 
   const handleQuerySubmit = useCallback(
     (value: string) => {
       searchStore.setQuery(value);
+      resetPage();
     },
-    [searchStore],
+    [resetPage, searchStore],
   );
 
   const handleQueryChange = useCallback(
@@ -46,7 +48,9 @@ const FilterRecipes: React.FC = observer(() => {
   );
 
   const handleClear = () => {
+    setRecipes([]);
     setValue('');
+    resetPage();
     searchStore.setQuery('');
   };
 
@@ -60,9 +64,10 @@ const FilterRecipes: React.FC = observer(() => {
           onChange={handleQueryChange}
           placeholder="Enter dishes"
         />
-        <Button onClick={() => handleQuerySubmit(value)}>
-          <FindIcon width={24} height={24} color="white" />
-        </Button>
+        <Button
+          onClick={() => handleQuerySubmit(value)}
+          actionSlot={<FindIcon width={24} height={24} color="white" />}
+        />
         {value && <Button onClick={handleClear}>Clear</Button>}
       </div>
       <div className={s.root__select}>
@@ -72,9 +77,13 @@ const FilterRecipes: React.FC = observer(() => {
           </Button>
         </div>
         <div className={s.root__filters}>
-          <Button onClick={filterModal.openModal} className={s.root__button}>
+          <Button
+            tag="span"
+            onClick={filterModal.openModal}
+            className={s.root__button}
+            actionSlot={<FilterIcon color="white" />}
+          >
             Filters
-            <FilterIcon color="white" />
           </Button>
         </div>
       </div>

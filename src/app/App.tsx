@@ -4,7 +4,7 @@ import RouterComponent from './router';
 function App() {
   return (
     <RootStoreProvider>
-      <RouterComponent />;
+      <RouterComponent />
     </RootStoreProvider>
   );
 }

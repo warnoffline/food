@@ -1,6 +1,6 @@
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import { Filter, Recipe } from '@/types/recipes';
-import { Meta, Response } from '@/types/shared';
+import { Meta } from '@/types/shared';
 import { ILocalStore } from '@/utils/useLocalStore';
 import qs from 'qs';
 import FilterStore from './FilterStore/FilterStore';
@@ -51,14 +51,16 @@ class RecipesStore implements ILocalStore {
       getExtractRecipe: action,
       extractRicpe: action,
       setMetaState: action,
-      setRecipes: action,
       setPage: action.bound,
+      setRecipes: action.bound,
       destroy: action,
       updateUrl: action,
       isFavorite: action,
       loadFavoritesFromLocalStorage: action,
       addRecipeToFavorites: action,
       saveFavorites: action,
+      resetPage: action.bound,
+      removeFromFavorites: action,
     });
 
     this.initializationPromise = this.initializeFavorites();
@@ -88,12 +90,16 @@ class RecipesStore implements ILocalStore {
     return this._queryString;
   }
 
+  get favorites() {
+    return this._favorites;
+  }
+
   getRecipes = async () => {
     await this.initializationPromise;
 
     try {
       this.setMetaState('recipes', Meta.loading);
-
+      
       const filterData = {
         query: this.searchStore.query || undefined,
         offset: (this._page - 1) * 12,
@@ -124,7 +130,9 @@ class RecipesStore implements ILocalStore {
       runInAction(() => {
         if (data) {
           this.setMetaState('recipes', Meta.success);
-          this.setRecipes(data);
+          this.setRecipes(data.results);
+          this._number = data.number;
+          this._totalResults = data.totalResults;
         } else {
           this.setMetaState('recipes', Meta.error);
         }
@@ -141,10 +149,8 @@ class RecipesStore implements ILocalStore {
     this._metaState[key] = state;
   }
 
-  setRecipes(data: Response<Recipe>) {
-    this._recipes = data.results;
-    this._number = data.number;
-    this._totalResults = data.totalResults;
+  setRecipes(recipes: Recipe[]) {
+    this._recipes = recipes;
   }
 
   setPage(page: number) {
@@ -183,12 +189,12 @@ class RecipesStore implements ILocalStore {
     sessionStorage.setItem('extractRecipe', JSON.stringify(data));
   }
 
-  get favorites() {
-    return this._favorites;
-  }
-
   isFavorite = (recipeId: number) => {
     return this._favorites.includes(recipeId);
+  };
+
+  resetPage = () => {
+    this.setPage(1);
   };
 
   saveFavorites() {

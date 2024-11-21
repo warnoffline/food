@@ -46,6 +46,8 @@ class ProductsStore implements ILocalStore {
       setIngredients: action,
       setMetaState: action,
       setPage: action.bound,
+      setProducts: action.bound,
+      resetPage: action.bound,
       destroy: action,
     });
   }
@@ -126,6 +128,14 @@ class ProductsStore implements ILocalStore {
 
   setPage(page: number) {
     this._page = page;
+  }
+
+  resetPage() {
+    this.setPage(1);
+  }
+
+  setProducts(products: Product[]) {
+    this._products = products;
   }
 
   updateUrl(params: UpdateParams) {

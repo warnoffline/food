@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import LogIn from './components/LogIn';
 import SignUp from './components/SignUp';
 import Text from '@/components/Text';
@@ -10,10 +10,10 @@ const Auth: React.FC = observer(() => {
   const { user } = useRootStore();
   const [isLogIn, setIsLogIn] = useState<boolean>(true);
 
-  const handleAuth = () => {
+  const handleAuth = useCallback(() => {
     user.setError('');
     setIsLogIn(!isLogIn);
-  };
+  }, [isLogIn, user]);
 
   return (
     <div className={s.root}>

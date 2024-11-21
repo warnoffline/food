@@ -16,6 +16,10 @@
     width: calc(100% - 100px);
     display: flex;
     justify-content: space-between;
+
+    @media (max-width: 600px) {
+      width: calc(100% - 20px);
+    }
   }
 
   &__left {
@@ -28,12 +32,22 @@
     display: flex;
     align-items: center;
     gap: 20px;
+
+    &-text {
+      @media (max-width: 900px) {
+        display: none;
+      }
+    }
   }
 
   &__navbar {
     display: flex;
     align-items: center;
     gap: 16px;
+
+    @media (max-width: 600px) {
+      display: none;
+    }
   }
 
   &__actions {
@@ -44,7 +58,7 @@
 
   &__link {
     font-weight: 400;
-    font-size: 16px;
+    font-size: $m;
     color: $primary;
 
     &-selected {
@@ -58,6 +72,14 @@
 
     &:active {
       color: $accent;
+    }
+
+    @media (max-width: 900px) {
+      font-size: $xs;
+    }
+
+    @media (max-width: 600px) {
+      font-size: $l;
     }
   }
 
@@ -85,5 +107,17 @@
         fill: $brand-active;
       }
     }
+  }
+
+  &__burgerMenu {
+    position: absolute;
+    width: 100%;
+    height: calc(100vh - 64px);
+    background-color: white;
+    margin-top: 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
   }
 }

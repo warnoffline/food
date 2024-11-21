@@ -10,5 +10,9 @@
     flex-direction: column;
     gap: 24px;
     justify-content: center;
+
+    @media (max-width: 600px) {
+      width: calc(100% - 20px);
+    }
   }
 }

@@ -39,9 +39,11 @@ const RecipeInfo: React.FC<RecipeInfoProps> = observer(({ recipe }) => {
       <div className={s.root__img}>
         <img src={recipe.image} alt="" />
         {recipe.id > 0 && (
-          <Button className={s.root__icon} onClick={handleFavoriteToggle}>
-            <LikeIcon width={19} height={19} color={colorLike} strokeWidth={2} stroke="white" />
-          </Button>
+          <Button
+            className={s.root__icon}
+            onClick={handleFavoriteToggle}
+            actionSlot={<LikeIcon width={19} height={19} color={colorLike} strokeWidth={2} stroke="white" />}
+          />
         )}
       </div>
       <div className={s.root__txts}>

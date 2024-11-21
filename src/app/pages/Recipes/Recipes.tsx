@@ -1,15 +1,14 @@
 import React from 'react';
 import Text from '@/components/Text';
 import s from './Recipes.module.scss';
-import FilterRecipesWithProvider from './components/FilterRecipes/FilterRecipes';
+import FilterRecipes from './components/FilterRecipes/FilterRecipes';
 import RecipeCard from './components/RecipeCard/RecipeCard';
 import Pagination from '@/components/Pagination';
 import { useEffect } from 'react';
-import Loading from '@/components/Loading';
-import { Meta } from '@/types/shared';
 import { observer } from 'mobx-react-lite';
 import { RecipesStoreProvider, useRecipesStore } from './useRecipesStore';
 import { withProvider } from '@/hoc/withProvider';
+import RenderMetaContent from '@/hoc/RenderMetaContent';
 
 const Recipes: React.FC = observer(() => {
   const { filtersStore, searchStore, setPage, recipes, queryString, page, getRecipes, totalResults, metaState } =
@@ -24,28 +23,9 @@ const Recipes: React.FC = observer(() => {
 
   useEffect(() => {
     getRecipes();
-  }, [page, filters, queryString, search, getRecipes]);
+  }, [page, filters, queryString, search, getRecipes, setPage]);
 
-  const renderMetaContent = () => {
-    switch (metaState.recipes) {
-      case Meta.loading:
-        return <Loading />;
-      case Meta.error:
-        return <Text view="title">Oops, something went wrong!</Text>;
-      case Meta.success:
-        return recipes.length > 0 ? (
-          <div className={s.root__items}>
-            {recipes.map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe} />
-            ))}
-          </div>
-        ) : (
-          <Text view="title">No recipes found.</Text>
-        );
-      default:
-        return null;
-    }
-  };
+  const recipe = recipes.map((recipe) => <RecipeCard key={recipe.id} recipe={recipe} />);
 
   return (
     <div className={s.root}>
@@ -58,9 +38,11 @@ const Recipes: React.FC = observer(() => {
             Find the perfect food and drink ideas for every occasion, from weeknight dinners to holiday feasts.
           </Text>
         </div>
-        <FilterRecipesWithProvider />
-        {renderMetaContent()}
-        {totalPages > 1 && (
+        <FilterRecipes />
+        <RenderMetaContent meta={metaState.recipes} items={recipes}>
+          {recipe}
+        </RenderMetaContent>
+        {totalPages > 1 && recipes.length > 0 && (
           <div className={s.root__pagination}>
             <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
           </div>

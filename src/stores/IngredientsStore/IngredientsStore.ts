@@ -1,6 +1,6 @@
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import { Ingredient } from '@/types/ingredient';
-import { Meta, Response } from '@/types/shared';
+import { Meta } from '@/types/shared';
 import qs from 'qs';
 import { ILocalStore } from '@/utils/useLocalStore';
 import SearchIngredientStore from './SearchIngredientStore/SearchIngredientStore';
@@ -8,15 +8,7 @@ import rootStore from '../RootStore';
 
 type metaStateKeys = 'ingredients';
 
-type PrivateFields =
-  | '_ingredients'
-  | '_ingredient'
-  | '_number'
-  | '_totalResults'
-  | '_number'
-  | '_queryString'
-  | '_metaState'
-  | '_page';
+type PrivateFields = '_ingredients' | '_number' | '_totalResults' | '_number' | '_queryString' | '_metaState' | '_page';
 
 type UpdateParams = {
   page: number;
@@ -25,7 +17,6 @@ type UpdateParams = {
 
 class IngredientsStore implements ILocalStore {
   private _ingredients: Ingredient[] = [];
-  private _ingredient: Ingredient | null = null;
   private _totalResults: number = 0;
   private _number: number = 0;
   private _queryString: string = '';
@@ -41,7 +32,6 @@ class IngredientsStore implements ILocalStore {
 
     makeObservable<IngredientsStore, PrivateFields>(this, {
       _ingredients: observable,
-      _ingredient: observable,
       _totalResults: observable,
       _number: observable,
       _queryString: observable,
@@ -54,9 +44,9 @@ class IngredientsStore implements ILocalStore {
       queryString: computed,
       metaState: computed,
       getIngredients: action,
-      setIngredient: action,
-      setIngredients: action,
+      setIngredients: action.bound,
       setMetaState: action,
+      resetPage: action.bound,
       setPage: action.bound,
       destroy: action,
     });
@@ -104,7 +94,9 @@ class IngredientsStore implements ILocalStore {
         runInAction(() => {
           if (data) {
             this.setMetaState('ingredients', Meta.success);
-            this.setIngredients(data);
+            this.setIngredients(data.results);
+            this._totalResults = data.totalResults;
+            this._number = data.number;
             return;
           }
 
@@ -130,18 +122,16 @@ class IngredientsStore implements ILocalStore {
     this._metaState[key] = state;
   }
 
-  setIngredients(data: Response<Ingredient>) {
-    this._ingredients = data.results;
-    this._totalResults = data.totalResults;
-    this._number = data.number;
-  }
-
-  setIngredient(data: Ingredient) {
-    this._ingredient = data;
+  setIngredients(ingredients: Ingredient[]) {
+    this._ingredients = ingredients;
   }
 
   setPage(page: number) {
     this._page = page;
+  }
+
+  resetPage() {
+    this.setPage(1);
   }
 
   updateUrl(params: UpdateParams) {

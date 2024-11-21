@@ -2,13 +2,17 @@ import React, { memo } from 'react';
 import Loader from '../Loader';
 import s from './Button.module.scss';
 import cn from 'classnames';
+import Text from '../Text';
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   loading?: boolean;
   className?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  actionSlot?: React.ReactNode;
   disabled?: boolean;
   fill?: boolean;
+  view?: 'title' | 'button' | 'label' | 'p-xxl' | 'p-xl' | 'p-l' | 'p-m' | 'p-l' | 'p-s' | 'p-xs' | 'p-xxs';
+  tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'div' | 'p' | 'span';
 };
 
 const Button: React.FC<ButtonProps> = ({
@@ -17,6 +21,9 @@ const Button: React.FC<ButtonProps> = ({
   children,
   fill,
   disabled = false,
+  actionSlot,
+  view,
+  tag,
   ...props
 }) => {
   const isDisabled = loading || disabled;
@@ -36,7 +43,14 @@ const Button: React.FC<ButtonProps> = ({
           <span>{children}</span>
         </>
       ) : (
-        children
+        <>
+          {children && (
+            <Text tag={tag} view={view}>
+              {children}
+            </Text>
+          )}
+          {actionSlot}
+        </>
       )}
     </button>
   );

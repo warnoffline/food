@@ -16,7 +16,7 @@ type ModalFilterRecipesProps = {
 };
 
 const ModalFilterRecipes: React.FC<ModalFilterRecipesProps> = observer(({ onClose }) => {
-  const { filtersStore } = useRecipesStore();
+  const { filtersStore, resetPage } = useRecipesStore();
   const filters = filtersStore.filterData;
 
   const handleReset = (event: React.FormEvent) => {
@@ -31,9 +31,10 @@ const ModalFilterRecipes: React.FC<ModalFilterRecipesProps> = observer(({ onClos
     (event: React.FormEvent) => {
       event.preventDefault();
       filtersStore.syncFilters();
+      resetPage();
       onClose();
     },
-    [filtersStore, onClose],
+    [filtersStore, onClose, resetPage],
   );
 
   return (
