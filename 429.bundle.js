@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkfood=self.webpackChunkfood||[]).push([[429],{8429:(e,s,f)=>{f.r(s),f.d(s,{default:()=>r});var o=f(7671);const r=()=>(0,o.jsx)(o.Fragment,{children:"Profile"})}}]);

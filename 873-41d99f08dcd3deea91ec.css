@@ -1,0 +1,3 @@
+.DetailTabHeader-module__root{width:100%;display:flex;gap:6px;align-items:center;padding:50px 0 37px 0}
+.IngredientDetail-module__root{width:100%;display:flex;justify-content:center}.IngredientDetail-module__root__center{display:flex;flex-direction:column;width:calc(100% - 100px);gap:48px}
+.IngredientInfo-module__root{display:flex;gap:50px}.IngredientInfo-module__root__img{display:flex;flex-direction:column;position:relative;object-fit:cover}.IngredientInfo-module__root__img img{width:450px;height:300px;border-radius:10px;object-fit:cover}.IngredientInfo-module__root__txts{width:50%;gap:100px;display:flex;flex-wrap:wrap}.IngredientInfo-module__root__detail{width:90px;display:flex;flex-direction:column;align-items:center;text-align:center}

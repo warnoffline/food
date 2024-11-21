@@ -1,0 +1,1 @@
+{"version":3,"file":"641.bundle.js","mappings":"sHAIA,UAJ4B,WAC1B,OAAOA,EAAAA,EAAAA,KAAAC,EAAAA,SAAA,CAAAC,SAAE,aACX,C","sources":["webpack://food/./src/app/pages/MenuItems/MenuItems.tsx"],"sourcesContent":["const MenuItems: React.FC = () => {\r\n  return <>MenuItems</>;\r\n};\r\n\r\nexport default MenuItems;\r\n"],"names":["_jsx","_Fragment","children"],"sourceRoot":""}
