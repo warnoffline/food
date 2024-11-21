@@ -27,7 +27,7 @@ const RouterComponent = observer(() => {
 
   const router = createBrowserRouter([
     {
-      path: '/',
+      path: '/food',
       element: <RootLayout />,
       children: [
         {
@@ -83,11 +83,11 @@ const RouterComponent = observer(() => {
             },
           ],
         },
-        {
-          path: '*',
-          element: <NotFoundLazy />,
-        },
       ],
+    },
+    {
+      path: '*',
+      element: <NotFoundLazy />,
     },
   ]);
   return (

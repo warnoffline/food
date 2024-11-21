@@ -2,7 +2,7 @@
   "name": "food",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://warnoffline.github.io",
+  "homepage": "https://warnoffline.github.io/food",
   "type": "module",
   "scripts": {
     "dev": "cross-env NODE_ENV=development npx webpack serve --mode=development",
