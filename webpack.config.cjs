@@ -5,9 +5,11 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TsCheckerPlugin = require('fork-ts-checker-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const buildPath = path.resolve(__dirname, 'dist');
 const srcPath = path.resolve(__dirname, 'src')
+const publicPath = path.resolve(__dirname, 'public');
 const isProd = process.env.NODE_ENV === 'production';
 
 dotenv.config();
@@ -97,6 +99,14 @@ module.exports = {
             filename: '[name]-[hash].css',
         }),
         new TsCheckerPlugin (),
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: publicPath,
+                    to: buildPath,   
+                },
+            ],
+        }),
     ].filter(Boolean),
     resolve: {
         extensions: ['.tsx', '.jsx', '.js', '.ts'],
