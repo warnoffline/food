@@ -6,6 +6,8 @@ import Text from '@/components/Text';
 import { FavoritesStoreProvider, useFavoritesStore } from './useFavoritesStore';
 import { withProvider } from '@/hoc/withProvider';
 import RenderMetaContent from '@/hoc/RenderMetaContent';
+import { motion } from 'framer-motion';
+import { animation } from '@/configs/animationConfig';
 
 const Favorites: React.FC = observer(() => {
   const { favorites, getFavorites, metaState } = useFavoritesStore();
@@ -14,10 +16,14 @@ const Favorites: React.FC = observer(() => {
     getFavorites();
   }, [getFavorites]);
 
-  const favorite = favorites.map((recipe) => <FavoriteCard key={recipe.id} recipe={recipe} />);
+  const favorite = favorites.map((recipe, index) => (
+    <motion.div {...animation} transition={{ duration: 0.5, delay: index * 0.1 }}>
+      <FavoriteCard key={recipe.id} recipe={recipe} />
+    </motion.div>
+  ));
 
   return (
-    <div className={s.root}>
+    <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 }} className={s.root}>
       <div className={s.root__center}>
         <Text view="p-xxl" weight="semiBold">
           Favorite recipes
@@ -26,7 +32,7 @@ const Favorites: React.FC = observer(() => {
           {favorite}
         </RenderMetaContent>
       </div>
-    </div>
+    </motion.div>
   );
 });
 

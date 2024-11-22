@@ -3,6 +3,8 @@ import Text from '@/components/Text';
 import { observer } from 'mobx-react-lite';
 import { useMemo } from 'react';
 import { Product } from '@/types/product';
+import { motion } from 'framer-motion';
+import { animation } from '@/configs/animationConfig';
 
 type ProductInfoProps = {
   product: Product;
@@ -12,7 +14,7 @@ const ProductInfo: React.FC<ProductInfoProps> = observer(({ product }) => {
   const Image = useMemo(() => product.image, [product.image]);
 
   return (
-    <div className={s.root}>
+    <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 }} className={s.root}>
       <div className={s.root__img}>
         <img src={Image} alt="" />
       </div>
@@ -23,20 +25,25 @@ const ProductInfo: React.FC<ProductInfoProps> = observer(({ product }) => {
       <div className={s.root__txts}>
         {product.nutrition?.nutrients &&
           product.nutrition.nutrients.map(
-            (item) =>
+            (item, index) =>
               item && (
-                <div key={item.name} className={s.root__detail}>
+                <motion.div
+                  {...animation}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  key={item.name}
+                  className={s.root__detail}
+                >
                   <Text view="p-m">{item.name}</Text>
                   <Text color="accent" weight="semiBold" view="p-m">
                     {item.amount}
                     {''}
                     {item.unit}
                   </Text>
-                </div>
+                </motion.div>
               ),
           )}
       </div>
-    </div>
+    </motion.div>
   );
 });
 

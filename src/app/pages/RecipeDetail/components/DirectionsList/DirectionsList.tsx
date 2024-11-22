@@ -2,6 +2,8 @@ import { AnalyzedInstructions } from '@/types/recipes';
 import Text from '@/components/Text';
 import s from './DirectionsList.module.scss';
 import React, { memo } from 'react';
+import { motion } from 'framer-motion';
+import { animation } from '@/configs/animationConfig';
 
 type DirectionsListProps = {
   analyzedInstructions: AnalyzedInstructions[];
@@ -9,28 +11,38 @@ type DirectionsListProps = {
 
 const DirectionsList: React.FC<DirectionsListProps> = ({ analyzedInstructions }) => {
   return (
-    <div className={s.root}>
+    <motion.div {...animation} transition={{ duration: 0.5, delay: 0.3 }} className={s.root}>
       <Text view="p-xl" weight="semiBold">
         Direction
       </Text>
       <div className={s.root__list}>
-        {analyzedInstructions.map(({ name, steps }) => (
-          <div key={name} className={s.root__item}>
+        {analyzedInstructions.map(({ name, steps }, index) => (
+          <motion.div
+            {...animation}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            key={name}
+            className={s.root__item}
+          >
             <Text>{name}</Text>
             <div className={s.root__steps}>
-              {steps.map(({ number, step }) => (
-                <div key={number + step} className={s.root__step}>
+              {steps.map(({ number, step }, index) => (
+                <motion.div
+                  key={number + step}
+                  {...animation}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className={s.root__step}
+                >
                   <Text view="p-m" weight="semiBold">
                     Step {number}
                   </Text>
                   <Text view="p-s">{step}</Text>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

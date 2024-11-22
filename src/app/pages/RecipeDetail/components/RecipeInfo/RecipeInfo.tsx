@@ -8,6 +8,8 @@ import LikeIcon from '@/components/icons/LikeIcon';
 import { observer } from 'mobx-react-lite';
 import { useRecipeDetailStore } from '../../useRecipeDetailStore';
 import { toJS } from 'mobx';
+import { motion } from 'framer-motion';
+import { animation } from '@/configs/animationConfig';
 
 type RecipeInfoProps = {
   recipe: Recipe;
@@ -36,7 +38,7 @@ const RecipeInfo: React.FC<RecipeInfoProps> = observer(({ recipe }) => {
 
   return (
     <div className={s.root}>
-      <div className={s.root__img}>
+      <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 }} className={s.root__img}>
         <img src={recipe.image} alt="" />
         {recipe.id > 0 && (
           <Button
@@ -45,17 +47,22 @@ const RecipeInfo: React.FC<RecipeInfoProps> = observer(({ recipe }) => {
             actionSlot={<LikeIcon width={19} height={19} color={colorLike} strokeWidth={2} stroke="white" />}
           />
         )}
-      </div>
+      </motion.div>
       <div className={s.root__txts}>
         {mainDetails.map(
-          ({ value, title }) =>
+          ({ value, title }, index) =>
             value && (
-              <div key={title} className={s.root__detail}>
+              <motion.div
+                {...animation}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                key={title}
+                className={s.root__detail}
+              >
                 <Text view="p-m">{title}</Text>
                 <Text color="accent" weight="semiBold" view="p-m">
                   {value}
                 </Text>
-              </div>
+              </motion.div>
             ),
         )}
       </div>

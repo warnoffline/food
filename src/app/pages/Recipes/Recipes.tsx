@@ -9,6 +9,8 @@ import { observer } from 'mobx-react-lite';
 import { RecipesStoreProvider, useRecipesStore } from './useRecipesStore';
 import { withProvider } from '@/hoc/withProvider';
 import RenderMetaContent from '@/hoc/RenderMetaContent';
+import { motion } from 'framer-motion';
+import { animation } from '@/configs/animationConfig';
 
 const Recipes: React.FC = observer(() => {
   const { filtersStore, searchStore, setPage, recipes, queryString, page, getRecipes, totalResults, metaState } =
@@ -25,23 +27,29 @@ const Recipes: React.FC = observer(() => {
     getRecipes();
   }, [page, filters, queryString, search, getRecipes, setPage]);
 
-  const recipe = recipes.map((recipe) => <RecipeCard key={recipe.id} recipe={recipe} />);
+  const recipe = recipes.map((recipe, index) => (
+    <motion.div {...animation} key={recipe.id} transition={{ duration: 0.5, delay: index * 0.1 }}>
+      <RecipeCard recipe={recipe} />
+    </motion.div>
+  ));
 
   return (
     <div className={s.root}>
-      <div className={s.root__banner}>
+      <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 }} className={s.root__banner}>
         <img src="banner.png" alt="banner" />
-      </div>
+      </motion.div>
       <div className={s.root__content}>
-        <div className={s.root__quote}>
+        <motion.div {...animation} transition={{ duration: 0.5, delay: 0.2 }} className={s.root__quote}>
           <Text>
             Find the perfect food and drink ideas for every occasion, from weeknight dinners to holiday feasts.
           </Text>
-        </div>
+        </motion.div>
         <FilterRecipes />
-        <RenderMetaContent meta={metaState.recipes} items={recipes}>
-          {recipe}
-        </RenderMetaContent>
+        <motion.div {...animation} transition={{ duration: 0.5, delay: 0.3 }}>
+          <RenderMetaContent meta={metaState.recipes} items={recipes}>
+            {recipe}
+          </RenderMetaContent>
+        </motion.div>
         {totalPages > 1 && recipes.length > 0 && (
           <div className={s.root__pagination}>
             <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />

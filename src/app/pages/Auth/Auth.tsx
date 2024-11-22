@@ -5,6 +5,8 @@ import Text from '@/components/Text';
 import s from './Auth.module.scss';
 import { useRootStore } from '@/stores/RootStore/hooks/useRootStore';
 import { observer } from 'mobx-react-lite';
+import { motion } from 'framer-motion';
+import { animation } from '@/configs/animationConfig';
 
 const Auth: React.FC = observer(() => {
   const { user } = useRootStore();
@@ -17,13 +19,13 @@ const Auth: React.FC = observer(() => {
 
   return (
     <div className={s.root}>
-      <div className={s.root__center}>
+      <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 }} className={s.root__center}>
         {isLogIn ? <LogIn /> : <SignUp />}
         <div className={s.root__footer}>
           <Text>{isLogIn ? `Don't have an account yet?` : 'Already have an account?'}</Text>
           <button onClick={handleAuth}>{isLogIn ? 'Sign Up' : 'Log In'}</button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 });

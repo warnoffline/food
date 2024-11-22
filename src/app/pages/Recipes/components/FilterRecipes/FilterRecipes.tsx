@@ -10,6 +10,8 @@ import ModalFilterRecipes from '../ModalFilterRecipes/ModalFilterRecipes';
 import ModalFindRecipeWebsite from '../ModalFindRecipeWebsite/ModalFindRecipeWebsite';
 import { observer } from 'mobx-react-lite';
 import { useRecipesStore } from '../../useRecipesStore';
+import { motion } from 'framer-motion';
+import { animation } from '@/configs/animationConfig';
 
 const FilterRecipes: React.FC = observer(() => {
   const filterModal = useModal();
@@ -56,7 +58,7 @@ const FilterRecipes: React.FC = observer(() => {
 
   return (
     <div className={s.root}>
-      <div className={s.root__find}>
+      <motion.div {...animation} transition={{ duration: 0.5, delay: 0.3 }} className={s.root__find}>
         <Input
           className={s.root__input}
           onKeyDown={handleKeyDown}
@@ -69,14 +71,14 @@ const FilterRecipes: React.FC = observer(() => {
           actionSlot={<FindIcon width={24} height={24} color="white" />}
         />
         {value && <Button onClick={handleClear}>Clear</Button>}
-      </div>
+      </motion.div>
       <div className={s.root__select}>
-        <div className={s.root__filters}>
+        <motion.div {...animation} transition={{ duration: 0.5, delay: 0.4 }} className={s.root__filters}>
           <Button onClick={findRecipeModal.openModal} className={s.root__button}>
             Get Recipe From Website
           </Button>
-        </div>
-        <div className={s.root__filters}>
+        </motion.div>
+        <motion.div {...animation} transition={{ duration: 0.5, delay: 0.5 }} className={s.root__filters}>
           <Button
             tag="span"
             onClick={filterModal.openModal}
@@ -85,7 +87,7 @@ const FilterRecipes: React.FC = observer(() => {
           >
             Filters
           </Button>
-        </div>
+        </motion.div>
       </div>
       <Modal open={filterModal.isOpen} onClose={filterModal.closeModal} title="Filters">
         <ModalFilterRecipes onClose={filterModal.closeModal} />

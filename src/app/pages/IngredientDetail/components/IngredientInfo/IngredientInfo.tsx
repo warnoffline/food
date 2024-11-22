@@ -3,6 +3,8 @@ import Text from '@/components/Text';
 import { observer } from 'mobx-react-lite';
 import { Ingredient } from '@/types/ingredient';
 import { useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { animation } from '@/configs/animationConfig';
 
 type IngredientInfoProps = {
   ingredient: Ingredient;
@@ -15,7 +17,7 @@ const IngredientInfo: React.FC<IngredientInfoProps> = observer(({ ingredient }) 
   );
 
   return (
-    <div className={s.root}>
+    <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 }} className={s.root}>
       <div className={s.root__img}>
         <img src={Image} alt="" />
       </div>
@@ -26,20 +28,25 @@ const IngredientInfo: React.FC<IngredientInfoProps> = observer(({ ingredient }) 
       <div className={s.root__txts}>
         {ingredient.nutrition &&
           ingredient.nutrition.nutrients.map(
-            (item) =>
+            (item, index) =>
               item && (
-                <div key={item.name} className={s.root__detail}>
+                <motion.div
+                  {...animation}
+                  transition={{ duration: 1, delay: index * 0.1 }}
+                  key={item.name}
+                  className={s.root__detail}
+                >
                   <Text view="p-m">{item.name}</Text>
                   <Text color="accent" weight="semiBold" view="p-m">
                     {item.amount}
                     {''}
                     {item.unit}
                   </Text>
-                </div>
+                </motion.div>
               ),
           )}
       </div>
-    </div>
+    </motion.div>
   );
 });
 

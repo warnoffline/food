@@ -4,6 +4,8 @@ import { useRootStore } from '@/stores/RootStore/hooks/useRootStore';
 import { observer } from 'mobx-react-lite';
 import Button from '@/components/Button';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { animation } from '@/configs/animationConfig';
 
 const Profile: React.FC = observer(() => {
   const { user } = useRootStore();
@@ -15,17 +17,19 @@ const Profile: React.FC = observer(() => {
   };
 
   return (
-    <div className={s.root}>
+    <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 }} className={s.root}>
       <div className={s.root__center}>
         <Text view="p-xxl">Profile</Text>
-        <Text view="p-xl">
-          Email: <b>{user.user}</b>
-        </Text>
-        <div>
+        <motion.div {...animation} transition={{ duration: 0.5, delay: 0.2 }}>
+          <Text view="p-xl">
+            Email: <b>{user.user}</b>
+          </Text>
+        </motion.div>
+        <motion.div {...animation} transition={{ duration: 0.5, delay: 0.3 }}>
           <Button onClick={handleLogOut}>Exit</Button>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 });
 

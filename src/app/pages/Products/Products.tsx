@@ -9,6 +9,8 @@ import { ProductsStoreProvider, useProductsStore } from './useProductsStore';
 import { withProvider } from '@/hoc/withProvider';
 import ProductCard from './components/ProductCard';
 import SearchProduct from './components/SearchProduct';
+import { motion } from 'framer-motion';
+import { animation } from '@/configs/animationConfig';
 
 const Products: React.FC = observer(() => {
   const { products, queryString, page, setPage, getProducts, metaState, totalResults, searchStore } =
@@ -22,25 +24,31 @@ const Products: React.FC = observer(() => {
     getProducts();
   }, [page, search, queryString, getProducts]);
 
-  const product = products.map((product) => <ProductCard key={product.id} product={product} />);
+  const product = products.map((product, index) => (
+    <motion.div {...animation} transition={{ duration: 0.5, delay: index * 0.1 }}>
+      <ProductCard key={product.id} product={product} />
+    </motion.div>
+  ));
 
   return (
-    <div className={s.root}>
+    <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 }} className={s.root}>
       <div className={s.root__center}>
         <Text view="p-xxl">Products</Text>
-        <div>
+        <motion.div {...animation} transition={{ duration: 0.5, delay: 0.2 }}>
           <SearchProduct />
-        </div>
-        <RenderMetaContent meta={metaState.products} items={products}>
-          {product}
-        </RenderMetaContent>
+        </motion.div>
+        <motion.div {...animation} transition={{ duration: 0.5, delay: 0.2 }}>
+          <RenderMetaContent meta={metaState.products} items={products}>
+            {product}
+          </RenderMetaContent>
+        </motion.div>
         {totalPages > 1 && products.length > 0 && (
           <div className={s.root__pagination}>
             <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 });
 
