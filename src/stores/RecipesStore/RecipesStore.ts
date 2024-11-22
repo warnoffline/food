@@ -99,7 +99,7 @@ class RecipesStore implements ILocalStore {
 
     try {
       this.setMetaState('recipes', Meta.loading);
-      
+
       const filterData = {
         query: this.searchStore.query || undefined,
         offset: (this._page - 1) * 12,
@@ -158,7 +158,7 @@ class RecipesStore implements ILocalStore {
   }
 
   updateUrl(filterUrl: Filter) {
-    const queryString = qs.stringify(filterUrl, { addQueryPrefix: true });
+    const queryString = `recipes${qs.stringify(filterUrl, { addQueryPrefix: true })}`;
     window.history.replaceState(null, '', queryString || window.location.pathname);
     this._queryString = queryString;
   }

@@ -12,7 +12,7 @@ const NotFound: React.FC = () => {
         <img src="404.png" alt="" />
       </div>
       <Text view="p-xxl">404 Not Found</Text>
-      <Button onClick={() => navigate('food/')}>Go back</Button>
+      <Button onClick={() => navigate('/')}>Go back</Button>
     </div>
   );
 };

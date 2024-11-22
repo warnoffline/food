@@ -139,7 +139,7 @@ class ProductsStore implements ILocalStore {
   }
 
   updateUrl(params: UpdateParams) {
-    const queryString = qs.stringify(params, { addQueryPrefix: true });
+    const queryString = `products${qs.stringify(params, { addQueryPrefix: true })}`;
     window.history.replaceState(null, '', queryString || window.location.pathname);
     this._queryString = queryString;
   }

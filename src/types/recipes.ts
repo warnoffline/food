@@ -18,7 +18,6 @@ export type Recipe = {
   dishTypes?: string[];
   extendedIngredients?: Ingredient[];
   nutrition?: Nutrition;
-
   imageType?: string;
   cookingMinutes?: number | null;
   preparationMinutes?: number | null;

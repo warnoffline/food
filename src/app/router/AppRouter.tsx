@@ -25,71 +25,74 @@ const RouterComponent = observer(() => {
   const { user } = useRootStore();
   const isAuthenticated = user.isAuthenticated ? true : false;
 
-  const router = createBrowserRouter([
-    {
-      path: '/food',
-      element: <RootLayout />,
-      children: [
-        {
-          index: true,
-          element: <Navigate to={ROUTES.recipes} replace />,
-        },
-        {
-          path: ROUTES.recipes,
-          element: <RecipesLazy />,
-        },
-        {
-          path: ROUTES.recipeById,
-          element: <RecipeDetailLazy />,
-        },
-        {
-          path: ROUTES.products,
-          element: <ProductsLazy />,
-        },
-        {
-          path: ROUTES.productById,
-          element: <ProductDetailLazy />,
-        },
-        {
-          path: ROUTES.ingredients,
-          element: <IngredientsLazy />,
-        },
-        {
-          path: ROUTES.ingredientById,
-          element: <IngredientDetailLazy />,
-        },
-        {
-          path: ROUTES.menuItems,
-          element: <MenuItemsLazy />,
-        },
-        {
-          path: ROUTES.mealPlanning,
-          element: <MealPlanningLazy />,
-        },
-        {
-          path: ROUTES.favorites,
-          element: <FavoritesLazy />,
-        },
-        {
-          path: ROUTES.auth,
-          element: <AuthLazy />,
-        },
-        {
-          element: <ProtectedRoute isAuthenticated={isAuthenticated} />,
-          children: [
-            {
-              path: ROUTES.profile,
-              element: <ProfileLazy />,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      path: '*',
-      element: <NotFoundLazy />,
-    },
-  ]);
+  const router = createBrowserRouter(
+    [
+      {
+        path: '/',
+        element: <RootLayout />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to={ROUTES.recipes} replace />,
+          },
+          {
+            path: ROUTES.recipes,
+            element: <RecipesLazy />,
+          },
+          {
+            path: ROUTES.recipeById,
+            element: <RecipeDetailLazy />,
+          },
+          {
+            path: ROUTES.products,
+            element: <ProductsLazy />,
+          },
+          {
+            path: ROUTES.productById,
+            element: <ProductDetailLazy />,
+          },
+          {
+            path: ROUTES.ingredients,
+            element: <IngredientsLazy />,
+          },
+          {
+            path: ROUTES.ingredientById,
+            element: <IngredientDetailLazy />,
+          },
+          {
+            path: ROUTES.menuItems,
+            element: <MenuItemsLazy />,
+          },
+          {
+            path: ROUTES.mealPlanning,
+            element: <MealPlanningLazy />,
+          },
+          {
+            path: ROUTES.favorites,
+            element: <FavoritesLazy />,
+          },
+          {
+            path: ROUTES.auth,
+            element: <AuthLazy />,
+          },
+          {
+            element: <ProtectedRoute isAuthenticated={isAuthenticated} />,
+            children: [
+              {
+                path: ROUTES.profile,
+                element: <ProfileLazy />,
+              },
+            ],
+          },
+          {
+            path: '*',
+            element: <NotFoundLazy />,
+          },
+        ],
+      },
+    ],
+    { basename: '/food' },
+  );
   return (
     <Suspense fallback={<Loading page />}>
       <RouterProvider router={router} />

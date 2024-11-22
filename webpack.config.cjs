@@ -78,7 +78,10 @@ module.exports = {
         host: '0.0.0.0',
         port: 3000,
         hot: true,
-        historyApiFallback: true
+        historyApiFallback: true,
+        static: {
+            directory: path.join(__dirname, 'dist'),
+          },
     },
     plugins: [
         new webpack.DefinePlugin({
