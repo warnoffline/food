@@ -23,6 +23,9 @@ export default class QueryParamsStore {
     if (window.location.pathname.includes('products')) {
       savedParams = sessionStorage.getItem('product-filter') || '';
     }
+    if (window.location.pathname.includes('wine-pairing')) {
+      savedParams = sessionStorage.getItem('wine-filter') || '';
+    }
 
     if (savedParams) {
       this._params = JSON.parse(savedParams);
@@ -48,6 +51,11 @@ export default class QueryParamsStore {
     if (window.location.pathname.includes('products')) {
       const searchParams = qs.parse(cleanSearch) as Record<string, string | Option | Option[]>;
       sessionStorage.setItem('product-filter', JSON.stringify(searchParams));
+      this._params = searchParams;
+    }
+    if (window.location.pathname.includes('wine-pairing')) {
+      const searchParams = qs.parse(cleanSearch) as Record<string, string>;
+      sessionStorage.setItem('wine-filter', JSON.stringify(searchParams));
       this._params = searchParams;
     }
   }

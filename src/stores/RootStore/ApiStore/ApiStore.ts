@@ -5,6 +5,7 @@ import { IngredientsLoadParams } from '@/types/ingredient';
 import { Response } from '@/types/shared';
 import { EquipmentById, GetRecipesParams, Recipe } from '@/types/recipes';
 import { Product, ProductsLoadParams, ProductsResponse } from '@/types/product';
+import { WineResponse } from '@/types/wines';
 
 class ApiStore {
   constructor() {
@@ -127,6 +128,21 @@ class ApiStore {
   fetchProductById = async (productId: number): Promise<Product | null> => {
     try {
       const response = await axiosInstance.get<Product>(`/food/products/${productId}`);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+
+  // Wine
+  fetchWinePairing = async (food: string): Promise<WineResponse | null> => {
+    try {
+      const response = await axiosInstance.get<WineResponse>('/food/wine/pairing', {
+        params: {
+          food,
+        },
+      });
       return response.data;
     } catch (error) {
       console.error(error);

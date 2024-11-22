@@ -98,6 +98,7 @@ export type WinePairing = {
   pairedWines: string[];
   pairingText: string;
 };
+
 export type Temperature = {
   number: number;
   unit: string;

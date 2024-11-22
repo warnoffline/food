@@ -5,7 +5,7 @@ export const ROUTES = {
   ingredientById: 'ingredients/:id',
   products: 'products',
   productById: 'products/:id',
-  menuItems: 'menu-items',
+  winePairing: 'wine-pairing',
   mealPlanning: 'meal-planning',
   profile: 'profile',
   favorites: 'favorites',

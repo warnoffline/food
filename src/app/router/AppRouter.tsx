@@ -6,7 +6,6 @@ import {
   RecipesLazy,
   ProductsLazy,
   FavoritesLazy,
-  MenuItemsLazy,
   IngredientsLazy,
   MealPlanningLazy,
   RecipeDetailLazy,
@@ -14,6 +13,7 @@ import {
   IngredientDetailLazy,
   ProductDetailLazy,
   AuthLazy,
+  WinePairingLazy,
 } from '../pages';
 import { Suspense } from 'react';
 import Loading from '@/components/Loading/Loading';
@@ -60,8 +60,8 @@ const RouterComponent = observer(() => {
             element: <IngredientDetailLazy />,
           },
           {
-            path: ROUTES.menuItems,
-            element: <MenuItemsLazy />,
+            path: ROUTES.winePairing,
+            element: <WinePairingLazy />,
           },
           {
             path: ROUTES.mealPlanning,
