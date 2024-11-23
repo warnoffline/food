@@ -133,48 +133,54 @@ class RecipeDetailStore implements ILocalStore {
   };
 
   initRecipeDetail = async (recipeId: number) => {
-    await this.initializationPromise;
+    if (recipeId === -1) {
+      const findRecipe = sessionStorage.getItem('extractRecipe') || '';
+      this._recipe = JSON.parse(findRecipe);
+      this.setMetaState('recipe', Meta.success);
+    } else {
+      await this.initializationPromise;
 
-    try {
-      this.setMetaState('recipe', Meta.loading);
-      this.setMetaState('equipments', Meta.loading);
-      this.setMetaState('similarRecipes', Meta.loading);
+      try {
+        this.setMetaState('recipe', Meta.loading);
+        this.setMetaState('equipments', Meta.loading);
+        this.setMetaState('similarRecipes', Meta.loading);
 
-      const [recipeData, equipmentsData, similarRecipesData] = await Promise.all([
-        rootStore.api.fetchRecipeById(recipeId),
-        rootStore.api.fetchEquipmentsById(recipeId),
-        rootStore.api.fetchSimilarRecipe(recipeId),
-      ]);
+        const [recipeData, equipmentsData, similarRecipesData] = await Promise.all([
+          rootStore.api.fetchRecipeById(recipeId),
+          rootStore.api.fetchEquipmentsById(recipeId),
+          rootStore.api.fetchSimilarRecipe(recipeId),
+        ]);
 
-      runInAction(() => {
-        if (recipeData) {
-          this.setMetaState('recipe', Meta.success);
-          this.setRecipe(recipeData);
-        } else {
+        runInAction(() => {
+          if (recipeData) {
+            this.setMetaState('recipe', Meta.success);
+            this.setRecipe(recipeData);
+          } else {
+            this.setMetaState('recipe', Meta.error);
+          }
+
+          if (equipmentsData) {
+            this.setMetaState('equipments', Meta.success);
+            this.setEquipments(equipmentsData);
+          } else {
+            this.setMetaState('equipments', Meta.error);
+          }
+
+          if (similarRecipesData) {
+            this.setMetaState('similarRecipes', Meta.success);
+            this.setSimilar(similarRecipesData);
+          } else {
+            this.setMetaState('similarRecipes', Meta.error);
+          }
+        });
+      } catch (error) {
+        runInAction(() => {
           this.setMetaState('recipe', Meta.error);
-        }
-
-        if (equipmentsData) {
-          this.setMetaState('equipments', Meta.success);
-          this.setEquipments(equipmentsData);
-        } else {
           this.setMetaState('equipments', Meta.error);
-        }
-
-        if (similarRecipesData) {
-          this.setMetaState('similarRecipes', Meta.success);
-          this.setSimilar(similarRecipesData);
-        } else {
           this.setMetaState('similarRecipes', Meta.error);
-        }
-      });
-    } catch (error) {
-      runInAction(() => {
-        this.setMetaState('recipe', Meta.error);
-        this.setMetaState('equipments', Meta.error);
-        this.setMetaState('similarRecipes', Meta.error);
-      });
-      console.error('Failed to load recipe details:', error);
+        });
+        console.error('Failed to load recipe details:', error);
+      }
     }
   };
 

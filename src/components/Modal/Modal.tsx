@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useEffect } from 'react';
 import Text from '../Text';
 import s from './Modal.module.scss';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type ModalProps = {
   open: boolean;
@@ -8,6 +9,12 @@ type ModalProps = {
   title?: string;
   children: React.ReactNode;
   actions?: React.ReactNode;
+};
+
+const modalVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0.8 },
 };
 
 const Modal: React.FC<ModalProps> = ({ open, onClose, title, children, actions }) => {
@@ -32,10 +39,25 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, title, children, actions }
   }, [open]);
 
   return (
-    <>
+    <AnimatePresence>
       {open && (
-        <div className={s.root__overlay} onMouseDown={handleOverlayMouseDown}>
-          <div className={s.root__content} onMouseDown={(e) => e.stopPropagation()}>
+        <motion.div
+          className={s.root__overlay}
+          onMouseDown={handleOverlayMouseDown}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <motion.div
+            className={s.root__content}
+            onMouseDown={(e) => e.stopPropagation()}
+            variants={modalVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={{ duration: 0.3 }}
+          >
             <div className={s.root__header}>
               {title && (
                 <Text view="title" className={s.root__title}>
@@ -48,10 +70,10 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, title, children, actions }
             </div>
             <div className={s.root__body}>{children}</div>
             {actions && <div className={s.root__actions}>{actions}</div>}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
-    </>
+    </AnimatePresence>
   );
 };
 

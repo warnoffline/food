@@ -10,6 +10,13 @@ import { useRootStore } from '@/stores/RootStore/hooks/useRootStore';
 import LogInIcon from '../icons/LogInIcon/LogInIcon';
 import BurgerIcon from '../icons/BurgerIcon';
 import CloseIcon from '../icons/CloseIcon';
+import { motion } from 'framer-motion';
+
+const headerVariants = {
+  hidden: { opacity: 0, x: 200 },
+  visible: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: 200 },
+};
 
 const Header = () => {
   const location = useLocation();
@@ -96,17 +103,31 @@ const Header = () => {
         </div>
       </div>
       {isBurgerOpen && isMobile && (
-        <div className={s.root__burgerMenu}>
-          {NAV_CONFIG.map(({ name, path }) => (
+        <motion.div
+          variants={headerVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          transition={{ duration: 0.3 }}
+          className={s.root__burgerMenu}
+        >
+          {NAV_CONFIG.map(({ name, path }, index) => (
             <NavLink
               key={name}
               to={path}
               className={({ isActive }) => cn(s.root__link, isActive && s['root__link-selected'])}
             >
-              {name}{' '}
+              <motion.div
+                transition={{ duration: 0.3, delay: 0.1 * index }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+              >
+                {name}{' '}
+              </motion.div>
             </NavLink>
           ))}
-        </div>
+        </motion.div>
       )}
     </div>
   );

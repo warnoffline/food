@@ -19,12 +19,22 @@ const ModalFilterRecipes: React.FC<ModalFindRecipesProps> = observer(({ onClose 
   const handleSubmit = useCallback(
     async (event: React.FormEvent) => {
       event.preventDefault();
-      await recipeStore.getExtractRecipe(url);
-      navigate(`/recipes/-1`);
-      setUrl('');
+      if (url) {
+        await recipeStore.getExtractRecipe(url);
+        navigate(`/recipes/-1`);
+        setUrl('');
+      }
       onClose();
     },
     [url, recipeStore, navigate, onClose],
+  );
+
+  const handleCancel = useCallback(
+    (event: React.FormEvent) => {
+      event.preventDefault();
+      onClose();
+    },
+    [onClose],
   );
 
   return (
@@ -37,7 +47,7 @@ const ModalFilterRecipes: React.FC<ModalFindRecipesProps> = observer(({ onClose 
         <Button loading={recipeStore.metaState.extractRecipe === Meta.loading} className={s.root__btn} type="submit">
           Submit
         </Button>
-        <Button className={s.root__btn} fill onClick={onClose}>
+        <Button className={s.root__btn} fill onClick={handleCancel}>
           Cancel
         </Button>
       </div>

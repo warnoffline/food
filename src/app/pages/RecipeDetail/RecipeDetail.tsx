@@ -18,7 +18,7 @@ const RecipeDetail: React.FC = observer(() => {
 
   useEffect(() => {
     const recipeId = Number(id);
-    if (recipeId && recipeId !== -1) {
+    if (recipeId) {
       initRecipeDetail(recipeId);
     }
   }, [id, initRecipeDetail]);
