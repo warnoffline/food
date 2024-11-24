@@ -19,7 +19,7 @@ const SimilarList: React.FC<SimilarListProps> = observer(({ recipes }) => {
       </Text>
       <div className={s.root__items}>
         {recipes.map((recipe, index) => (
-          <motion.div key={recipe.id} {...animation} transition={{ duration: 0.5, delay: index * 0.1 }}>
+          <motion.div key={recipe.id} {...animation} transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}>
             <SimilarCard recipe={recipe} />
           </motion.div>
         ))}

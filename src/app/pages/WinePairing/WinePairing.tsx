@@ -19,7 +19,7 @@ const WinePairing: React.FC = observer(() => {
   }, [search, queryString, getWinePairing]);
 
   const wine = wines.map((wine, index) => (
-    <motion.div key={wine.id} {...animation} transition={{ duration: 0.5, delay: index * 0.1 }}>
+    <motion.div key={wine.id} {...animation} transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}>
       <WineCard wine={wine} />
     </motion.div>
   ));

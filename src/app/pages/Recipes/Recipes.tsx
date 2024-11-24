@@ -27,12 +27,6 @@ const Recipes: React.FC = observer(() => {
     getRecipes();
   }, [page, filters, queryString, search, getRecipes, setPage]);
 
-  const recipe = recipes.map((recipe, index) => (
-    <motion.div {...animation} key={recipe.id} transition={{ duration: 0.5, delay: index * 0.1 }}>
-      <RecipeCard recipe={recipe} />
-    </motion.div>
-  ));
-
   return (
     <div className={s.root}>
       <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 }} className={s.root__banner}>
@@ -45,16 +39,22 @@ const Recipes: React.FC = observer(() => {
           </Text>
         </motion.div>
         <FilterRecipes />
-        <motion.div {...animation} transition={{ duration: 0.5, delay: 0.3 }}>
+        {totalPages > 1 && recipes.length > 0 && (
+          <motion.div {...animation} transition={{ duration: 0.5, delay: 0.3 }} className={s.root__pagination}>
+            <div className={s.root__pagination__center}>
+              <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+            </div>
+          </motion.div>
+        )}
+        <motion.div {...animation} transition={{ duration: 0.5, delay: 0.4 }}>
           <RenderMetaContent meta={metaState.recipes} items={recipes}>
-            {recipe}
+            {recipes.map((recipe, index) => (
+              <motion.div {...animation} key={recipe.id} transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}>
+                <RecipeCard recipe={recipe} />
+              </motion.div>
+            ))}
           </RenderMetaContent>
         </motion.div>
-        {totalPages > 1 && recipes.length > 0 && (
-          <div className={s.root__pagination}>
-            <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
-          </div>
-        )}
       </div>
     </div>
   );

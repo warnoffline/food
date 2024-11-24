@@ -7,7 +7,6 @@ import {
   ProductsLazy,
   FavoritesLazy,
   IngredientsLazy,
-  MealPlanningLazy,
   RecipeDetailLazy,
   NotFoundLazy,
   IngredientDetailLazy,
@@ -62,10 +61,6 @@ const RouterComponent = observer(() => {
           {
             path: ROUTES.winePairing,
             element: <WinePairingLazy />,
-          },
-          {
-            path: ROUTES.mealPlanning,
-            element: <MealPlanningLazy />,
           },
           {
             path: ROUTES.favorites,

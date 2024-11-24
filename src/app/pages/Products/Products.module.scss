@@ -23,5 +23,17 @@
   &__pagination {
     display: flex;
     justify-content: center;
+    position: sticky;
+    top: 70px;
+    z-index: 5;
+    padding: 20px 0;
+
+    &__center {
+      display: flex;
+      justify-content: center;
+      background-color: white;
+      border-radius: 8px;
+      padding: 10px;
+    }
   }
 }

@@ -54,7 +54,7 @@ const RecipeInfo: React.FC<RecipeInfoProps> = observer(({ recipe }) => {
             value && (
               <motion.div
                 {...animation}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}
                 key={title}
                 className={s.root__detail}
               >

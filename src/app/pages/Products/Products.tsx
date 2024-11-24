@@ -24,12 +24,6 @@ const Products: React.FC = observer(() => {
     getProducts();
   }, [page, search, queryString, getProducts]);
 
-  const product = products.map((product, index) => (
-    <motion.div {...animation} transition={{ duration: 0.5, delay: index * 0.1 }}>
-      <ProductCard key={product.id} product={product} />
-    </motion.div>
-  ));
-
   return (
     <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 }} className={s.root}>
       <div className={s.root__center}>
@@ -37,16 +31,22 @@ const Products: React.FC = observer(() => {
         <motion.div {...animation} transition={{ duration: 0.5, delay: 0.2 }}>
           <SearchProduct />
         </motion.div>
+        {totalPages > 1 && products.length > 0 && (
+          <motion.div {...animation} transition={{ duration: 0.5, delay: 0.3 }} className={s.root__pagination}>
+            <div className={s.root__pagination__center}>
+              <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+            </div>
+          </motion.div>
+        )}
         <motion.div {...animation} transition={{ duration: 0.5, delay: 0.2 }}>
           <RenderMetaContent meta={metaState.products} items={products}>
-            {product}
+            {products.map((product, index) => (
+              <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}>
+                <ProductCard key={product.id} product={product} />
+              </motion.div>
+            ))}
           </RenderMetaContent>
         </motion.div>
-        {totalPages > 1 && products.length > 0 && (
-          <div className={s.root__pagination}>
-            <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
-          </div>
-        )}
       </div>
     </motion.div>
   );

@@ -32,7 +32,7 @@ const IngredientInfo: React.FC<IngredientInfoProps> = observer(({ ingredient }) 
               item && (
                 <motion.div
                   {...animation}
-                  transition={{ duration: 1, delay: index * 0.1 }}
+                  transition={{ duration: 1, delay: 0.1 * (index % 4) }}
                   key={item.name}
                   className={s.root__detail}
                 >

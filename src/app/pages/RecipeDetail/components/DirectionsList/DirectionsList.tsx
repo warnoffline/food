@@ -19,7 +19,7 @@ const DirectionsList: React.FC<DirectionsListProps> = ({ analyzedInstructions })
         {analyzedInstructions.map(({ name, steps }, index) => (
           <motion.div
             {...animation}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
+            transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}
             key={name}
             className={s.root__item}
           >
@@ -29,7 +29,7 @@ const DirectionsList: React.FC<DirectionsListProps> = ({ analyzedInstructions })
                 <motion.div
                   key={number + step}
                   {...animation}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}
                   className={s.root__step}
                 >
                   <Text view="p-m" weight="semiBold">

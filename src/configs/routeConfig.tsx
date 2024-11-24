@@ -6,7 +6,6 @@ export const ROUTES = {
   products: 'products',
   productById: 'products/:id',
   winePairing: 'wine-pairing',
-  mealPlanning: 'meal-planning',
   profile: 'profile',
   favorites: 'favorites',
   auth: 'auth',

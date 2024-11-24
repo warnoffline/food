@@ -24,12 +24,6 @@ const Ingredients: React.FC = observer(() => {
     getIngredients();
   }, [page, search, queryString, getIngredients]);
 
-  const ingredient = ingredients.map((ingredient, index) => (
-    <motion.div {...animation} transition={{ duration: 0.5, delay: index * 0.1 }}>
-      <IngredientCard key={ingredient.id} ingredient={ingredient} />
-    </motion.div>
-  ));
-
   return (
     <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 }} className={s.root}>
       <div className={s.root__center}>
@@ -37,16 +31,22 @@ const Ingredients: React.FC = observer(() => {
         <motion.div {...animation} transition={{ duration: 0.5, delay: 0.2 }}>
           <SearchIngredient />
         </motion.div>
+        {totalPages > 1 && ingredients.length > 0 && (
+          <motion.div {...animation} transition={{ duration: 0.5, delay: 0.3 }} className={s.root__pagination}>
+            <div className={s.root__pagination__center}>
+              <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+            </div>
+          </motion.div>
+        )}
         <motion.div {...animation} transition={{ duration: 0.5, delay: 0.2 }}>
           <RenderMetaContent meta={metaState.ingredients} items={ingredients}>
-            {ingredient}
+            {ingredients.map((ingredient, index) => (
+              <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}>
+                <IngredientCard key={ingredient.id} ingredient={ingredient} />
+              </motion.div>
+            ))}
           </RenderMetaContent>
         </motion.div>
-        {totalPages > 1 && ingredients.length > 0 && (
-          <div className={s.root__pagination}>
-            <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
-          </div>
-        )}
       </div>
     </motion.div>
   );

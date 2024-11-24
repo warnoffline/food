@@ -1,8 +1,11 @@
+@use "@/styles/variables" as *;
+
 .root {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 
   &__content {
     width: calc(100% - 100px);
@@ -43,5 +46,17 @@
   &__pagination {
     display: flex;
     justify-content: center;
+    position: sticky;
+    top: 70px;
+    z-index: 5;
+    padding: 20px 0;
+
+    &__center {
+      display: flex;
+      justify-content: center;
+      background-color: white;
+      border-radius: 8px;
+      padding: 10px;
+    }
   }
 }

@@ -130,7 +130,7 @@ class RecipesStore implements ILocalStore {
       runInAction(() => {
         if (data) {
           this.setMetaState('recipes', Meta.success);
-          this.setRecipes(data.results);
+          this._recipes = data.results;
           this._number = data.number;
           this._totalResults = data.totalResults;
         } else {

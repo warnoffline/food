@@ -1,7 +1,8 @@
-import React, { memo, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import s from './Pagination.module.scss';
 import BackArrowIcon from '../icons/BackArrowIcon';
 import Text from '../Text';
+import { observer } from 'mobx-react-lite';
 
 type PaginationProps = {
   currentPage: number;
@@ -9,7 +10,7 @@ type PaginationProps = {
   onPageChange: (page: number) => void;
 };
 
-const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+const Pagination: React.FC<PaginationProps> = observer(({ currentPage, totalPages, onPageChange }) => {
   const handlePageChange = useCallback(
     (page: number) => {
       if (page >= 1 && page <= totalPages) {
@@ -100,6 +101,6 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
       <div className={s.root__nextGroup}>{renderNextButton()}</div>
     </div>
   );
-};
+});
 
-export default memo(Pagination);
+export default Pagination;
