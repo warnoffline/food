@@ -19,7 +19,7 @@ class FavoritesStore implements ILocalStore {
   private initializationPromise: Promise<void>;
 
   constructor() {
-    this.user = rootStore.user.user;
+    this.user = localStorage.getItem('user') || '';
     makeObservable<FavoritesStore, PrivateFields>(this, {
       _favoritesIds: observable,
       _favorites: observable,

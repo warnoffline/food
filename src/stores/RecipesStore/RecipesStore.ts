@@ -30,7 +30,7 @@ class RecipesStore implements ILocalStore {
 
   constructor() {
     this._page = Number(rootStore.query.getParam('page')) || 1;
-    this.user = rootStore.user.user;
+    this.user = localStorage.getItem('user') || '';
 
     makeObservable<RecipesStore, PrivateFields>(this, {
       _page: observable,

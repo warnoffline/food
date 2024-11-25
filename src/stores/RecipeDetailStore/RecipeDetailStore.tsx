@@ -22,7 +22,7 @@ class RecipeDetailStore implements ILocalStore {
   private initializationPromise: Promise<void>;
 
   constructor() {
-    this.user = rootStore.user.user;
+    this.user = localStorage.getItem('user') || '';
 
     makeObservable<RecipeDetailStore, PrivateFields>(this, {
       _similarRecipes: observable,

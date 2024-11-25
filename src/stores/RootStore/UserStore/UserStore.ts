@@ -22,13 +22,13 @@ class UserStore {
       user: computed,
       loading: computed,
       setError: action,
-      signUp: action,
-      saveFavorites: action,
-      deleteFavorites: action,
-      deleteFavoriteById: action,
+      signUp: action.bound,
+      saveFavorites: action.bound,
+      deleteFavorites: action.bound,
+      deleteFavoriteById: action.bound,
       getFavorites: action,
-      login: action,
-      logout: action,
+      login: action.bound,
+      logout: action.bound,
     });
     this.loadFromLocalStorage();
   }
@@ -56,6 +56,7 @@ class UserStore {
   async saveFavorites(favorites: number[]): Promise<void> {
     this._loading = true;
     this._error = null;
+    this.loadFromLocalStorage();
     try {
       if (!this._user) throw new Error('User is not logged in.');
       const userDocRef = doc(db, 'users', this._user);
@@ -72,6 +73,7 @@ class UserStore {
   async getFavorites(): Promise<number[]> {
     this._loading = true;
     this._error = null;
+    this.loadFromLocalStorage();
     try {
       if (!this._user) throw new Error('User is not logged in.');
       const userDocRef = doc(db, 'users', this._user);
@@ -96,6 +98,7 @@ class UserStore {
   async deleteFavorites(): Promise<void> {
     this._loading = true;
     this._error = null;
+    this.loadFromLocalStorage();
     try {
       if (!this._user) throw new Error('User is not logged in.');
       const userDocRef = doc(db, 'users', this._user);
@@ -112,6 +115,7 @@ class UserStore {
   async deleteFavoriteById(favoriteId: number): Promise<void> {
     this._loading = true;
     this._error = null;
+    this.loadFromLocalStorage();
     try {
       if (!this._user) throw new Error('User is not logged in.');
       const userDocRef = doc(db, 'users', this._user);
