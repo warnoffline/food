@@ -140,6 +140,14 @@ class UserStore {
         this._isAuthenticated = true;
         this._user = email;
       });
+
+      const localFavorites = localStorage.getItem('favorites');
+      const localFavoritesArray: number[] = localFavorites ? JSON.parse(localFavorites) : [];
+
+      const userDocRef = doc(db, 'users', email);
+
+      await setDoc(userDocRef, { favorites: localFavoritesArray }, { merge: true });
+
       this.saveToLocalStorage();
     } catch (err) {
       if (err instanceof Error) {
@@ -159,6 +167,22 @@ class UserStore {
         this._isAuthenticated = true;
         this._user = email;
       });
+
+      const userDocRef = doc(db, 'users', email);
+      const docSnap = await getDoc(userDocRef);
+
+      const localFavorites = localStorage.getItem('favorites');
+      const localFavoritesArray: number[] = localFavorites ? JSON.parse(localFavorites) : [];
+
+      if (docSnap.exists()) {
+        const firebaseFavorites: number[] = docSnap.data().favorites || [];
+        const mergedFavorites = Array.from(new Set([...firebaseFavorites, ...localFavoritesArray]));
+
+        await updateDoc(userDocRef, { favorites: mergedFavorites });
+      } else {
+        await setDoc(userDocRef, { favorites: localFavoritesArray });
+      }
+
       this.saveToLocalStorage();
     } catch (err) {
       if (err instanceof Error) {
