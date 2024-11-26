@@ -5,6 +5,7 @@ import { Ingredient } from '@/types/ingredient';
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { animation } from '@/configs/animationConfig';
+import ImageWithFallback from '@/hoc/ImageWithFallback';
 
 type IngredientInfoProps = {
   ingredient: Ingredient;
@@ -19,7 +20,7 @@ const IngredientInfo: React.FC<IngredientInfoProps> = observer(({ ingredient }) 
   return (
     <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 }} className={s.root}>
       <div className={s.root__img}>
-        <img src={Image} alt="" />
+        <ImageWithFallback src={Image} alt="Card Image" fallbackSrc="notImg.png" />
       </div>
       <div className={s.root__category}>
         <Text view="title">{ingredient.aisle}</Text>

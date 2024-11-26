@@ -3,7 +3,6 @@ import React from 'react';
 export const RecipesLazy = React.lazy(() => import('./Recipes/Recipes'));
 export const RecipeDetailLazy = React.lazy(() => import('./RecipeDetail/RecipeDetail'));
 export const IngredientsLazy = React.lazy(() => import('./Ingredients/Ingredients'));
-export const MenuItemsLazy = React.lazy(() => import('./MenuItems/MenuItems'));
 export const ProductsLazy = React.lazy(() => import('./Products/Products'));
 export const ProductDetailLazy = React.lazy(() => import('./ProductDetail/ProductDetail'));
 export const ProfileLazy = React.lazy(() => import('./Profile/Profile'));

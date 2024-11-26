@@ -40,11 +40,12 @@ const Products: React.FC = observer(() => {
         )}
         <motion.div {...animation} transition={{ duration: 0.5, delay: 0.2 }}>
           <RenderMetaContent meta={metaState.products} items={products}>
-            {products.map((product, index) => (
-              <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}>
-                <ProductCard key={product.id} product={product} />
-              </motion.div>
-            ))}
+            {products &&
+              products.map((product, index) => (
+                <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}>
+                  <ProductCard key={product.id} product={product} />
+                </motion.div>
+              ))}
           </RenderMetaContent>
         </motion.div>
       </div>

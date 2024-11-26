@@ -48,11 +48,12 @@ const Recipes: React.FC = observer(() => {
         )}
         <motion.div {...animation} transition={{ duration: 0.5, delay: 0.4 }}>
           <RenderMetaContent meta={metaState.recipes} items={recipes}>
-            {recipes.map((recipe, index) => (
-              <motion.div {...animation} key={recipe.id} transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}>
-                <RecipeCard recipe={recipe} />
-              </motion.div>
-            ))}
+            {recipes &&
+              recipes.map((recipe, index) => (
+                <motion.div {...animation} key={recipe.id} transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}>
+                  <RecipeCard recipe={recipe} />
+                </motion.div>
+              ))}
           </RenderMetaContent>
         </motion.div>
       </div>

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 type ImageWithFallbackProps = {
-  src: string;
+  src?: string;
   alt: string;
   fallbackSrc: string;
-  className: string;
+  className?: string;
 };
 
 const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ src, alt, fallbackSrc, className }) => {

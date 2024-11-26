@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { Product } from '@/types/product';
 import { motion } from 'framer-motion';
 import { animation } from '@/configs/animationConfig';
+import ImageWithFallback from '@/hoc/ImageWithFallback';
 
 type ProductInfoProps = {
   product: Product;
@@ -16,7 +17,7 @@ const ProductInfo: React.FC<ProductInfoProps> = observer(({ product }) => {
   return (
     <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 }} className={s.root}>
       <div className={s.root__img}>
-        <img src={Image} alt="" />
+        <ImageWithFallback src={Image} alt="Card Image" fallbackSrc="notImg.png" />
       </div>
       <div className={s.root__category}>
         <Text view="title">{product.aisle}</Text>

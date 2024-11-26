@@ -18,12 +18,6 @@ const WinePairing: React.FC = observer(() => {
     getWinePairing();
   }, [search, queryString, getWinePairing]);
 
-  const wine = wines.map((wine, index) => (
-    <motion.div key={wine.id} {...animation} transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}>
-      <WineCard wine={wine} />
-    </motion.div>
-  ));
-
   return (
     <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 }} className={s.root}>
       <div className={s.root__center}>
@@ -36,7 +30,12 @@ const WinePairing: React.FC = observer(() => {
         </motion.div>
         <motion.div {...animation} transition={{ duration: 0.5, delay: 0.2 }}>
           <RenderMetaContent meta={metaState.wines} items={wines}>
-            {wine}
+            {wines &&
+              wines.map((wine, index) => (
+                <motion.div key={wine.id} {...animation} transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}>
+                  <WineCard wine={wine} />
+                </motion.div>
+              ))}
           </RenderMetaContent>
         </motion.div>
       </div>

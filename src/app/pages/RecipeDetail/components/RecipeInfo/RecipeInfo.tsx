@@ -10,6 +10,7 @@ import { useRecipeDetailStore } from '../../useRecipeDetailStore';
 import { toJS } from 'mobx';
 import { motion } from 'framer-motion';
 import { animation } from '@/configs/animationConfig';
+import ImageWithFallback from '@/hoc/ImageWithFallback';
 
 type RecipeInfoProps = {
   recipe: Recipe;
@@ -39,7 +40,7 @@ const RecipeInfo: React.FC<RecipeInfoProps> = observer(({ recipe }) => {
   return (
     <div className={s.root}>
       <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 }} className={s.root__img}>
-        <img src={recipe.image} alt="" />
+        <ImageWithFallback src={recipe.image} alt="Card Image" fallbackSrc="notImg.png" />
         {recipe.id > 0 && (
           <Button
             className={s.root__icon}

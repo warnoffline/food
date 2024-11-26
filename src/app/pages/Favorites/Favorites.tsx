@@ -23,11 +23,12 @@ const Favorites: React.FC = observer(() => {
           Favorite recipes
         </Text>
         <RenderMetaContent meta={metaState.favorites} items={favorites}>
-          {favorites.map((recipe, index) => (
-            <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}>
-              <FavoriteCard key={recipe.id} recipe={recipe} />
-            </motion.div>
-          ))}
+          {favorites &&
+            favorites.map((recipe, index) => (
+              <motion.div {...animation} transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}>
+                <FavoriteCard key={recipe.id} recipe={recipe} />
+              </motion.div>
+            ))}
         </RenderMetaContent>
       </div>
     </motion.div>
