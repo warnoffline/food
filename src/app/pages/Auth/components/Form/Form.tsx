@@ -42,21 +42,15 @@ const Form: React.FC<FormProps> = observer(({ title, handleClick }) => {
     <form className={s.root} onSubmit={handleSubmit(onSubmit)}>
       <div className={s.root__content}>
         <Text view="title">{title}</Text>
-        <div>
+        <div className={s.root__item}>
           <label>Email</label>
-          <Input
-            placeholder="Enter email"
-            background="gray"
-            value={watch('email')}
-            onChange={(value) => setValue('email', value)}
-          />
+          <Input placeholder="Enter email" value={watch('email')} onChange={(value) => setValue('email', value)} />
           {errors.email && <Text className={s.error}>{errors.email.message}</Text>}
         </div>
-        <div>
+        <div className={s.root__item}>
           <label>Password</label>
           <Input
             placeholder="Enter password"
-            background="gray"
             type="password"
             value={watch('password')}
             onChange={(value) => setValue('password', value)}

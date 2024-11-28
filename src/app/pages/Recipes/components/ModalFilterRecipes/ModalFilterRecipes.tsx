@@ -78,6 +78,7 @@ const ModalFilterRecipes: React.FC<ModalFilterRecipesProps> = observer(({ onClos
       <div>
         <Text view="label">Include Ingredients</Text>
         <Input
+          text
           value={filters?.includeIngredients || ''}
           onChange={(value) => filtersStore.setIncludeIngredients(value)}
           color="primary"
@@ -87,6 +88,7 @@ const ModalFilterRecipes: React.FC<ModalFilterRecipesProps> = observer(({ onClos
       <div>
         <Text view="label">Exclude Ingredients</Text>
         <Input
+          text
           value={filters?.excludeIngredients || ''}
           onChange={(value) => filtersStore.setExcludeIngredients(value)}
           color="primary"

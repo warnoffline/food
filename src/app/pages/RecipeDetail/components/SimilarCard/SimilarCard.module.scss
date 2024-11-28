@@ -3,3 +3,28 @@
   align-items: center;
   gap: 5px;
 }
+
+.icon {
+  transform: rotate(180deg);
+}
+
+.root {
+  display: flex;
+  align-items: start;
+  gap: 10px;
+  transition: 0.3s;
+
+  &:hover {
+    transform: translateX(10px);
+    transition: 0.3s;
+  }
+
+  &:active {
+    transform: translateX(10px);
+    transition: 0.3s;
+  }
+
+  @media (max-width: 600px) {
+    justify-content: space-between;
+  }
+}

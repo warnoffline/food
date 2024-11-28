@@ -50,6 +50,7 @@ export type Recipe = {
 };
 
 export type Nutrition = {
+  calories?: string;
   nutrients: Nutrient[];
 };
 

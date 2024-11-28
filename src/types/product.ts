@@ -1,4 +1,4 @@
-import { Nutrient } from './recipes';
+import { Nutrition } from './recipes';
 
 export type Product = {
   id: number;
@@ -11,10 +11,7 @@ export type Product = {
   ingredientCount?: number;
   ingredientList?: string;
   title?: string;
-  nutrition?: {
-    calories?: string;
-    nutrients?: Nutrient[];
-  };
+  nutrition: Nutrition;
   ingredients: shortIngredient[];
 };
 

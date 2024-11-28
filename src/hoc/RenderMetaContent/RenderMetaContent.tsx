@@ -21,7 +21,9 @@ const RenderMetaContent = <T,>({ meta, items, children }: renderMetaContentProps
       );
     case Meta.success:
       return items && items.length > 0 ? (
-        <div className={s.root__items}>{children}</div>
+        <div className={s.root__center}>
+          <div className={s.root__items}>{children}</div>
+        </div>
       ) : (
         <div className={s['root__no-items']}>
           <Text view="title">No results</Text>

@@ -2,7 +2,7 @@ import Input from '@/components/Input';
 import Button from '@/components/Button';
 import FindIcon from '@/components/icons/FindIcon';
 import s from './FilterRecipes.module.scss';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import FilterIcon from '@/components/icons/FilterIcon/FilterIcon';
 import Modal from '@/components/Modal/Modal';
 import useModal from '@/utils/useModal';
@@ -17,8 +17,6 @@ const FilterRecipes: React.FC = observer(() => {
   const filterModal = useModal();
   const findRecipeModal = useModal();
   const { searchStore, setRecipes, resetPage } = useRecipesStore();
-
-  const regex = useMemo(() => /^[A-Za-zА-Яа-я\s,]+$/, []);
 
   const [value, setValue] = useState<string>(searchStore.query);
 
@@ -40,15 +38,6 @@ const FilterRecipes: React.FC = observer(() => {
     [resetPage, searchStore],
   );
 
-  const handleQueryChange = useCallback(
-    (value: string) => {
-      if (regex.test(value) || value === '') {
-        setValue(value);
-      }
-    },
-    [regex],
-  );
-
   const handleClear = () => {
     setRecipes([]);
     setValue('');
@@ -60,10 +49,11 @@ const FilterRecipes: React.FC = observer(() => {
     <div className={s.root}>
       <motion.div {...animation} transition={{ duration: 0.5, delay: 0.3 }} className={s.root__find}>
         <Input
+          text
           className={s.root__input}
           onKeyDown={handleKeyDown}
           value={value}
-          onChange={handleQueryChange}
+          onChange={setValue}
           placeholder="Enter dishes"
         />
         <Button

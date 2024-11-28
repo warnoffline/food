@@ -23,23 +23,16 @@
 
   &__txts {
     width: 50%;
-    gap: 100px;
+    gap: 50px;
     display: flex;
     flex-wrap: wrap;
+    padding-bottom: 40px;
 
     @media (max-width: 600px) {
       width: 100%;
       gap: 10px;
       justify-content: center;
     }
-  }
-
-  &__detail {
-    width: 90px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
   }
 
   @media (max-width: 600px) {
