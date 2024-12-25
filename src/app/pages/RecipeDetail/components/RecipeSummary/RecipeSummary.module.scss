@@ -1,0 +1,16 @@
+@use "@/styles/variables" as *;
+
+.root {
+  width: 100%;
+  background-color: rgba($color: $brand, $alpha: 0.33);
+  padding: 36px;
+  border-radius: 10px;
+
+  a {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 600px) {
+    padding: 16px;
+  }
+}

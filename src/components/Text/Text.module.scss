@@ -1,0 +1,114 @@
+@use "@/styles/variables" as *;
+@import "@/styles/styles.css";
+
+.text {
+  font-family: "Roboto";
+
+  &--primary {
+    color: $primary;
+  }
+
+  &--secondary {
+    color: $secondary;
+  }
+
+  &--accent {
+    color: $brand;
+  }
+
+  &--red {
+    color: red;
+  }
+
+  &--weight {
+    &-normal {
+      font-weight: 400;
+    }
+
+    &-medium {
+      font-weight: 500;
+    }
+
+    &-semiBold {
+      font-weight: 600;
+    }
+
+    &-bold {
+      font-weight: 700;
+    }
+  }
+
+  &--view {
+    &-title {
+      font-size: $xl;
+      font-weight: bold;
+
+      @media (max-width: 900px) {
+        font-size: $l;
+      }
+    }
+
+    &-label {
+      font-size: $m;
+      font-weight: bold;
+      padding-bottom: 5px;
+    }
+
+    &-button {
+      font-size: $m;
+      text-transform: uppercase;
+    }
+
+    &-p-xxl {
+      font-size: $xxl;
+
+      @media (max-width: 900px) {
+        font-size: $xl;
+      }
+    }
+
+    &-p-xl {
+      font-size: $xl;
+
+      @media (max-width: 900px) {
+        font-size: $l;
+      }
+    }
+
+    &-p-l {
+      font-size: $l;
+
+      @media (max-width: 900px) {
+        font-size: $m;
+      }
+    }
+
+    &-p-m {
+      font-size: $m;
+
+      @media (max-width: 900px) {
+        font-size: $s;
+      }
+    }
+
+    &-p-s {
+      font-size: $s;
+
+      @media (max-width: 900px) {
+        font-size: $xs;
+      }
+    }
+
+    &-p-xs {
+      font-size: $xs;
+
+      @media (max-width: 900px) {
+        font-size: $xxs;
+      }
+    }
+
+    &-p-xxs {
+      font-size: $xxs;
+    }
+  }
+}

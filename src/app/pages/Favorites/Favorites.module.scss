@@ -1,0 +1,32 @@
+.root {
+  display: flex;
+  justify-content: center;
+
+  &__center {
+    width: calc(100% - 100px);
+    padding: 48px 0;
+
+    @media (max-width: 600px) {
+      width: calc(100% - 20px);
+    }
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 80px;
+    padding: 48px 0;
+
+    @media (max-width: 1440px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 900px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}

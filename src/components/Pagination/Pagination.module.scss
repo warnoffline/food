@@ -1,0 +1,52 @@
+@use "@/styles/variables" as *;
+
+.root {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  &__prev,
+  &__next {
+    display: flex;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+
+  &__page {
+    cursor: pointer;
+    min-width: 38px;
+    height: 45px;
+    border-radius: 0;
+    border: 1.5px solid $secondary;
+    background: none;
+    font-family: "Roboto";
+  }
+
+  &__next {
+    transform: rotate(180deg);
+  }
+
+  &__page-active {
+    background-color: $brand;
+    color: #fff;
+    border: 0;
+  }
+
+  &__pageGroup {
+    display: flex;
+    align-items: center;
+  }
+
+  &__ellipsis {
+    width: 38px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media (max-width: 600px) {
+    gap: 0px;
+  }
+}

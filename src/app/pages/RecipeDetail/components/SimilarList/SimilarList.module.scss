@@ -1,0 +1,21 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 40px;
+
+    @media (max-width: 600px) {
+      gap: 20px;
+      padding: 10px 0;
+    }
+  }
+
+  @media (max-width: 600px) {
+    gap: 5px;
+  }
+}

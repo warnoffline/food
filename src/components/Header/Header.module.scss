@@ -1,0 +1,123 @@
+@use "@/styles/variables" as *;
+
+.root {
+  &__wrapper {
+    width: 100%;
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  &__content {
+    width: calc(100% - 100px);
+    display: flex;
+    justify-content: space-between;
+
+    @media (max-width: 600px) {
+      width: calc(100% - 20px);
+    }
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    &-text {
+      @media (max-width: 900px) {
+        display: none;
+      }
+    }
+  }
+
+  &__navbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    @media (max-width: 600px) {
+      display: none;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__link {
+    font-weight: 400;
+    font-size: $m;
+    color: $primary;
+
+    &-selected {
+      font-weight: 600;
+      color: $accent;
+    }
+
+    &:hover {
+      color: $brand-hover;
+    }
+
+    &:active {
+      color: $accent;
+    }
+
+    @media (max-width: 900px) {
+      font-size: $xs;
+    }
+
+    @media (max-width: 600px) {
+      font-size: $l;
+    }
+  }
+
+  &__icon {
+    &-stroke {
+      cursor: pointer;
+
+      &:hover {
+        stroke: $brand-hover;
+      }
+
+      &:active {
+        stroke: $brand-active;
+      }
+    }
+
+    &-fill {
+      cursor: pointer;
+
+      &:hover {
+        fill: $brand-hover;
+      }
+
+      &:active {
+        fill: $brand-active;
+      }
+    }
+  }
+
+  &__burgerMenu {
+    position: absolute;
+    width: 100%;
+    height: calc(100vh - 64px);
+    background-color: white;
+    margin-top: 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+  }
+}
